@@ -107,9 +107,11 @@ public class WorldRenderer {
 	      }, 800, 480,new Vector2(150,0));
 		
 		// Load all Block Textures
-		blockTextures.put(BlockType.GROUND, new Texture(Gdx.files.internal("images/block.png")));
+		blockTextures.put(BlockType.NIGHT, new Texture(Gdx.files.internal("images/tiles/night.png")));
+		blockTextures.put(BlockType.ROCK, new Texture(Gdx.files.internal("images/tiles/rock.png")));
+		blockTextures.put(BlockType.GRASS, new Texture(Gdx.files.internal("images/tiles/grass.png")));
 		
-		heroFrame = new Texture(Gdx.files.internal("images/player.png"));
+		heroFrame = new Texture(Gdx.files.internal("images/nauts/lenny.png"));
 		
 		
 		/**
@@ -214,9 +216,9 @@ public class WorldRenderer {
 		// Draw hero's frame in the proper position
 		spriteBatch.draw(heroFrame, 
 				hero.getPosition().x * ppuX, 
-				hero.getPosition().y * ppuY, 
-				Hero.SIZE * ppuX, 
-				Hero.SIZE * ppuY);
+				hero.getPosition().y * ppuY);
+				//Hero.SIZE * ppuX, 
+				//Hero.SIZE * ppuY);
 	}
 
 	private void drawDebug() {

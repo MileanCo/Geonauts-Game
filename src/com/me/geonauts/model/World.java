@@ -100,9 +100,11 @@ public class World {
 		col -= getCurrentChunk().position.x;
 		row -= getCurrentChunk().position.y;
 		
+		if (row >= Chunk.HEIGHT) row = Chunk.HEIGHT - 1;
+		
 		//System.out.println(col + " " + row);
 		
-		// Get block from next chunk, since col is bigger than 
+		// Get block from next chunk, since col is out of bounds for current chunk.
 		if (col >= Chunk.WIDTH) 
 			return getNextChunk().getBlock(col - Chunk.WIDTH, row);
 		else

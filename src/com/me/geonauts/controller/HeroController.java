@@ -20,16 +20,13 @@ public class HeroController {
 
 	// CONSTANTS
 	private static final long LONG_FLY_PRESS = 150l;
-	private static final float ACCELERATION = 15f;
-	private static final float GRAVITY = -12f;
-	private static final float MAX_FLY_SPEED = 7f;
+	private static final float GRAVITY = -6f;
+	private static final float ACCELERATION = GRAVITY * -1.5f;
+	
+	private static final Vector2 MAX_VEL = new Vector2(4f, GRAVITY / -1.5f);
 	private static final float DAMP = 0.90f;
-	private static final float MAX_VEL = 4f;
 
 	private Array<Block> collidable = new Array<Block>();
-
-	// these are temporary
-	private static final float WIDTH = 10f;
 
 	// Model objects
 	private World world;
@@ -44,7 +41,6 @@ public class HeroController {
 	/** When the fly button was pressed */
 	private long flyPressedTime;
 	/** True as long as the Fly button is being pressed */
-	private boolean flyingPressed;
 	private Vector2 target;
 
 	private boolean grounded = false;
@@ -83,7 +79,6 @@ public class HeroController {
 	}
 	public void flyReleased() {
 		keys.get(keys.put(Keys.FLY, false));
-		flyingPressed = false;
 	}
 
 	/** The main update method **/
@@ -91,8 +86,7 @@ public class HeroController {
 		// Processing the input - setting the states of Hero
 		processInput();
 
-		// Setting initial vertical acceleration
-		hero.getAcceleration().y = GRAVITY;
+		// Setting initial horizontal acceleration
 		hero.getAcceleration().x = Hero.SPEED;
 
 		// Convert acceleration to frame time
@@ -100,8 +94,6 @@ public class HeroController {
 
 		// apply acceleration to change velocity
 		hero.getVelocity().add(hero.getAcceleration().x, hero.getAcceleration().y);
-
-		// Make X coord bounce left/right slowly to resemble "flying"
 		
 		// checking collisions with the surrounding blocks depending on Hero's
 		// velocity
@@ -111,13 +103,15 @@ public class HeroController {
 		//hero.getVelocity().x *= DAMP;
 
 		// ensure terminal velocity is not exceeded
-		if (hero.getVelocity().x > MAX_VEL) {
-			hero.getVelocity().x = MAX_VEL;
-		}
-		if (hero.getVelocity().x < -MAX_VEL) {
-			hero.getVelocity().x = -MAX_VEL;
-		}
-
+		if (hero.getVelocity().x > MAX_VEL.x) 
+			hero.getVelocity().x = MAX_VEL.x;
+		
+		if (hero.getVelocity().y >  MAX_VEL.y * 1.2) 
+			hero.getVelocity().y = MAX_VEL.y;
+		
+		else if (hero.getVelocity().y <  -MAX_VEL.y) 
+			hero.getVelocity().y = -MAX_VEL.y;
+		
 		// simply updates the state time
 		hero.update(delta);
 
@@ -224,29 +218,18 @@ public class HeroController {
 
 	/** Change Hero's state and parameters based on input controls **/
 	private boolean processInput() {
-		if (keys.get(Keys.FLY)) {
-			// Initial flying force
-			if (!hero.getState().equals(State.FLYING)) {
-				flyingPressed = true;
-				flyPressedTime = System.currentTimeMillis();
-				hero.setState(State.FLYING);
-				hero.getVelocity().y = MAX_FLY_SPEED;
-				grounded = false;
-				
-			// Still pressing fly key after flying
-			} else {
-				// Check if we need to stop upward force
-				if (flyingPressed && ((System.currentTimeMillis() - flyPressedTime) >= LONG_FLY_PRESS)) {
-					flyingPressed = false;
-				// Max fly time reached
-				} else {
-					if (flyingPressed) 
-						hero.getVelocity().y = MAX_FLY_SPEED;
-				}
-			}
+		if (keys.get(Keys.FLY)) {	
+			hero.setState(State.FLYING);
+			flyPressedTime = System.currentTimeMillis();
+			
+			//hero.getVelocity().y = MAX_FLY_SPEED;
+			hero.getAcceleration().y = ACCELERATION;
+			grounded = false;
+			
 		// If he's not flying, he's falling.
 		} else {
 			hero.setState(State.FALLING);
+			hero.getAcceleration().y = GRAVITY;
 		}
 		if (keys.get(Keys.FIRE)) {
 			// CREATE NEW MISSILE w/ TARGET

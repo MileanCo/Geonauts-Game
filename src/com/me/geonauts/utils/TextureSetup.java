@@ -15,6 +15,6 @@ public class TextureSetup {
 
 	public static void main(String[] args) {
 		
-		TexturePacker2.process("/home/joel/workspace/libgdx/banishedwings2/BanishedWings2-android/assets/", "/home/joel/workspace/libgdx/banishedwings2/BanishedWings2-android/assets/textures", "textures.pack");
+		TexturePacker2.process("/home/joel/workspace/libgdx/Geonauts/Geonauts/assets/", "/home/joel/workspace/libgdx/Geonauts/Geonauts/assets/textures", "textures.pack");
 	}
 }

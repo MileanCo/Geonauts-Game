@@ -47,16 +47,16 @@ public class Chunk {
 		
 		
 		
-		// Make the ground
-		blocks[0][1] =  new Block(new Vector2(position.x, 1), BlockType.GROUND);
-		int row = random.nextInt(2 - 0) + 0;
+		// Make the ROCK
+		blocks[0][1] =  new Block(new Vector2(position.x, 1), BlockType.ROCK);
+		int row = 0;
 		for (int col = 0; col < WIDTH; col++ ) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, row); 
 			// Set the new block @ its right point in the chunk.
-			blocks[col][row] = new Block(block_pos, BlockType.GROUND);
+			blocks[col][row] = new Block(block_pos, BlockType.ROCK);
 		}
-		blocks[WIDTH-1][1] =  new Block(new Vector2(WIDTH-1 + position.x, 1), BlockType.GROUND);
+		blocks[WIDTH-1][1] =  new Block(new Vector2(WIDTH-1 + position.x, 1), BlockType.ROCK);
 		
 		// Make some walls
 		int col = random.nextInt(WIDTH-1 - 0) + 0;
@@ -64,7 +64,7 @@ public class Chunk {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.
-			blocks[col][r] = new Block(block_pos, BlockType.GROUND);
+			blocks[col][r] = new Block(block_pos, BlockType.ROCK);
 		}
 		
 		// Make some ceiling walls
@@ -73,7 +73,7 @@ public class Chunk {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.
-			blocks[col][r] = new Block(block_pos, BlockType.GROUND);
+			blocks[col][r] = new Block(block_pos, BlockType.ROCK);
 		}
 		
 	}
