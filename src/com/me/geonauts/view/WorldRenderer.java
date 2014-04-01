@@ -97,7 +97,7 @@ public class WorldRenderer {
 	private void loadTextures() {
 		// Load texture atlases
 		//TextureAtlas backgroundAtlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
-		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/rednebula3.jpg"));	
+		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
 	
 		background = new ParallaxBackground(new ParallaxLayer[] {
 	            new ParallaxLayer(new TextureRegion(bg1), new Vector2(0.2f, 0), new Vector2(0, 0)),
