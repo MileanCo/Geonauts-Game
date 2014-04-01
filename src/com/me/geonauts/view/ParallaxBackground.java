@@ -73,8 +73,4 @@ public class ParallaxBackground {
 	public void setSize(float width, float height) {
 		camera = new OrthographicCamera(width, height);
 	}
-
-	public void setCamera(OrthographicCamera c) {
-		camera = c;
-	}
 }

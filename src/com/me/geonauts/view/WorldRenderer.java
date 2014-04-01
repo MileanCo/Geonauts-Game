@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -48,7 +47,7 @@ public class WorldRenderer {
 	//private TextureRegion heroJumpLeft;
 	public HashMap<BlockType, Texture> blockTextures = new HashMap<BlockType, Texture>();
 	public HashMap<String, Texture> backgroundTextures = new HashMap<String, Texture> ();
-	private Texture heroFrame;
+	private TextureRegion heroFrame;
 	private ParallaxBackground background;
 	
 	
@@ -111,7 +110,8 @@ public class WorldRenderer {
 		blockTextures.put(BlockType.ROCK, new Texture(Gdx.files.internal("images/tiles/rock.png")));
 		blockTextures.put(BlockType.GRASS, new Texture(Gdx.files.internal("images/tiles/grass.png")));
 		
-		heroFrame = new Texture(Gdx.files.internal("images/nauts/lenny.png"));
+		Texture heroTex = new Texture(Gdx.files.internal("images/nauts/lenny.png")); 
+		heroFrame = new TextureRegion(heroTex, 0, 0, heroTex.getWidth(), heroTex.getHeight());
 		
 		
 		/**
@@ -159,7 +159,6 @@ public class WorldRenderer {
 		
 		// Draw everything to the screen
 		spriteBatch.begin();
-			//, spriteBatch);
 			drawChunks();
 			drawHero();
 		spriteBatch.end();
@@ -214,11 +213,22 @@ public class WorldRenderer {
 		}
 		*/
 		// Draw hero's frame in the proper position
+		
+		spriteBatch.draw(heroFrame, hero.getPosition().x * ppuX, hero.getPosition().y * ppuY, 
+				heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
+				heroFrame.getRegionWidth(), heroFrame.getRegionHeight(), 
+				1, 1, 
+				hero.getAngle());
+		/**
 		spriteBatch.draw(heroFrame, 
 				hero.getPosition().x * ppuX, 
-				hero.getPosition().y * ppuY);
+				hero.getPosition().y * ppuY,
+				(float) heroFrame.getWidth(),
+				(float) heroFrame.getHeight(),
+				(int)hero.getAngle());
 				//Hero.SIZE * ppuX, 
 				//Hero.SIZE * ppuY);
+		*/
 	}
 
 	private void drawDebug() {

@@ -18,14 +18,13 @@ public class HeroController {
 		FLY, FIRE
 	}
 
-	// CONSTANTS
-	private static final long LONG_FLY_PRESS = 150l;
+	// Flying constants
 	private static final float GRAVITY = -6f;
-	private static final float ACCELERATION = GRAVITY * -1.5f;
-	
+	private static final float ACCELERATION = GRAVITY * -1.25f;
 	private static final Vector2 MAX_VEL = new Vector2(4f, GRAVITY / -1.5f);
 	private static final float DAMP = 0.90f;
 
+	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
 
 	// Model objects
@@ -38,16 +37,17 @@ public class HeroController {
 		keys.put(Keys.FLY, false);
 		keys.put(Keys.FIRE, false);
 	};
+	
 	/** When the fly button was pressed */
 	private long flyPressedTime;
 	/** True as long as the Fly button is being pressed */
 	private Vector2 target;
 
+	// True if hero on the ground.
 	private boolean grounded = false;
 
 	/**
 	 * Constructor to make the Controller for hero
-	 * 
 	 * @param world
 	 */
 	public HeroController(World world) {
@@ -106,7 +106,7 @@ public class HeroController {
 		if (hero.getVelocity().x > MAX_VEL.x) 
 			hero.getVelocity().x = MAX_VEL.x;
 		
-		if (hero.getVelocity().y >  MAX_VEL.y * 1.2) 
+		if (hero.getVelocity().y >  MAX_VEL.y * 1.2f) 
 			hero.getVelocity().y = MAX_VEL.y;
 		
 		else if (hero.getVelocity().y <  -MAX_VEL.y) 
@@ -239,5 +239,4 @@ public class HeroController {
 
 		return false;
 	}
-
 }

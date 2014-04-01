@@ -167,4 +167,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public int getHeight() {
 		return height;
 	}
+	public HeroController getHeroController() {
+		return heroController;
+	}
 }

@@ -20,13 +20,18 @@ public class Hero extends Entity {
 	public static final float SPEED = 3f;	// unit per second
 	public static final float SIZE = 1f; // whole unit
 	
-	Vector2 	acceleration;
-	Vector2 	velocity;
-	Rectangle 	bounds = new Rectangle();
+	// Rotation stuff
+	public static final float ROTATION_SPEED = 12f; // angles per second
+	private static final float MAX_ANGLE = 30f;
+	private float angle = 0f;
 	
-	State		state = State.FALLING;
-	boolean		facingLeft = true;
-	float		stateTime = 0;
+	private Vector2 	acceleration;
+	private Vector2 	velocity;
+	private Rectangle 	bounds = new Rectangle();
+	
+	private State		state = State.FALLING;
+	private boolean		facingLeft = true;
+	private float		stateTime = 0;
 
 	public Hero(Vector2 position) {
 		super(position, SIZE);
@@ -44,7 +49,22 @@ public class Hero extends Entity {
 		// bounds.y = position.y;
 		// position.add(velocity.tmp().mul(delta)); 
 		stateTime += delta;
-		//System.out.println(acceleration.x);
+		
+		// Update angle based on vertical accel
+		if (acceleration.y > 0) { 
+			// Hero going UP
+			angle += 1.25 * ROTATION_SPEED * delta;
+		} else {
+			// Hero going DOWN
+			angle -= ROTATION_SPEED * delta;
+		}
+		//System.out.println(ROTATION_SPEED * delta);
+		
+		// Make sure angle isn't too big.
+		if (angle > MAX_ANGLE) angle = MAX_ANGLE;
+		else if (angle < -MAX_ANGLE) angle = -MAX_ANGLE;
+		
+		System.out.println(angle);
 	}
 	
 	
@@ -81,8 +101,10 @@ public class Hero extends Entity {
 	}
 	
 
-	public void setVelocity(Vector2 velocity) {
-		this.velocity = velocity;
+	public float getAngle() {
+		return angle;
 	}
+	
+	
 }
 	
