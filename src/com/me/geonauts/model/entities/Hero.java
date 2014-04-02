@@ -64,7 +64,7 @@ public class Hero extends Entity {
 		if (angle > MAX_ANGLE) angle = MAX_ANGLE;
 		else if (angle < -MAX_ANGLE) angle = -MAX_ANGLE;
 		
-		System.out.println(angle);
+		//System.out.println(angle);
 	}
 	
 	

@@ -20,7 +20,7 @@ public class HeroController {
 
 	// Flying constants
 	private static final float GRAVITY = -6f;
-	private static final float ACCELERATION = GRAVITY * -1.25f;
+	private static final float ACCELERATION = GRAVITY * -1.75f;
 	private static final Vector2 MAX_VEL = new Vector2(4f, GRAVITY / -1.5f);
 	private static final float DAMP = 0.90f;
 

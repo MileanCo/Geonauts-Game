@@ -28,8 +28,8 @@ public class Chunk {
 	private World world;
 	
 	// Random generator for the chunk.
-	private final long SEED = 123456789L;
-	private Random random = new Random(SEED);
+	//private final long SEED = 123456789L;
+	private Random random = new Random();
 	
 	public Chunk(Vector2 pos, World world) {
 		this.position = pos;

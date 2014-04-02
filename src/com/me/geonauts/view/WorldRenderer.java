@@ -94,6 +94,8 @@ public class WorldRenderer {
 	 * Load our textures
 	 */
 	private void loadTextures() {
+		Texture.setEnforcePotImages(false); // TO DO: remove this when using TextureAtlases
+		
 		// Load texture atlases
 		//TextureAtlas backgroundAtlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
 		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
@@ -103,14 +105,14 @@ public class WorldRenderer {
 	            
 	          //  new ParallaxLayer(backgroundAtlas.findRegion("bg2"),new Vector2(1.0f,1.0f),new Vector2(0, 500)),
 	           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
-	      }, 800, 480,new Vector2(150,0));
+	      }, width, height, 0.5f, this);
 		
 		// Load all Block Textures
 		blockTextures.put(BlockType.NIGHT, new Texture(Gdx.files.internal("images/tiles/night.png")));
 		blockTextures.put(BlockType.ROCK, new Texture(Gdx.files.internal("images/tiles/rock.png")));
 		blockTextures.put(BlockType.GRASS, new Texture(Gdx.files.internal("images/tiles/grass.png")));
 		
-		Texture heroTex = new Texture(Gdx.files.internal("images/nauts/lenny.png")); 
+		Texture heroTex = new Texture(Gdx.files.internal("images/nauts/bgbattleship.png")); 
 		heroFrame = new TextureRegion(heroTex, 0, 0, heroTex.getWidth(), heroTex.getHeight());
 		
 		
@@ -155,6 +157,7 @@ public class WorldRenderer {
 		// Set the projection matrix to the new camera matrix in the spriteBatch
 		spriteBatch.setProjectionMatrix(cam.combined);
 		
+		// Draw the parallax scrolling background
 		background.render(delta);
 		
 		// Draw everything to the screen
@@ -212,23 +215,18 @@ public class WorldRenderer {
 		// Get hero's frame if he's jumping or falling
 		}
 		*/
+		
 		// Draw hero's frame in the proper position
+		
+		// TO DO: Figure out a way to draw objects in the world all @ the same size.
+		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
 		
 		spriteBatch.draw(heroFrame, hero.getPosition().x * ppuX, hero.getPosition().y * ppuY, 
 				heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
-				heroFrame.getRegionWidth(), heroFrame.getRegionHeight(), 
-				1, 1, 
+				heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
+				ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
 				hero.getAngle());
-		/**
-		spriteBatch.draw(heroFrame, 
-				hero.getPosition().x * ppuX, 
-				hero.getPosition().y * ppuY,
-				(float) heroFrame.getWidth(),
-				(float) heroFrame.getHeight(),
-				(int)hero.getAngle());
-				//Hero.SIZE * ppuX, 
-				//Hero.SIZE * ppuY);
-		*/
+
 	}
 
 	private void drawDebug() {
@@ -251,5 +249,15 @@ public class WorldRenderer {
 		debugRenderer.end();
 	}
 	
+	
+	public float getPPUX() { 
+		return ppuX; 
+	}
+	public float getPPUY() {
+		return ppuY;
+	}
+	public World getWorld() {
+		return world;
+	}
 
 }
