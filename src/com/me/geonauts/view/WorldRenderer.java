@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Scaling;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
@@ -220,11 +221,11 @@ public class WorldRenderer {
 		
 		// TO DO: Figure out a way to draw objects in the world all @ the same size.
 		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
-		
+		//Scaling.fillX;
 		spriteBatch.draw(heroFrame, hero.getPosition().x * ppuX, hero.getPosition().y * ppuY, 
 				heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
 				heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
-				ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
+				1, 1,//ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
 				hero.getAngle());
 
 	}

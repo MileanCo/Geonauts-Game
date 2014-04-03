@@ -21,7 +21,7 @@ public class Hero extends Entity {
 	public static final float SIZE = 1f; // whole unit
 	
 	// Rotation stuff
-	public static final float ROTATION_SPEED = 12f; // angles per second
+	public static final float ROTATION_SPEED = 0.5f; // angles per second??
 	private static final float MAX_ANGLE = 30f;
 	private float angle = 0f;
 	
@@ -50,19 +50,24 @@ public class Hero extends Entity {
 		// position.add(velocity.tmp().mul(delta)); 
 		stateTime += delta;
 		
-		// Update angle based on vertical accel
-		if (acceleration.y > 0) { 
-			// Hero going UP
-			angle += 1.25 * ROTATION_SPEED * delta;
-		} else {
-			// Hero going DOWN
-			angle -= ROTATION_SPEED * delta;
+		// Update angle based State
+		if (state == State.FLYING) {
+			angle += ROTATION_SPEED;// * delta;
+		} else if ( state == State.FALLING) {
+			angle -= ROTATION_SPEED / 1.5;// * delta;
 		}
-		//System.out.println(ROTATION_SPEED * delta);
 		
 		// Make sure angle isn't too big.
 		if (angle > MAX_ANGLE) angle = MAX_ANGLE;
 		else if (angle < -MAX_ANGLE) angle = -MAX_ANGLE;
+		
+		// Set acceleration
+		acceleration.x = SPEED;
+		acceleration.y = (float) (SPEED * angle);
+		
+		
+		// System.out.println(velocity.y);
+		//System.out.println(ROTATION_SPEED * delta);
 		
 		//System.out.println(angle);
 	}

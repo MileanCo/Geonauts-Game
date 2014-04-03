@@ -33,7 +33,7 @@ public class World {
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
 		
-		hero = new Hero(new Vector2(WorldRenderer.CAM_OFFSET, 2));		
+		hero = new Hero(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
 		
 		resetChunks();
 	}

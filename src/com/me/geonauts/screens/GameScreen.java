@@ -48,8 +48,8 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Update the world, hero controller, and render the screen
-		world.update(delta);
 		heroController.update(delta);
+		world.update(delta);
 		renderer.render(delta);
 	}
 	

@@ -19,9 +19,7 @@ public class HeroController {
 	}
 
 	// Flying constants
-	private static final float GRAVITY = -6f;
-	private static final float ACCELERATION = GRAVITY * -1.75f;
-	private static final Vector2 MAX_VEL = new Vector2(4f, GRAVITY / -1.5f);
+	private static final Vector2 MAX_VEL = new Vector2(Hero.SPEED * 2, Hero.SPEED * 1.5f);
 	private static final float DAMP = 0.90f;
 
 	// Collidable blocks.
@@ -86,27 +84,26 @@ public class HeroController {
 		// Processing the input - setting the states of Hero
 		processInput();
 
-		// Setting initial horizontal acceleration
-		hero.getAcceleration().x = Hero.SPEED;
-
 		// Convert acceleration to frame time
 		hero.getAcceleration().scl(delta);
 
 		// apply acceleration to change velocity
 		hero.getVelocity().add(hero.getAcceleration().x, hero.getAcceleration().y);
 		
+		//System.out.println(a_y);
 		// checking collisions with the surrounding blocks depending on Hero's
 		// velocity
 		checkCollisionWithBlocks(delta);
 
 		// apply damping to halt Hero nicely
-		//hero.getVelocity().x *= DAMP;
-
+		//hero.getVelocity().scl(DAMP);
+		hero.getVelocity().y *= DAMP;
+		
 		// ensure terminal velocity is not exceeded
 		if (hero.getVelocity().x > MAX_VEL.x) 
 			hero.getVelocity().x = MAX_VEL.x;
 		
-		if (hero.getVelocity().y >  MAX_VEL.y * 1.2f) 
+		if (hero.getVelocity().y >  MAX_VEL.y) 
 			hero.getVelocity().y = MAX_VEL.y;
 		
 		else if (hero.getVelocity().y <  -MAX_VEL.y) 
@@ -184,7 +181,7 @@ public class HeroController {
 				if (hero.getVelocity().y < 0) {
 					// Add "landing" code
 					grounded = true;
-					hero.getVelocity().y = 0;
+					hero.getAcceleration().x /= 2;
 				}
 				hero.setState(State.DYING);
 				world.getCollisionRects().add(block.getBounds());
@@ -221,15 +218,11 @@ public class HeroController {
 		if (keys.get(Keys.FLY)) {	
 			hero.setState(State.FLYING);
 			flyPressedTime = System.currentTimeMillis();
-			
-			//hero.getVelocity().y = MAX_FLY_SPEED;
-			hero.getAcceleration().y = ACCELERATION;
 			grounded = false;
 			
 		// If he's not flying, he's falling.
 		} else {
 			hero.setState(State.FALLING);
-			hero.getAcceleration().y = GRAVITY;
 		}
 		if (keys.get(Keys.FIRE)) {
 			// CREATE NEW MISSILE w/ TARGET
