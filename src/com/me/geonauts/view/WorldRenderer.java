@@ -15,8 +15,9 @@ import com.badlogic.gdx.utils.Scaling;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
-import com.me.geonauts.model.entities.Hero;
+import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.enums.BlockType;
+import com.me.geonauts.model.enums.HeroType;
 
 
 /**
@@ -46,9 +47,9 @@ public class WorldRenderer {
 	//private TextureRegion heroIdleRight;
 	//private TextureRegion blockTexture;
 	//private TextureRegion heroJumpLeft;
-	public HashMap<BlockType, Texture> blockTextures = new HashMap<BlockType, Texture>();
-	public HashMap<String, Texture> backgroundTextures = new HashMap<String, Texture> ();
-	private TextureRegion heroFrame;
+	public HashMap<BlockType, TextureRegion> blockTextures = new HashMap<BlockType, TextureRegion>();
+	public HashMap<String, TextureRegion> backgroundTextures = new HashMap<String, TextureRegion> ();
+	private HashMap<HeroType, TextureRegion> heroTextures = new HashMap<HeroType, TextureRegion> ();
 	private ParallaxBackground background;
 	
 	
@@ -109,12 +110,12 @@ public class WorldRenderer {
 	      }, width, height, 0.5f, this);
 		
 		// Load all Block Textures
-		blockTextures.put(BlockType.NIGHT, new Texture(Gdx.files.internal("images/tiles/night.png")));
-		blockTextures.put(BlockType.ROCK, new Texture(Gdx.files.internal("images/tiles/rock.png")));
-		blockTextures.put(BlockType.GRASS, new Texture(Gdx.files.internal("images/tiles/grass.png")));
+		blockTextures.put(BlockType.NIGHT, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/night.png"))));
+		blockTextures.put(BlockType.ROCK, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/rock.png"))));
+		blockTextures.put(BlockType.GRASS, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/grass.png"))));
 		
-		Texture heroTex = new Texture(Gdx.files.internal("images/nauts/bgbattleship.png")); 
-		heroFrame = new TextureRegion(heroTex, 0, 0, heroTex.getWidth(), heroTex.getHeight());
+		// Load all Hero textures
+		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgbattleship.png"))));
 		
 		
 		/**
@@ -145,6 +146,9 @@ public class WorldRenderer {
 		*/
 	}
 	
+	public TextureRegion getHeroTexture(HeroType type) {
+		return heroTextures.get(type);
+	}
 	
 	/**
 	 * Draw all objects to the World
@@ -178,8 +182,8 @@ public class WorldRenderer {
 			spriteBatch.draw( blockTextures.get(block.getType()), 
 					block.getPosition().x * ppuX, 
 					block.getPosition().y * ppuY, 
-					Block.SIZE * ppuX, 
-					Block.SIZE * ppuY);
+					block.SIZE.x * ppuX, 
+					block.SIZE.y * ppuY);
 		}
 		// Try to draw part of the next chunk.
 		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
@@ -187,8 +191,8 @@ public class WorldRenderer {
 			spriteBatch.draw( blockTextures.get(block.getType()), 
 					block.getPosition().x * ppuX, 
 					block.getPosition().y * ppuY, 
-					Block.SIZE * ppuX, 
-					Block.SIZE * ppuY);
+					block.SIZE.x * ppuX, 
+					block.SIZE.y * ppuY);
 		}
 		
 
@@ -222,6 +226,8 @@ public class WorldRenderer {
 		// TO DO: Figure out a way to draw objects in the world all @ the same size.
 		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
 		//Scaling.fillX;
+		TextureRegion heroFrame = heroTextures.get(hero.getType());
+		
 		spriteBatch.draw(heroFrame, hero.getPosition().x * ppuX, hero.getPosition().y * ppuY, 
 				heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
 				heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
@@ -248,6 +254,14 @@ public class WorldRenderer {
 		debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		*/
 		debugRenderer.end();
+	}
+	
+	/**
+	 * Dispose all resources in WorldRenderer
+	 */
+	public void dispose() {
+		spriteBatch.dispose();
+		//background.dispose();
 	}
 	
 	

@@ -5,11 +5,11 @@ import com.me.geonauts.model.enums.BlockType;
 
 public class Block extends Entity {
 	/** Size of the entity */
-	public static final float SIZE = 1f;
+	private static final Vector2 sz = new Vector2(1f, 1f);
 	private BlockType type;
 	
 	public Block(Vector2 pos, BlockType t) {
-		super(pos, SIZE);
+		super(pos, sz);
 		type = t;
 	}
 

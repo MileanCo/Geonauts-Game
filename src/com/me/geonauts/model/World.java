@@ -7,7 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.model.entities.Block;
-import com.me.geonauts.model.entities.Hero;
+import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.view.WorldRenderer;
 
@@ -16,9 +17,8 @@ import com.me.geonauts.view.WorldRenderer;
  *
  */
 public class World {
-
-	// No idea what this is
-    private Vector2 spanPosition;
+	private static final long DEAD_TIME = 1500;
+	
 	/** The collision boxes **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
 	/** Our player controlled hero **/
@@ -30,14 +30,20 @@ public class World {
 	/** Number of chunks to use */
 	public static int NUM_CHUNKS = 3;
 	
+	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
 		
-		hero = new Hero(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
+		// Create default hero Sage.
+		hero = new Sage(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
 		
 		resetChunks();
 	}
 	
+	/**
+	 * Updates the state of the world.
+	 * @param delta
+	 */
 	public void update(float delta) {
 		// Check the Hero's position relative to the current chunk.		
 		if (hero.getCamOffsetPosX() > (getCurrentChunk().position.x + Chunk.WIDTH)) {
@@ -46,6 +52,12 @@ public class World {
 			move_me.position.x = chunks.getLast().position.x + Chunk.WIDTH;
 			move_me.build();
 			chunks.addLast(move_me);
+		}
+		
+		if (hero.getState() == Hero.State.DYING) {
+			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
+				screen.toMainMenu();
+			}
 		}
 		
 	}

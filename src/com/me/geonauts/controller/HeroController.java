@@ -10,17 +10,12 @@ import com.badlogic.gdx.utils.Pool;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
-import com.me.geonauts.model.entities.Hero;
-import com.me.geonauts.model.entities.Hero.State;
+import com.me.geonauts.model.entities.heroes.Hero;
 
 public class HeroController {
 	enum Keys {
 		FLY, FIRE
 	}
-
-	// Flying constants
-	private static final Vector2 MAX_VEL = new Vector2(Hero.SPEED * 2, Hero.SPEED * 1.5f);
-	private static final float DAMP = 0.90f;
 
 	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
@@ -97,17 +92,18 @@ public class HeroController {
 
 		// apply damping to halt Hero nicely
 		//hero.getVelocity().scl(DAMP);
-		hero.getVelocity().y *= DAMP;
+		hero.getVelocity().y *= hero.getDAMP();
 		
-		// ensure terminal velocity is not exceeded
-		if (hero.getVelocity().x > MAX_VEL.x) 
-			hero.getVelocity().x = MAX_VEL.x;
+		// ensure terminal X velocity is not exceeded
+		if (hero.getVelocity().x > hero.MAX_VEL.x) 
+			hero.getVelocity().x = hero.MAX_VEL.x;
 		
-		if (hero.getVelocity().y >  MAX_VEL.y) 
-			hero.getVelocity().y = MAX_VEL.y;
-		
-		else if (hero.getVelocity().y <  -MAX_VEL.y) 
-			hero.getVelocity().y = -MAX_VEL.y;
+		// ensure terminal Y velocity
+		if (hero.getVelocity().y >  hero.MAX_VEL.y) 
+			hero.getVelocity().y = hero.MAX_VEL.y;
+		else if (hero.getVelocity().y <  -hero.MAX_VEL.y) 
+			hero.getVelocity().y = -hero.MAX_VEL.y;
+				
 		
 		// simply updates the state time
 		hero.update(delta);
@@ -151,13 +147,16 @@ public class HeroController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (heroRect.overlaps(block.getBounds())) {
-				hero.setState(State.DYING);
+				hero.setState(Hero.State.DYING);
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
 			}
 		}
 
-		// reset the x position of the collision box to check y
+		
+		
+		
+		// reset the x position of the collision box to check Y /////////////////////////////////////////////////////////
 		heroRect.x = hero.getPosition().x;
 
 		// the same thing but on the vertical Y axis
@@ -169,8 +168,6 @@ public class HeroController {
 			startY = endY = (int) Math.floor(hero.getBounds().y + hero.getVelocity().y + hero.getBounds().height );
 		}
 
-		//System.out.println(startX + " || " + endX);
-
 		populateCollidableBlocks(startX, startY, endX, endY);
 
 		heroRect.y += hero.getVelocity().y;
@@ -178,12 +175,8 @@ public class HeroController {
 		for (Block block : collidable) {
 			if (block == null) 	continue;
 			if (heroRect.overlaps(block.getBounds())) {
-				if (hero.getVelocity().y < 0) {
-					// Add "landing" code
-					grounded = true;
-					hero.getAcceleration().x /= 2;
-				}
-				hero.setState(State.DYING);
+				System.out.println("Collision @ " + block.getPosition().toString());
+				hero.setState(Hero.State.DYING);
 				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
@@ -216,13 +209,12 @@ public class HeroController {
 	/** Change Hero's state and parameters based on input controls **/
 	private boolean processInput() {
 		if (keys.get(Keys.FLY)) {	
-			hero.setState(State.FLYING);
+			hero.setState(Hero.State.FLYING);
 			flyPressedTime = System.currentTimeMillis();
-			grounded = false;
 			
 		// If he's not flying, he's falling.
 		} else {
-			hero.setState(State.FALLING);
+			hero.setState(Hero.State.FALLING);
 		}
 		if (keys.get(Keys.FIRE)) {
 			// CREATE NEW MISSILE w/ TARGET

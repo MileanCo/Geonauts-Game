@@ -4,11 +4,13 @@
 package com.me.geonauts.screens;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
 import com.me.geonauts.view.WorldRenderer;
@@ -24,18 +26,31 @@ public class GameScreen implements Screen, InputProcessor {
 	//private WorldController worldController;
 	private HeroController	heroController;
 
+	// Screens 
+	private Game game;
 	
 	private int width, height;
 
 	/**
-	 * Start a new game 
+	 * Create a new game to play!
+	 * @param menu
+	 */
+	public GameScreen (Game game) {
+		// init
+		this.game = game;
+		
+		// Create new game world objects
+		world = new World(this);
+		renderer = new WorldRenderer(world);
+		heroController = new HeroController(world);
+	}
+	
+	
+	/**
+	 * Start a new game AKA CONSTRUCTOR
 	*/
 	@Override
 	public void show() {
-		world = new World(this);
-		renderer = new WorldRenderer(world);
-		
-		heroController = new HeroController(world);
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -78,6 +93,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void dispose() {
 		Gdx.input.setInputProcessor(null);
+		renderer.dispose();
 	}
 
 	// * InputProcessor methods ***************************//
@@ -98,7 +114,20 @@ public class GameScreen implements Screen, InputProcessor {
 			heroController.flyReleased();
 		if (keycode == Keys.X)
 			heroController.fireReleased();
+		
+		// Check if escape is pressed to show the main menu
+		if (keycode == Keys.ESCAPE) {
+			toMainMenu();
+		}
+		
 		return true;
+	}
+	
+	/**
+	 * Sets the game screen to main menu
+	 */
+	public void toMainMenu() {
+		game.setScreen(new MainMenuScreen(game));
 	}
 
 	@Override

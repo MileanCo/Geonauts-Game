@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 	/** Position (x, y) of the Entity in the world */
 	public Vector2 position;
+	public final Vector2 SIZE;
 	
 	/** Rectangle used for collision detection*/
 	protected Rectangle bounds;
@@ -21,14 +22,15 @@ public abstract class Entity {
 	 * @param x
 	 * @param y
 	 */
-	public Entity(Vector2 pos, float SIZE) {
+	public Entity(Vector2 pos, Vector2 SIZE) {
+		this.SIZE = SIZE;
 		position = pos;
 		
 		// Make bounds/collision rectangle
 		bounds = new Rectangle();
 		bounds.setX(pos.x);
 		bounds.setY(pos.y);
-		setBounds(SIZE, SIZE);
+		setBounds(SIZE.x, SIZE.y);
 		
 	}	
 		
