@@ -34,7 +34,6 @@ public abstract class Hero extends Entity {
 	// Rotation stuff
 	public float 		ROTATION_SPEED;
 	protected float 	PITCH;
-	protected float 	angle = 0f;
 
 	/**
 	 * Creates a new Hero that is an Entity.
@@ -64,13 +63,13 @@ public abstract class Hero extends Entity {
 	 * @param delta
 	 */
 	public void update(float delta) {
-		// bounds.x = position.x;
-		// bounds.y = position.y;
-		// position.add(velocity.tmp().mul(delta)); 
+		// Add delta to the stateTime, used by animations.
 		stateTime += delta;
 		
-		if (position.y > Chunk.HEIGHT - SIZE.y * 3) {
+		// Make sure hero doesn't go above screen.
+		if (position.y > Chunk.HEIGHT - SIZE.y) {
 			state = State.FALLING;
+			angle -= ROTATION_SPEED;
 		}
 		//System.out.println(position.toString());
 		
@@ -130,10 +129,7 @@ public abstract class Hero extends Entity {
 	public float getCamOffsetPosX() {
 		return position.x - WorldRenderer.CAM_OFFSET + 1;
 	}
-	
-	public float getAngle() {
-		return angle;
-	}
+
 	public float getDAMP() {
 		return DAMP;
 	}

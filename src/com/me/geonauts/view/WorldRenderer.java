@@ -3,6 +3,7 @@ package com.me.geonauts.view;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,11 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Scaling;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.enums.BlockType;
 import com.me.geonauts.model.enums.HeroType;
@@ -57,7 +60,7 @@ public class WorldRenderer {
 	private Animation heroAnimation;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = false;
+	private boolean debug = true;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -173,26 +176,19 @@ public class WorldRenderer {
 		
 		if (debug)
 			drawDebug();
+		
 	}
 
 	private void drawChunks() {
 		// Draw current chunk
 		//System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
 		for (Block block : world.getCurrentChunk().getDrawableBlocks() ) {
-			spriteBatch.draw( blockTextures.get(block.getType()), 
-					block.getPosition().x * ppuX, 
-					block.getPosition().y * ppuY, 
-					block.SIZE.x * ppuX, 
-					block.SIZE.y * ppuY);
+			drawEntity(block, blockTextures.get(block.getType()));
 		}
 		// Try to draw part of the next chunk.
 		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
 		for (Block block : world.getNextChunk().getDrawableBlocks() ) {
-			spriteBatch.draw( blockTextures.get(block.getType()), 
-					block.getPosition().x * ppuX, 
-					block.getPosition().y * ppuY, 
-					block.SIZE.x * ppuX, 
-					block.SIZE.y * ppuY);
+			drawEntity(block, blockTextures.get(block.getType()));
 		}
 		
 
@@ -222,17 +218,8 @@ public class WorldRenderer {
 		*/
 		
 		// Draw hero's frame in the proper position
-		
-		// TO DO: Figure out a way to draw objects in the world all @ the same size.
-		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
-		//Scaling.fillX;
 		TextureRegion heroFrame = heroTextures.get(hero.getType());
-		
-		spriteBatch.draw(heroFrame, hero.getPosition().x * ppuX, hero.getPosition().y * ppuY, 
-				heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
-				heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
-				1, 1,//ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
-				hero.getAngle());
+		drawEntity(hero, heroFrame);
 
 	}
 
@@ -241,18 +228,18 @@ public class WorldRenderer {
 		debugRenderer.setProjectionMatrix(cam.combined);
 		debugRenderer.begin(ShapeType.Line);
 		
-		/**
-		for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
+		
+		for (Block block : world.getCurrentChunk().getDrawableBlocks())  {
 			Rectangle rect = block.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		}
 		// render hero
-		Hero hero = world.gethero();
+		Hero hero = world.getHero();
 		Rectangle rect = hero.getBounds();
 		debugRenderer.setColor(new Color(0, 1, 0, 1));
 		debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
-		*/
+		
 		debugRenderer.end();
 	}
 	
@@ -262,6 +249,23 @@ public class WorldRenderer {
 	public void dispose() {
 		spriteBatch.dispose();
 		//background.dispose();
+	}
+	
+	
+	/**
+	 * Helper method to draw entities to the screen.
+	 * @param e Entity
+	 * @param frame TextureRegion
+	 */
+	private void drawEntity(Entity e, TextureRegion frame) {
+		// TO DO: Figure out a way to draw objects in the world all @ the same size.
+		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
+		// Scaling.fillX;
+		spriteBatch.draw(frame, e.getPosition().x * ppuX, e.getPosition().y * ppuY, 
+				e.SIZE.x * ppuX / 2, e.SIZE.y * ppuY / 2, //heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
+				e.SIZE.x * ppuX, e.SIZE.y * ppuY, //heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
+				1, 1, //hero.SIZE.x, hero.SIZE.y, //ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
+				e.getAngle());
 	}
 	
 	

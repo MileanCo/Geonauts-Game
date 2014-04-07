@@ -15,7 +15,8 @@ public abstract class Entity {
 	protected float width;
 	protected float height; 
 	
-	//protected float rotation;
+	// Angle of the entity.
+	protected float angle;
 	
 	/**
 	 * Constructor to make a new Entity object.
@@ -25,6 +26,7 @@ public abstract class Entity {
 	public Entity(Vector2 pos, Vector2 SIZE) {
 		this.SIZE = SIZE;
 		position = pos;
+		angle = 0f;
 		
 		// Make bounds/collision rectangle
 		bounds = new Rectangle();
@@ -53,5 +55,8 @@ public abstract class Entity {
 	}
 	public void setPosition(Vector2 pos) {
 		position = pos;
+	}
+	public float getAngle() {
+		return angle;
 	}
 }
