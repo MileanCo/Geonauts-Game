@@ -1,4 +1,4 @@
-banishedwings2
+Geonauts
 ==============
 
-Final project app for Entrepreneurship Innovation - Banished Wings 2! On Android, iOS, and desktop.
+Final project app for Entrepreneurship Innovation - Geonauts! On Android, iOS, and desktop.
