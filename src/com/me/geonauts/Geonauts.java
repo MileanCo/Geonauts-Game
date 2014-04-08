@@ -1,6 +1,6 @@
 package com.me.geonauts;
 
-import com.me.geonauts.screens.MainMenuScreen;
+import com.me.geonauts.screens.ui.MainMenuScreen;
 import com.badlogic.gdx.Game;
 
 public class Geonauts extends Game {

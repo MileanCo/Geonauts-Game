@@ -10,9 +10,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
+import com.me.geonauts.screens.ui.MainMenuScreen;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -127,7 +129,8 @@ public class GameScreen implements Screen, InputProcessor {
 	 * Sets the game screen to main menu
 	 */
 	public void toMainMenu() {
-		game.setScreen(new MainMenuScreen(game));
+		MainMenuScreen menu = new MainMenuScreen(game);
+		game.setScreen(menu);
 	}
 
 	@Override

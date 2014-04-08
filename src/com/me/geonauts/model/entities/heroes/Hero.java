@@ -75,14 +75,14 @@ public abstract class Hero extends Entity {
 		
 		// Update angle based State
 		if (state == State.FLYING) {
-			angle += ROTATION_SPEED;// * delta;
+			angle += ROTATION_SPEED;
 		} else if ( state == State.FALLING) {
-			angle -= ROTATION_SPEED / 2;// * delta;
+			angle -= ROTATION_SPEED / 3;
 		}
 		
 		// Make sure angle isn't too big.
 		if (angle > PITCH) angle = PITCH;
-		else if (angle < -PITCH + 5) angle = -PITCH + 5;
+		else if (angle < -PITCH + 7) angle = -PITCH + 7;
 		
 		// Set acceleration
 		acceleration.x = SPEED;
