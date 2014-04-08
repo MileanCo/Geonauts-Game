@@ -52,8 +52,8 @@ public class MainMenuScreen extends AbstractScreen {
 		stage.addActor(table);
 
 		// Skins
-		Skin skin = new Skin(Gdx.files.internal("images/ui/uiskin.json"));
-		skin.getAtlas().getTextures().iterator().next().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		Skin skin = new Skin();//Gdx.files.internal("images/ui/uiskin.json"));
+		//skin.getAtlas().getTextures().iterator().next().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		// btnSkin.addRegions(buttonsAtlas);
 
 		// TextureRegions
@@ -127,7 +127,6 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		// Gdx.input.setInputProcessor(this);
 	}
 
 	private void newGame() {
@@ -135,40 +134,4 @@ public class MainMenuScreen extends AbstractScreen {
 		game.setScreen(gameScreen);
 
 	}
-
-	//
-	// #################### CONTROLS ///////////////////
-	//
-
-	/**
-	 * public boolean keyDown(int keycode) { // TODO Auto-generated method stub
-	 * return false; }
-	 * 
-	 * 
-	 * public boolean keyUp(int keycode) { newGame(); return false; }
-	 * 
-	 * 
-	 * public boolean keyTyped(char character) { // TODO Auto-generated method
-	 * stub return false; }
-	 * 
-	 * public boolean touchDown(int screenX, int screenY, int pointer, int
-	 * button) { // TODO Auto-generated method stub return false; }
-	 * 
-	 * 
-	 * public boolean touchUp(int screenX, int screenY, int pointer, int button)
-	 * { // Make a new game! newGame(); return false; }
-	 * 
-	 * 
-	 * public boolean touchDragged(int screenX, int screenY, int pointer) { //
-	 * TODO Auto-generated method stub return false; }
-	 * 
-	 * 
-	 * public boolean mouseMoved(int screenX, int screenY) { // TODO
-	 * Auto-generated method stub return false; }
-	 * 
-	 * 
-	 * public boolean scrolled(int amount) { // TODO Auto-generated method stub
-	 * return false; }
-	 */
-
 }
