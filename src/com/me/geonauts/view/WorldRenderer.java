@@ -181,12 +181,13 @@ public class WorldRenderer {
 
 	private void drawChunks() {
 		// Draw current chunk
-		//System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
+		System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
 		for (Block block : world.getCurrentChunk().getDrawableBlocks() ) {
 			drawEntity(block, blockTextures.get(block.getType()));
 		}
+		
 		// Try to draw part of the next chunk.
-		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
+		System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
 		for (Block block : world.getNextChunk().getDrawableBlocks() ) {
 			drawEntity(block, blockTextures.get(block.getType()));
 		}
