@@ -109,8 +109,7 @@ public class Chunk {
 			if (x1 < 0) 	x1 = 0;	
 	
 			// get Right-hand side of screen		
-			// TO-DO: For the next chunk, ONLY get the blocks that are INSIDE the screen... AKA x2 is wrong.
-			int x2 = (int) (world.getHero().getCamOffsetPosX() + 21 - position.x ) ; //x1 + WorldRenderer.WIDTH + 1; 
+			int x2 = (int) (world.getHero().getCamOffsetPosX() + WorldRenderer.WIDTH + 1 - position.x );
 			int y2 = WorldRenderer.HEIGHT - 1;
 			
 			if (x2 >= WIDTH) x2 = WIDTH - 1;
