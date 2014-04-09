@@ -119,6 +119,13 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void render(float delta) {
 		super.render(delta);
+		
+		/**
+		batch.begin();
+			font.draw(batch, TITLE, stage.getWidth() / 2 - FONT_SIZE * TITLE.length(), stage.getHeight() - FONT_SIZE);
+		batch.end();
+		*/
+
 	}
 
 	public void hide() {

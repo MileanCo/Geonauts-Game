@@ -115,8 +115,6 @@ public class Chunk {
 			if (x2 >= WIDTH) x2 = WIDTH - 1;
 			if (y2 >= HEIGHT) y2 = HEIGHT - 1;
 			
-			//System.out.println(x1 + " | " + x2);
-			
 			// Make a list of all blocks within x...x2, y....y2
 			Block block;
 			for (int col = x1; col <= x2; col++) {

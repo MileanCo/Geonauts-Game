@@ -79,17 +79,7 @@ public class World {
 	public Array<Rectangle> getCollisionRects() {
 		return collisionRects;
 	}
-	
-	/**
-	 * Converts a vector into Chunk coordinates.
-	 * @param v
-	 * @return
-	 */
-	public Vector2 toChunkCoords(Vector2 v) {
-		return new Vector2(v.cpy().x - getCurrentChunk().position.x, v.y);
-	}
-	
-	
+		
 	/**
 	 * Current chunk is the first one in the Linked List. Aka the one at the front of the chunk-queue.
 	 * @return
@@ -123,11 +113,6 @@ public class World {
 			return chunks.getFirst().getBlock(col, row);
 		
 	}
-	public GameScreen getScreen() {
-		return screen;
-	}
 
-
-	// --------------------
 
 }

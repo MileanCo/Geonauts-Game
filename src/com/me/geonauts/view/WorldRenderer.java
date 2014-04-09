@@ -118,7 +118,7 @@ public class WorldRenderer {
 		blockTextures.put(BlockType.GRASS, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/grass.png"))));
 		
 		// Load all Hero textures
-		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgbattleship.png"))));
+		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgspeedship.png"))));
 		
 		
 		/**
@@ -181,13 +181,13 @@ public class WorldRenderer {
 
 	private void drawChunks() {
 		// Draw current chunk
-		System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
+		//System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
 		for (Block block : world.getCurrentChunk().getDrawableBlocks() ) {
 			drawEntity(block, blockTextures.get(block.getType()));
 		}
 		
 		// Try to draw part of the next chunk.
-		System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
+		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
 		for (Block block : world.getNextChunk().getDrawableBlocks() ) {
 			drawEntity(block, blockTextures.get(block.getType()));
 		}
@@ -195,11 +195,6 @@ public class WorldRenderer {
 
 	}
 	
-	
-	private float toPixels(float unit) {
-		return unit * ppuX;
-	}
-
 	/**
 	 * Draws hero in our world and updates his animation.
 	 */

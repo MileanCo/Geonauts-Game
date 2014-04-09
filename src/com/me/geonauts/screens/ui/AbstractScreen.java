@@ -16,6 +16,7 @@ public abstract class AbstractScreen implements Screen {
     protected BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
+    
 
     public AbstractScreen(Game game ) {
         this.game = game;
