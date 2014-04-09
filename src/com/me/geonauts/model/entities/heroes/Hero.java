@@ -30,19 +30,22 @@ public abstract class Hero extends Entity {
 	public Vector2 		velocity;
 	public Vector2		MAX_VEL;
 
-	
 	// Rotation stuff
 	public float 		ROTATION_SPEED;
 	protected float 	PITCH;
 
+	// Other attributes
+	private int health;
+	
 	/**
 	 * Creates a new Hero that is an Entity.
 	 * @param position
 	 * @param SIZE
 	 */
-	public Hero(Vector2 position, Vector2 SIZE, HeroType type, float ROTATION_SPEED, float PITCH, float SPEED ) {
+	public Hero(Vector2 position, Vector2 SIZE, HeroType type, float ROTATION_SPEED, float PITCH, float SPEED, int health ) {
 		super(position, SIZE);
 		this.type = type;
+		this.health = health;
 		
 		// Set movement constants
 		this.ROTATION_SPEED = ROTATION_SPEED;
@@ -86,7 +89,7 @@ public abstract class Hero extends Entity {
 		
 		// Set acceleration
 		acceleration.x = SPEED;
-		acceleration.y = (float) (SPEED * angle);
+		acceleration.y = (float) (SPEED * angle);		
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {

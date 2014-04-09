@@ -12,14 +12,17 @@ public class Sage extends Hero {
 	public static final float ROTATION_SPEED = 1f; // angles per second??
 	private static final float PITCH = 20f; 
 	
-	private static final Vector2 SIZE = new Vector2(1.64f, (4/3f)); //textureWidth / ppuX, 
+	private static final Vector2 SIZE = new Vector2(1.64f, (4/3f)); //textureWidth / ppuX
+	
+	// Other Attributes
+	private static int health = 100;
 	
 	/**
 	 * Create a new Hero of type Sage.
 	 * @param position
 	 */
 	public Sage(Vector2 position) {
-		super(position, SIZE, HeroType.SAGE, ROTATION_SPEED, PITCH, SPEED);		
+		super(position, SIZE, HeroType.SAGE, ROTATION_SPEED, PITCH, SPEED, health);		
 	}
 	
 	

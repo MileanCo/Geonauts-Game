@@ -43,7 +43,7 @@ public class WorldRenderer {
 	private OrthographicCamera cam;
 
 	/** for debug rendering **/
-	ShapeRenderer debugRenderer = new ShapeRenderer();
+	ShapeRenderer debugRenderer;
 
 	/** Textures **/
 	//private TextureRegion heroIdleLeft;
@@ -70,6 +70,7 @@ public class WorldRenderer {
 		this.world = world;		
 		this.debug = debug;
 		spriteBatch = new SpriteBatch();
+		debugRenderer = new ShapeRenderer();
 		loadTextures();
 	}
 	
@@ -118,7 +119,7 @@ public class WorldRenderer {
 		blockTextures.put(BlockType.GRASS, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/grass.png"))));
 		
 		// Load all Hero textures
-		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgspeedship.png"))));
+		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgbattleship.png"))));
 		
 		
 		/**
@@ -223,20 +224,21 @@ public class WorldRenderer {
 		// render blocks
 		debugRenderer.setProjectionMatrix(cam.combined);
 		debugRenderer.begin(ShapeType.Line);
-		
+		System.out.println(ppuX);
 		
 		for (Block block : world.getCurrentChunk().getDrawableBlocks())  {
 			Rectangle rect = block.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
-			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
+			debugRenderer.rect(rect.x * ppuX, rect.y * ppuY, rect.width * ppuY, rect.height * ppuY);
 		}
+		
 		// render hero
 		Hero hero = world.getHero();
 		Rectangle rect = hero.getBounds();
 		debugRenderer.setColor(new Color(0, 1, 0, 1));
-		debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
-		
+		debugRenderer.rect(rect.x * ppuX, rect.y * ppuY, rect.width * ppuY, rect.height * ppuY);
 		debugRenderer.end();
+		
 	}
 	
 	/**
@@ -254,13 +256,10 @@ public class WorldRenderer {
 	 * @param frame TextureRegion
 	 */
 	private void drawEntity(Entity e, TextureRegion frame) {
-		// TO DO: Figure out a way to draw objects in the world all @ the same size.
-		// Dont do this in the draw method below. The bounds of the colliding box need to change as well.
-		// Scaling.fillX;
 		spriteBatch.draw(frame, e.getPosition().x * ppuX, e.getPosition().y * ppuY, 
-				e.SIZE.x * ppuX / 2, e.SIZE.y * ppuY / 2, //heroFrame.getRegionWidth()/2, heroFrame.getRegionHeight()/2, 
-				e.SIZE.x * ppuX, e.SIZE.y * ppuY, //heroFrame.getRegionWidth(),  heroFrame.getRegionHeight(),// Hero.SIZE * ppuX, Hero.SIZE * ppuY, 
-				1, 1, //hero.SIZE.x, hero.SIZE.y, //ppuX / heroFrame.getRegionWidth(), ppuX / heroFrame.getRegionWidth(), 
+				e.SIZE.x * ppuX / 2, e.SIZE.y * ppuY / 2,  
+				e.SIZE.x * ppuX, e.SIZE.y * ppuY,  
+				1, 1,  
 				e.getAngle());
 	}
 	
