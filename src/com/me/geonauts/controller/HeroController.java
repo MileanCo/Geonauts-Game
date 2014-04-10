@@ -74,35 +74,36 @@ public class HeroController {
 		keys.get(keys.put(Keys.FLY, false));
 	}
 
-	/** The main update method **/
+	/**
+	 * Update the Hero's position and check collisions
+	 * @param delta
+	 */
 	public void update(float delta) {
 		// Processing the input - setting the states of Hero
 		processInput();
 
 		// Convert acceleration to frame time
-		hero.getAcceleration().scl(delta);
+		hero.acceleration.scl(delta);
 
 		// apply acceleration to change velocity
-		hero.getVelocity().add(hero.getAcceleration().x, hero.getAcceleration().y);
+		hero.velocity.add(hero.acceleration.x, hero.acceleration.y);
 		
-		//System.out.println(a_y);
 		// checking collisions with the surrounding blocks depending on Hero's
 		// velocity
 		checkCollisionWithBlocks(delta);
 
 		// apply damping to halt Hero nicely
-		//hero.getVelocity().scl(DAMP);
-		hero.getVelocity().y *= hero.getDAMP();
+		hero.velocity.y *= hero.getDAMP();
 		
 		// ensure terminal X velocity is not exceeded
-		if (hero.getVelocity().x > hero.MAX_VEL.x) 
-			hero.getVelocity().x = hero.MAX_VEL.x;
+		if (hero.velocity.x > hero.MAX_VEL.x) 
+			hero.velocity.x = hero.MAX_VEL.x;
 		
 		// ensure terminal Y velocity
-		if (hero.getVelocity().y >  hero.MAX_VEL.y) 
-			hero.getVelocity().y = hero.MAX_VEL.y;
-		else if (hero.getVelocity().y <  -hero.MAX_VEL.y) 
-			hero.getVelocity().y = -hero.MAX_VEL.y;
+		if (hero.velocity.y >  hero.MAX_VEL.y) 
+			hero.velocity.y = hero.MAX_VEL.y;
+		else if (hero.velocity.y <  -hero.MAX_VEL.y) 
+			hero.velocity.y = -hero.MAX_VEL.y;
 				
 		
 		// simply updates the state time
@@ -113,7 +114,7 @@ public class HeroController {
 	/** Collision checking **/
 	private void checkCollisionWithBlocks(float delta) {
 		// scale velocity to frame units
-		hero.getVelocity().scl(delta);
+		hero.velocity.scl(delta);
 
 		// Obtain the rectangle from the pool instead of instantiating it
 		Rectangle heroRect = rectPool.obtain();
@@ -126,19 +127,18 @@ public class HeroController {
 		int startY = (int) hero.getBounds().y;
 		int endY = (int) (hero.getBounds().y + hero.getBounds().height);
 		// if Hero is heading left then we check if he collides with the block on
-		// his left
-		// we check the block on his right otherwise
-		if (hero.getVelocity().x < 0) {
-			startX = endX = (int) Math.floor(hero.getBounds().x + hero.getVelocity().x);
+		// his left we check the block on his right otherwise
+		if (hero.velocity.x < 0) {
+			startX = endX = (int) Math.floor(hero.getBounds().x + hero.velocity.x);
 		} else {
-			startX = endX = (int) Math.floor(hero.getBounds().x + hero.getVelocity().x + hero.getBounds().width );
+			startX = endX = (int) Math.floor(hero.getBounds().x + hero.velocity.x + hero.getBounds().width );
 		}
 		
 		// get the block(s) hero can collide with
 		populateCollidableBlocks(startX, startY, endX, endY);
 
 		// simulate hero's movement on the X
-		heroRect.x += hero.getVelocity().x;
+		heroRect.x += hero.velocity.x;
 
 		// clear collision boxes in world for debug
 		world.getCollisionRects().clear();
@@ -147,6 +147,7 @@ public class HeroController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (heroRect.overlaps(block.getBounds())) {
+				//System.out.println("Collision @ " + block.position.toString());
 				hero.setState(Hero.State.DYING);
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
@@ -157,40 +158,40 @@ public class HeroController {
 		
 		
 		// reset the x position of the collision box to check Y /////////////////////////////////////////////////////////
-		heroRect.x = hero.getPosition().x;
+		heroRect.x = hero.position.x;
 
 		// the same thing but on the vertical Y axis
 		startX = (int) hero.getBounds().x;
 		endX = (int) (hero.getBounds().x + hero.getBounds().width);
-		if (hero.getVelocity().y < 0) {
-			startY = endY = (int) Math.floor(hero.getBounds().y + hero.getVelocity().y );
+		if (hero.velocity.y < 0) {
+			startY = endY = (int) Math.floor(hero.getBounds().y + hero.velocity.y );
 		} else {
-			startY = endY = (int) Math.floor(hero.getBounds().y + hero.getVelocity().y + hero.getBounds().height );
+			startY = endY = (int) Math.floor(hero.getBounds().y + hero.velocity.y + hero.getBounds().height );
 		}
 
 		populateCollidableBlocks(startX, startY, endX, endY);
 
-		heroRect.y += hero.getVelocity().y;
+		heroRect.y += hero.velocity.y;
 
 		for (Block block : collidable) {
 			if (block == null) 	continue;
 			if (heroRect.overlaps(block.getBounds())) {
-				System.out.println("Collision @ " + block.getPosition().toString());
+				//System.out.println("Collision @ " + block.position.toString());
 				hero.setState(Hero.State.DYING);
 				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
 		}
 		// reset the collision box's position on Y
-		heroRect.y = hero.getPosition().y;
+		heroRect.y = hero.position.y;
 
 		// update Hero's position
-		hero.getPosition().add(hero.getVelocity());
-		hero.getBounds().x = hero.getPosition().x;
-		hero.getBounds().y = hero.getPosition().y;
+		hero.position.add(hero.velocity);
+		hero.getBounds().x = hero.position.x;
+		hero.getBounds().y = hero.position.y;
 
 		// un-scale velocity (not in frame time)
-		hero.getVelocity().scl(1 / delta);
+		hero.velocity.scl(1 / delta);
 
 	}
 	

@@ -13,14 +13,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Scaling;
+import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.model.enums.BlockType;
-import com.me.geonauts.model.enums.HeroType;
 
 
 /**
@@ -52,7 +53,7 @@ public class WorldRenderer {
 	//private TextureRegion heroJumpLeft;
 	public HashMap<BlockType, TextureRegion> blockTextures = new HashMap<BlockType, TextureRegion>();
 	public HashMap<String, TextureRegion> backgroundTextures = new HashMap<String, TextureRegion> ();
-	private HashMap<HeroType, TextureRegion> heroTextures = new HashMap<HeroType, TextureRegion> ();
+	//private HashMap<HeroType, TextureRegion[]> heroTextures = new HashMap<HeroType, TextureRegion[]> ();
 	private ParallaxBackground background;
 	
 	
@@ -60,7 +61,7 @@ public class WorldRenderer {
 	private Animation heroAnimation;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = true;
+	private boolean debug = false;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -119,8 +120,20 @@ public class WorldRenderer {
 		blockTextures.put(BlockType.GRASS, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/grass.png"))));
 		
 		// Load all Hero textures
-		heroTextures.put(HeroType.SAGE, new TextureRegion(new Texture(Gdx.files.internal("images/nauts/bgbattleship.png"))));
+		int frames = 1;
+		Sage.heroFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			Sage.heroFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/nauts/sage0" + i + ".png")));
+		}
 		
+		// Load all Enemy textures
+		Dwain.enemyFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			Dwain.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/dwain0" + i + ".png")));
+		}
+		
+		
+
 		
 		/**
 		
@@ -149,11 +162,7 @@ public class WorldRenderer {
 		bobFallRight.flip(true, false);
 		*/
 	}
-	
-	public TextureRegion getHeroTexture(HeroType type) {
-		return heroTextures.get(type);
-	}
-	
+
 	/**
 	 * Draw all objects to the World
 	 */
@@ -173,6 +182,13 @@ public class WorldRenderer {
 		spriteBatch.begin();
 			drawChunks();
 			drawHero();
+			
+			// DRAW and UPDATE enemies in same loop for performance improvement
+			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
+				drawUpdateEnemy(i, delta);
+			}
+
+			
 		spriteBatch.end();
 		
 		if (debug)
@@ -202,29 +218,45 @@ public class WorldRenderer {
 	private void drawHero() {
 		Hero hero = world.getHero();
 		
-		/**
-		// Get default frame depending on if he's standing right or left
-		heroFrame = hero.isFacingLeft() ? heroIdleLeft : heroIdleRight;
-		
+				
 		// Get hero's current frame if he's walking
-		if (hero.getState().equals(State.MOVING)) {
-			heroFrame = hero.isFacingLeft() ? moveLeftAnimation.getKeyFrame(hero.getStateTime(), true) : moveRightAnimation.getKeyFrame(hero.getStateTime(), true);
+		//if (hero.getState().equals(State.MOVING)) {
+		//	heroFrame = hero.isFacingLeft() ? moveLeftAnimation.getKeyFrame(hero.getStateTime(), true) : moveRightAnimation.getKeyFrame(hero.getStateTime(), true);
 		
 		// Get hero's frame if he's jumping or falling
-		}
-		*/
+		//}
 		
 		// Draw hero's frame in the proper position
-		TextureRegion heroFrame = heroTextures.get(hero.getType());
-		drawEntity(hero, heroFrame);
+		TextureRegion[] frames = hero.getFrames();
+		drawEntity(hero, frames[0]);
 
+	}
+	
+	/**
+	 * DRAW and UPDATE enemies in same loop for performance improvement
+	 * @param index: Index in the enemyControllers list.
+	 * @param delta: Time since last loop
+	 */
+	private void drawUpdateEnemy(int index, float delta) {
+		// Get objects
+		EnemyController ec = world.getEnemyControllers().get(index);
+		Entity e = ec.getEnemyEntity();
+		TextureRegion[] frames = ec.getFrames();
+		
+		// Update and draw objects
+		ec.update(delta);
+		drawEntity(e, frames[0]);
+		
+		// Check if enemy is off the screen
+		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
+			world.getEnemyControllers().remove(index);
+		}
 	}
 
 	private void drawDebug() {
 		// render blocks
 		debugRenderer.setProjectionMatrix(cam.combined);
 		debugRenderer.begin(ShapeType.Line);
-		System.out.println(ppuX);
 		
 		for (Block block : world.getCurrentChunk().getDrawableBlocks())  {
 			Rectangle rect = block.getBounds();
@@ -256,7 +288,7 @@ public class WorldRenderer {
 	 * @param frame TextureRegion
 	 */
 	private void drawEntity(Entity e, TextureRegion frame) {
-		spriteBatch.draw(frame, e.getPosition().x * ppuX, e.getPosition().y * ppuY, 
+		spriteBatch.draw(frame, e.position.x * ppuX, e.position.y * ppuY, 
 				e.SIZE.x * ppuX / 2, e.SIZE.y * ppuY / 2,  
 				e.SIZE.x * ppuX, e.SIZE.y * ppuY,  
 				1, 1,  

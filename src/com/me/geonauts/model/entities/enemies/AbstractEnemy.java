@@ -3,21 +3,24 @@
  */
 package com.me.geonauts.model.entities.enemies;
 
+import java.util.Random;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.entities.heroes.Hero.State;
 
 /**
  * @author joel
  *
  */
 public abstract class AbstractEnemy extends Entity {
+	private Random rand = new Random();
 	// State stuff
 	public enum State {
 		DYING, ALIVE
 	}
 	
-	protected State		state = State.ALIVE;
+	public State		state = State.ALIVE;
 	private float		stateTime = 0;
 	
 	// Movement attributes
@@ -33,35 +36,24 @@ public abstract class AbstractEnemy extends Entity {
 	
 	
 	
-	public AbstractEnemy(Vector2 pos, Vector2 SIZE, int health, int damage) {
-		super(pos, SIZE);
-		
-		MAX_VEL = new Vector2(SPEED, SPEED);
-		DAMP = 0.85f;
-		this.health = health;
-		this.damage = damage;
+	public AbstractEnemy(Vector2 pos, Vector2 SIZE, float SPEED, int health, int damage) {
+		super(pos, SIZE);		
 		
 		// Make new movement vectors
+		DAMP = 0.85f;
+		this.SPEED = (float) (rand.nextDouble() * SPEED);
+		MAX_VEL = new Vector2(SPEED*1.5f, SPEED);
 		acceleration = new Vector2(SPEED, 0);
 		velocity = new Vector2();
 		
+		// Other attributes
+		this.health = health;
+		this.damage = damage;
 	}
 	
 	public abstract void update(float delta);
 
 	/** Getters and Setters */
-	public Vector2 getAcceleration() {
-		return acceleration;
-	}
-	public Vector2 getVelocity() {
-		return velocity;
-	}
-	public State getState() {
-		return state;
-	}
-	public void setState(State newState) {
-		this.state = newState;
-	}
 	public float getStateTime() {
 		return stateTime;
 	}
@@ -70,4 +62,6 @@ public abstract class AbstractEnemy extends Entity {
 		return DAMP;
 	}
 
+	// All Enemies must implement the getFrames() method to return the proper images 
+	public abstract TextureRegion[] getFrames ();
 }

@@ -1,12 +1,16 @@
 package com.me.geonauts.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.screens.GameScreen;
@@ -19,10 +23,14 @@ import com.me.geonauts.view.WorldRenderer;
 public class World {
 	private static final long DEAD_TIME = 1500;
 	
-	/** The collision boxes **/
+	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
 	/** Our player controlled hero **/
 	private Hero hero;
+	
+	private List<EnemyController> enemies;
+	private Random randomGen = new Random();
+	
 	/** Screen of the game */
 	private GameScreen screen;
 	/** List of chunks that are to move through the world. */
@@ -36,6 +44,9 @@ public class World {
 		
 		// Create default hero Sage.
 		hero = new Sage(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
+		
+		// Create default list of enemies
+		enemies = new ArrayList<EnemyController>();
 		
 		resetChunks();
 	}
@@ -59,6 +70,16 @@ public class World {
 				screen.toMainMenu();
 			}
 		}
+				
+		// Spawn some enemies!
+		int spawn = randomGen.nextInt(100 - 0) + 0;
+		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
+		if (spawn == 50) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			EnemyController ec = new EnemyController(this, new Dwain(pos));
+			enemies.add(ec);
+		}
+		
 		
 	}
 	
@@ -93,6 +114,9 @@ public class World {
 	public Hero getHero() {
 		return hero;
 	}
+	public List<EnemyController> getEnemyControllers() {
+		return enemies;
+	}
 	
 	public Block[][] getBlocks() {
 		return chunks.getFirst().getBlocks();
@@ -103,6 +127,10 @@ public class World {
 		row -= getCurrentChunk().position.y;
 		
 		if (row >= Chunk.HEIGHT) row = Chunk.HEIGHT - 1;
+		if (row < 0) {
+			System.out.println("WARNING: Tried to get block @ " + col + " | " + row);
+			row = 0;
+		}
 		
 		//System.out.println(col + " " + row);
 		

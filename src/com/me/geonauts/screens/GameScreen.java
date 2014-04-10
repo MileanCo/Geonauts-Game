@@ -43,8 +43,10 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Create new game world objects
 		world = new World(this);
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer(world); // Renderer updates and draws enemies.
 		heroController = new HeroController(world);
+		
+		
 	}
 	
 	
@@ -65,7 +67,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Update the world, hero controller, and render the screen
-		heroController.update(delta);
+		heroController.update(delta); // updates model Hero as well.
 		world.update(delta);
 		renderer.render(delta);
 	}

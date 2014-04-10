@@ -3,10 +3,10 @@
  */
 package com.me.geonauts.model.entities.heroes;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.enums.HeroType;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -20,7 +20,6 @@ public abstract class Hero extends Entity {
 	}	
 	protected State		state = State.FALLING;
 	private float		stateTime = 0;
-	private HeroType 	type;
 	private long		timeDied = 0;
 	
 	// Movement attributes
@@ -37,14 +36,16 @@ public abstract class Hero extends Entity {
 	// Other attributes
 	private int health;
 	
+	// Textures
+	//public static TextureRegion[] heroFrames;
+	
 	/**
 	 * Creates a new Hero that is an Entity.
 	 * @param position
 	 * @param SIZE
 	 */
-	public Hero(Vector2 position, Vector2 SIZE, HeroType type, float ROTATION_SPEED, float PITCH, float SPEED, int health ) {
+	public Hero(Vector2 position, Vector2 SIZE, float ROTATION_SPEED, float PITCH, float SPEED, int health) {
 		super(position, SIZE);
-		this.type = type;
 		this.health = health;
 		
 		// Set movement constants
@@ -69,27 +70,6 @@ public abstract class Hero extends Entity {
 		// Add delta to the stateTime, used by animations.
 		stateTime += delta;
 		
-		// Make sure hero doesn't go above screen.
-		if (position.y > Chunk.HEIGHT - SIZE.y) {
-			state = State.FALLING;
-			angle -= ROTATION_SPEED;
-		}
-		//System.out.println(position.toString());
-		
-		// Update angle based State
-		if (state == State.FLYING) {
-			angle += ROTATION_SPEED;
-		} else if ( state == State.FALLING) {
-			angle -= ROTATION_SPEED / 3;
-		}
-		
-		// Make sure angle isn't too big.
-		if (angle > PITCH) angle = PITCH;
-		else if (angle < -PITCH + 7) angle = -PITCH + 7;
-		
-		// Set acceleration
-		acceleration.x = SPEED;
-		acceleration.y = (float) (SPEED * angle);		
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {
@@ -101,7 +81,30 @@ public abstract class Hero extends Entity {
 			}
 		} else {
 			timeDied = 0;
+		
+			// Make sure hero doesn't go above screen.
+			if (position.y > Chunk.HEIGHT - SIZE.y) {
+				state = State.FALLING;
+				angle -= ROTATION_SPEED;
+			}
+			//System.out.println(position.toString());
+			
+			// Update angle based State
+			if (state == State.FLYING) {
+				angle += ROTATION_SPEED;
+			} else if ( state == State.FALLING) {
+				angle -= ROTATION_SPEED / 3;
+			}
+			
+			// Make sure angle isn't too big.
+			if (angle > PITCH) angle = PITCH;
+			else if (angle < -PITCH + 7) angle = -PITCH + 7;
+			
+			// Set acceleration
+			acceleration.x = SPEED;
+			acceleration.y = (float) (SPEED * angle);
 		}
+
 
 		
 		// System.out.println(velocity.y);
@@ -110,13 +113,6 @@ public abstract class Hero extends Entity {
 		//System.out.println(angle);
 	}
 	
-	public Vector2 getAcceleration() {
-		return acceleration;
-	}
-
-	public Vector2 getVelocity() {
-		return velocity;
-	}
 
 	public State getState() {
 		return state;
@@ -141,12 +137,12 @@ public abstract class Hero extends Entity {
 		return MAX_VEL;
 	}
 	
-	public HeroType getType() {
-		return type;
-	}
 	public long getTimeDied() {
 		return timeDied;
 	}
+	
+	// All Heros must implement the getFrames() method to return the proper images 
+	public abstract TextureRegion[] getFrames ();
 	
 }
 	

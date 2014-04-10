@@ -41,7 +41,7 @@ public class ParallaxBackground {
 	 */
 	public void render(float delta) {
 		// Get velocity of hero. If hero stops, scrolling will stop.
-		Vector2 velocity = world.getHero().getVelocity().cpy().scl(speed * delta);
+		Vector2 velocity = world.getHero().velocity.cpy().scl(speed * delta);
 		// Move the camera by the veloctiy of the hero. Convert from UNITS/sec to PIXELS/sec
 		camera.position.add(velocity.x * worldRenderer.getPPUX(), 
 				velocity.y * worldRenderer.getPPUY(), 0);
