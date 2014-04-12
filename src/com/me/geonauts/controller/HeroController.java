@@ -3,13 +3,20 @@ package com.me.geonauts.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.equations.Elastic;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.me.geonauts.model.Chunk;
+import com.me.geonauts.model.EntityAccessor;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.heroes.Hero;
 
 public class HeroController {
@@ -23,6 +30,8 @@ public class HeroController {
 	// Model objects
 	private World world;
 	private Hero hero;
+	private TweenManager manager;
+
 
 	// Keys
 	static Map<Keys, Boolean> keys = new HashMap<HeroController.Keys, Boolean>();
@@ -36,9 +45,6 @@ public class HeroController {
 	/** True as long as the Fly button is being pressed */
 	private Vector2 target;
 
-	// True if hero on the ground.
-	private boolean grounded = false;
-
 	/**
 	 * Constructor to make the Controller for hero
 	 * @param world
@@ -46,6 +52,11 @@ public class HeroController {
 	public HeroController(World world) {
 		this.world = world;
 		this.hero = world.getHero();
+		
+		// Tween stuff
+		Tween.registerAccessor(Entity.class, new EntityAccessor());
+		manager = new TweenManager();
+		
 	}
 
 	// This is the rectangle pool used in collision detection
@@ -59,9 +70,54 @@ public class HeroController {
 
 	// ** Key presses and touches **************** //
 
-	public void firePressed(int x, int y) {
+	/**
+	 * 
+	 * @param x of the mouse/touch in WORLD COORDINATES (not pixels)
+	 * @param y of the mouse/touch in WORLD COORDINATES (not pixels)
+	 */
+	public void firePressed(float x, float y) {
 		keys.get(keys.put(Keys.FIRE, true));
-		target = new Vector2(x, y);
+		
+		// Add hero's position to X so it's inside the camera view
+		x += hero.getCamOffsetPosX();
+		System.out.println("TOUCH: " + x + " " + y);
+		
+		// Try to find a target
+		for (EnemyController ec : world.getEnemyControllers()) {
+			
+			//System.out.println("enemy: " + ec.getEnemyEntity().getBounds());
+			// If touch enemy, fire missile
+			if (!pointInRectangle(ec.getEnemyEntity().getBounds(), x, y)) { 
+				
+				// CREATE NEW MISSILE w/ TARGET
+				Missile m = new Missile(hero.position.cpy(), ec.getEnemy(), 25);
+				System.out.println("new missile: " + m);
+				world.getMissiles().add(m);
+				
+				return;
+			}
+		}
+		
+		
+		
+		
+		/**
+		Tween.from(hero, EntityAccessor.POSITION_XY, 1.0f)
+			.target(hero.position.x, hero.position.y)
+			//.ease(Elastic.INOUT)
+			.start(manager);
+		
+		//Entity e = new Entity(Missile.frames[0]);
+		Tween.to(m, EntityAccessor.POSITION_XY, 1.0f)
+			.target(target.x, target.y)
+			//.ease(Elastic.INOUT)
+			.start(manager);
+		*/
+		
+	
+
+		//target = null;
+			
 	}
 	public void fireReleased() {
 		keys.get(keys.put(Keys.FIRE, false));
@@ -73,6 +129,11 @@ public class HeroController {
 	public void flyReleased() {
 		keys.get(keys.put(Keys.FLY, false));
 	}
+	
+	private static boolean pointInRectangle (Rectangle r, float x, float y) {
+	    return r.x <= x && (r.x + r.width >= x) 
+	    		&& r.y <= y && (r.y + r.height >= y);
+	}
 
 	/**
 	 * Update the Hero's position and check collisions
@@ -80,14 +141,17 @@ public class HeroController {
 	 */
 	public void update(float delta) {
 		// Processing the input - setting the states of Hero
-		processInput();
+		if (hero.state != Hero.State.DYING) 
+			processInput();
+		
+		
 
 		// Convert acceleration to frame time
 		hero.acceleration.scl(delta);
 
 		// apply acceleration to change velocity
 		hero.velocity.add(hero.acceleration.x, hero.acceleration.y);
-		
+				
 		// checking collisions with the surrounding blocks depending on Hero's
 		// velocity
 		checkCollisionWithBlocks(delta);
@@ -104,11 +168,10 @@ public class HeroController {
 			hero.velocity.y = hero.MAX_VEL.y;
 		else if (hero.velocity.y <  -hero.MAX_VEL.y) 
 			hero.velocity.y = -hero.MAX_VEL.y;
-				
 		
-		// simply updates the state time
+		// Update the rest of the Hero object
+		manager.update(delta); // elapsed seconds != delta
 		hero.update(delta);
-
 	}
 
 	/** Collision checking **/
@@ -148,13 +211,12 @@ public class HeroController {
 			if (block == null)  continue;
 			if (heroRect.overlaps(block.getBounds())) {
 				//System.out.println("Collision @ " + block.position.toString());
-				hero.setState(Hero.State.DYING);
+				dead();
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
 			}
 		}
 
-		
 		
 		
 		// reset the x position of the collision box to check Y /////////////////////////////////////////////////////////
@@ -177,7 +239,7 @@ public class HeroController {
 			if (block == null) 	continue;
 			if (heroRect.overlaps(block.getBounds())) {
 				//System.out.println("Collision @ " + block.position.toString());
-				hero.setState(Hero.State.DYING);
+				dead();
 				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
@@ -206,21 +268,27 @@ public class HeroController {
 			}
 		}
 	}
+	
+	private void dead() {
+		System.out.println("Hero dead");
+		hero.state = Hero.State.DYING;
+		hero.velocity.x = 0;
+		hero.velocity.y = 0;
+		hero.grounded = true;
+	}
 
 	/** Change Hero's state and parameters based on input controls **/
 	private boolean processInput() {
 		if (keys.get(Keys.FLY)) {	
-			hero.setState(Hero.State.FLYING);
+			hero.state = Hero.State.FLYING;
 			flyPressedTime = System.currentTimeMillis();
 			
 		// If he's not flying, he's falling.
 		} else {
-			hero.setState(Hero.State.FALLING);
+			hero.state = Hero.State.FALLING;
 		}
 		if (keys.get(Keys.FIRE)) {
-			// CREATE NEW MISSILE w/ TARGET
-			
-			target = null;
+
 		}
 
 		return false;

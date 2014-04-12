@@ -44,6 +44,11 @@ public class EnemyController {
 	 * @param delta
 	 */
 	public void update(float delta) {
+		if (enemy.health <= 0) {
+			die();
+			return;
+		}
+		
 		// Convert acceleration to frame time
 		enemy.acceleration.scl(delta);
 
@@ -67,8 +72,6 @@ public class EnemyController {
 		else if (enemy.velocity.y <  -enemy.MAX_VEL.y) 
 			enemy.velocity.y = -enemy.MAX_VEL.y;
 				
-		
-		//System.out.println(enemy.acceleration.toString());
 		// simply updates the state time
 		enemy.update(delta);
 
@@ -86,6 +89,17 @@ public class EnemyController {
 				enemy.getBounds().width, enemy.getBounds().height);
 
 		
+		// Check if enemy collides with Hero
+		Rectangle heroRect = rectPool.obtain();
+		// set the rectangle to hero's bounding box
+		heroRect.set(world.getHero().getBounds().x, world.getHero().getBounds().y, 
+				world.getHero().getBounds().width, world.getHero().getBounds().height);
+		// Does it collide? 
+		if (enemyRect.overlaps(heroRect)) {
+			world.getHero().health -= enemy.getDamage() * 5;
+			die();
+			return;
+		} 
 		
 		
 		
@@ -115,8 +129,8 @@ public class EnemyController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (enemyRect.overlaps(block.getBounds())) {
-				enemy.state = AbstractEnemy.State.DYING;
-				world.getEnemyControllers().remove(this);
+				System.out.println("Enemy Collision @ " + block.position.toString());
+				die();
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
 			}
@@ -144,8 +158,7 @@ public class EnemyController {
 			if (block == null) 	continue;
 			if (enemyRect.overlaps(block.getBounds())) {
 				System.out.println("Enemy Collision @ " + block.position.toString());
-				enemy.state = AbstractEnemy.State.DYING;
-				world.getEnemyControllers().remove(this);
+				die();
 				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
@@ -175,6 +188,11 @@ public class EnemyController {
 		}
 	}
 	
+	private void die() {
+		enemy.state = AbstractEnemy.State.DYING;
+		world.getEnemyControllers().remove(this);
+	}
+	
 	/**
 	 * Get the frames that belong to this Enemy. 
 	 * @return
@@ -184,6 +202,9 @@ public class EnemyController {
 	}
 
 	public Entity getEnemyEntity() {
+		return enemy;
+	}
+	public AbstractEnemy getEnemy() {
 		return enemy;
 	}
 	

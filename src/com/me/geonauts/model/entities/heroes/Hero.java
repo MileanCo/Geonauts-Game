@@ -18,7 +18,7 @@ public abstract class Hero extends Entity {
 	public enum State {
 		FLYING, FALLING, DYING
 	}	
-	protected State		state = State.FALLING;
+	public State		state = State.FALLING;
 	private float		stateTime = 0;
 	private long		timeDied = 0;
 	
@@ -34,7 +34,9 @@ public abstract class Hero extends Entity {
 	protected float 	PITCH;
 
 	// Other attributes
-	private int health;
+	public int health;
+	
+	public boolean grounded;
 	
 	// Textures
 	//public static TextureRegion[] heroFrames;
@@ -70,32 +72,40 @@ public abstract class Hero extends Entity {
 		// Add delta to the stateTime, used by animations.
 		stateTime += delta;
 		
+		if (health <= 0) state = State.DYING;
+		
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {
-			velocity.x = 0;
-			velocity.y = 0;
-			acceleration.y = 0;
+			//velocity.x /= 2;
+			//velocity.y = 0;
+			//acceleration.y = 0;
 			if (timeDied == 0) {
 				timeDied = System.currentTimeMillis();
 			}
 		} else {
 			timeDied = 0;
+		}
 		
-			// Make sure hero doesn't go above screen.
-			if (position.y > Chunk.HEIGHT - SIZE.y) {
-				state = State.FALLING;
-				angle -= ROTATION_SPEED;
-			}
-			//System.out.println(position.toString());
-			
+		
+		// Make sure hero doesn't go above screen.
+		if (position.y > Chunk.HEIGHT - SIZE.y) {
+			state = State.FALLING;
+			angle -= ROTATION_SPEED;
+		}
+		//System.out.println(position.toString());
+		
+		// If the Hero isn't on the ground, UPDATE ANGLE AND ACCELERATION
+		if (! grounded) {
 			// Update angle based State
-			if (state == State.FLYING) {
-				angle += ROTATION_SPEED;
-			} else if ( state == State.FALLING) {
-				angle -= ROTATION_SPEED / 3;
+			// Make hero go straight first couple meters
+			if (position.x > WorldRenderer.WIDTH/2) { 
+				if (state == State.FLYING) 
+					angle += ROTATION_SPEED;
+				else if ( state == State.FALLING || state == State.DYING)
+					angle -= ROTATION_SPEED / 3;
 			}
-			
+				
 			// Make sure angle isn't too big.
 			if (angle > PITCH) angle = PITCH;
 			else if (angle < -PITCH + 7) angle = -PITCH + 7;
@@ -105,7 +115,6 @@ public abstract class Hero extends Entity {
 			acceleration.y = (float) (SPEED * angle);
 		}
 
-
 		
 		// System.out.println(velocity.y);
 		//System.out.println(ROTATION_SPEED * delta);
@@ -113,15 +122,6 @@ public abstract class Hero extends Entity {
 		//System.out.println(angle);
 	}
 	
-
-	public State getState() {
-		return state;
-	}
-	
-	public void setState(State newState) {
-		this.state = newState;
-	}
-
 	public float getStateTime() {
 		return stateTime;
 	}

@@ -56,4 +56,18 @@ public abstract class Entity {
 	public float getAngle() {
 		return angle;
 	}
+
+	// FOR TWEENS
+	public void setX(float x) {
+		this.position.x = x;
+	}
+	public void setY(float y) {
+		this.position.y = y;
+	}
+	public float getX() {
+		return position.x;
+	}
+	public float getY() {
+		return position.y;
+	}
 }

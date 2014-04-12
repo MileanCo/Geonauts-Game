@@ -31,7 +31,7 @@ public abstract class AbstractEnemy extends Entity {
 	public Vector2		MAX_VEL;
 	
 	// Other attributes
-	private int health;
+	public int health;
 	private int damage;
 	
 	
@@ -57,7 +57,9 @@ public abstract class AbstractEnemy extends Entity {
 	public float getStateTime() {
 		return stateTime;
 	}
-
+	public int getDamage() {
+		return damage;
+	}
 	public float getDAMP() {
 		return DAMP;
 	}

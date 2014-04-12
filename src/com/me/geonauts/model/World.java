@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
@@ -28,6 +29,7 @@ public class World {
 	/** Our player controlled hero **/
 	private Hero hero;
 	
+	private List<Missile> missiles;
 	private List<EnemyController> enemies;
 	private Random randomGen = new Random();
 	
@@ -45,8 +47,9 @@ public class World {
 		// Create default hero Sage.
 		hero = new Sage(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
 		
-		// Create default list of enemies
+		// Create default lists
 		enemies = new ArrayList<EnemyController>();
+		missiles = new ArrayList<Missile> ();
 		
 		resetChunks();
 	}
@@ -65,7 +68,7 @@ public class World {
 			chunks.addLast(move_me);
 		}
 		
-		if (hero.getState() == Hero.State.DYING) {
+		if (hero.state == Hero.State.DYING) {
 			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
 				screen.toMainMenu();
 			}
@@ -117,6 +120,9 @@ public class World {
 	public List<EnemyController> getEnemyControllers() {
 		return enemies;
 	}
+	public List<Missile> getMissiles() {
+		return missiles;
+	}
 	
 	public Block[][] getBlocks() {
 		return chunks.getFirst().getBlocks();
@@ -127,12 +133,12 @@ public class World {
 		row -= getCurrentChunk().position.y;
 		
 		if (row >= Chunk.HEIGHT) row = Chunk.HEIGHT - 1;
-		if (row < 0) {
-			System.out.println("WARNING: Tried to get block @ " + col + " | " + row);
-			row = 0;
-		}
 		
 		//System.out.println(col + " " + row);
+		
+		// LOL WUT THIS SHOULD NEVA HAPPEN
+		if (col < 0) col = 0;
+		if (row < 0) row = 0;
 		
 		// Get block from next chunk, since col is out of bounds for current chunk.
 		if (col >= Chunk.WIDTH) 

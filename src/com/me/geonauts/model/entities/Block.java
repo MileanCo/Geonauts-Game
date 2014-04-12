@@ -7,6 +7,7 @@ public class Block extends Entity {
 	/** Size of the entity */
 	private static final Vector2 sz = new Vector2(1f, 1f);
 	private BlockType type;
+	private int damage = 2;
 	
 	public Block(Vector2 pos, BlockType t) {
 		super(pos, sz);
@@ -17,5 +18,8 @@ public class Block extends Entity {
 	
 	public BlockType getType() {
 		return type;
+	}
+	public int getDamage() {
+		return damage;
 	}
 }

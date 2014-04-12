@@ -18,6 +18,7 @@ import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
@@ -61,7 +62,7 @@ public class WorldRenderer {
 	private Animation heroAnimation;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = false;
+	private boolean debug = true;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -132,6 +133,9 @@ public class WorldRenderer {
 			Dwain.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/dwain0" + i + ".png")));
 		}
 		
+		Missile.frames = new TextureRegion[1];
+		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/laser_yellow00.png")));
+		
 		
 
 		
@@ -187,6 +191,11 @@ public class WorldRenderer {
 			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
 				drawUpdateEnemy(i, delta);
 			}
+			
+			// DRAW and UPDATE MISSILES
+			for (int i = 0; i < world.getMissiles().size(); i++ ) {
+				drawUpdateMissile(i, delta);
+			}
 
 			
 		spriteBatch.end();
@@ -241,16 +250,32 @@ public class WorldRenderer {
 		// Get objects
 		EnemyController ec = world.getEnemyControllers().get(index);
 		Entity e = ec.getEnemyEntity();
-		TextureRegion[] frames = ec.getFrames();
-		
-		// Update and draw objects
-		ec.update(delta);
-		drawEntity(e, frames[0]);
-		
+
 		// Check if enemy is off the screen
 		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
 			world.getEnemyControllers().remove(index);
+			
+		// Otherwise draw and update
+		} else {
+			TextureRegion[] frames = ec.getFrames();
+			// Update and draw objects
+			ec.update(delta);
+			drawEntity(e, frames[0]);
 		}
+	}
+	
+	private void drawUpdateMissile(int index, float delta) {
+		Missile m = world.getMissiles().get(index);
+		if (m.isAlive()) {
+			TextureRegion[] frames = m.getFrames();
+			m.update(delta);
+			drawEntity(m, frames[0]);
+			//System.out.println("m: " + m.position);
+		} else {
+			world.getMissiles().remove(index);
+		}
+		
+		
 	}
 
 	private void drawDebug() {
@@ -269,7 +294,22 @@ public class WorldRenderer {
 		Rectangle rect = hero.getBounds();
 		debugRenderer.setColor(new Color(0, 1, 0, 1));
 		debugRenderer.rect(rect.x * ppuX, rect.y * ppuY, rect.width * ppuY, rect.height * ppuY);
+		
+		
+		// render enemies
+		for (int i = 0; i < world.getEnemyControllers().size(); i++) {
+			// Get objects
+			EnemyController ec = world.getEnemyControllers().get(i);
+			Entity e = ec.getEnemyEntity();
+			
+			Rectangle eRect = e.getBounds();
+			debugRenderer.setColor(new Color(0, 0, 1, 1));
+			debugRenderer.rect(eRect.x * ppuX, eRect.y * ppuY, eRect.width * ppuY, eRect.height * ppuY);
+		}
 		debugRenderer.end();
+		
+		// render enemies
+
 		
 	}
 	
@@ -295,6 +335,7 @@ public class WorldRenderer {
 				e.getAngle());
 	}
 	
+
 	
 	public float getPPUX() { 
 		return ppuX; 

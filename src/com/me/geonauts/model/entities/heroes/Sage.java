@@ -13,7 +13,7 @@ public class Sage extends Hero {
 	
 	// Other Attributes
 	private static int health = 100;
-	private static final Vector2 SIZE = new Vector2(1.64f, (4/3f)); //textureWidth / ppuX
+	private static final Vector2 SIZE = new Vector2(1.64f/1.5f, (4/3f)/1.5f); //textureWidth / ppuX
 	
 	// Textures
 	public static TextureRegion[] heroFrames;

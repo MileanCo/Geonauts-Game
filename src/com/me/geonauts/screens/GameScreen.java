@@ -107,8 +107,8 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.Z)
 			heroController.flyPressed();
-		//if (keycode == Keys.X)
-			//heroController.firePressed();
+		if (keycode == Keys.X)
+			heroController.firePressed(Gdx.input.getX() / renderer.getPPUX(), Gdx.input.getY()  / renderer.getPPUY());
 		return true;
 	}
 
