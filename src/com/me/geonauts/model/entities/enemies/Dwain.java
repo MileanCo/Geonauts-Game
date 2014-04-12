@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Dwain extends AbstractEnemy {
 
 
-	public static final float SPEED = 1.5f;	// unit per second
+	public static final float SPEED = 0.5f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((74/64)/1.5f, (71/60)/1.5f);
 	private static int health = 50;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Sage extends Hero {
 	// Speed of the hero
-	public static final float SPEED = 4.0f;	// unit per second
+	public static final float SPEED = 3.0f;	// unit per second
 	
 	// Rotation stuff
 	public static final float ROTATION_SPEED = 1f; // angles per second??

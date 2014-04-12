@@ -26,6 +26,8 @@ public class HeroController {
 
 	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
+	// Used to make the boundinx box for the hero smaller.
+	private Vector2 BOUND_BOX_OFFSET;
 
 	// Model objects
 	private World world;
@@ -52,6 +54,11 @@ public class HeroController {
 	public HeroController(World world) {
 		this.world = world;
 		this.hero = world.getHero();
+		BOUND_BOX_OFFSET = new Vector2(hero.SIZE.x/3, hero.SIZE.y / 3);
+
+		// Change bounds to make colliding box smaller
+		hero.setBounds(hero.SIZE.x - BOUND_BOX_OFFSET.x, hero.SIZE.y - BOUND_BOX_OFFSET.y);
+		
 		
 		// Tween stuff
 		Tween.registerAccessor(Entity.class, new EntityAccessor());
@@ -91,16 +98,13 @@ public class HeroController {
 				
 				// CREATE NEW MISSILE w/ TARGET
 				Missile m = new Missile(hero.position.cpy(), ec.getEnemy(), 25);
+				MissileController mc = new MissileController(world, m);
 				System.out.println("new missile: " + m);
-				world.getMissiles().add(m);
+				world.getMissileControllers().add(mc);
 				
 				return;
 			}
 		}
-		
-		
-		
-		
 		/**
 		Tween.from(hero, EntityAccessor.POSITION_XY, 1.0f)
 			.target(hero.position.x, hero.position.y)
@@ -113,11 +117,6 @@ public class HeroController {
 			//.ease(Elastic.INOUT)
 			.start(manager);
 		*/
-		
-	
-
-		//target = null;
-			
 	}
 	public void fireReleased() {
 		keys.get(keys.put(Keys.FIRE, false));
@@ -249,8 +248,8 @@ public class HeroController {
 
 		// update Hero's position
 		hero.position.add(hero.velocity);
-		hero.getBounds().x = hero.position.x;
-		hero.getBounds().y = hero.position.y;
+		hero.getBounds().x = hero.position.x + BOUND_BOX_OFFSET.x / 2;
+		hero.getBounds().y = hero.position.y + BOUND_BOX_OFFSET.y / 2;
 
 		// un-scale velocity (not in frame time)
 		hero.velocity.scl(1 / delta);

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.EnemyController;
+import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
@@ -134,7 +135,7 @@ public class WorldRenderer {
 		}
 		
 		Missile.frames = new TextureRegion[1];
-		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/laser_yellow00.png")));
+		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/missiles/missile1.png")));//(/images/laser_yellow00.png")));
 		
 		
 
@@ -193,7 +194,7 @@ public class WorldRenderer {
 			}
 			
 			// DRAW and UPDATE MISSILES
-			for (int i = 0; i < world.getMissiles().size(); i++ ) {
+			for (int i = 0; i < world.getMissileControllers().size(); i++ ) {
 				drawUpdateMissile(i, delta);
 			}
 
@@ -265,18 +266,28 @@ public class WorldRenderer {
 	}
 	
 	private void drawUpdateMissile(int index, float delta) {
-		Missile m = world.getMissiles().get(index);
-		if (m.isAlive()) {
-			TextureRegion[] frames = m.getFrames();
-			m.update(delta);
-			drawEntity(m, frames[0]);
-			//System.out.println("m: " + m.position);
+		// Get objects
+		MissileController mc = world.getMissileControllers().get(index);
+		Entity e = mc.getMissileEntity();
+
+		// Check if missile is off the screen
+		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
+			world.getMissileControllers().remove(index);
+			
+		// Otherwise draw and update
 		} else {
-			world.getMissiles().remove(index);
-		}
-		
-		
+			TextureRegion[] frames = mc.getFrames();
+			// Update and draw objects
+			mc.update(delta);
+			
+			//if (mc.getMissile().getDIRECTION() == -1) 
+			//	frames[0].flip(true, false);
+			
+			drawEntity(e, frames[0]);
+			
+		}	
 	}
+	
 
 	private void drawDebug() {
 		// render blocks

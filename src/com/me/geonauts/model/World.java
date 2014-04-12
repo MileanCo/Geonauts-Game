@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.controller.EnemyController;
+import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.enemies.Dwain;
@@ -29,7 +30,7 @@ public class World {
 	/** Our player controlled hero **/
 	private Hero hero;
 	
-	private List<Missile> missiles;
+	private List<MissileController> missiles;
 	private List<EnemyController> enemies;
 	private Random randomGen = new Random();
 	
@@ -49,7 +50,7 @@ public class World {
 		
 		// Create default lists
 		enemies = new ArrayList<EnemyController>();
-		missiles = new ArrayList<Missile> ();
+		missiles = new ArrayList<MissileController> ();
 		
 		resetChunks();
 	}
@@ -120,7 +121,7 @@ public class World {
 	public List<EnemyController> getEnemyControllers() {
 		return enemies;
 	}
-	public List<Missile> getMissiles() {
+	public List<MissileController> getMissileControllers() {
 		return missiles;
 	}
 	

@@ -5,19 +5,34 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
+import com.me.geonauts.model.entities.enemies.AbstractEnemy.State;
 
 public class Missile extends Entity {
-
-	private static float SPEED = 12f;
-	public static Vector2 SIZE = new Vector2((22f/64f), (26/60f));
+	// State stuff
+	public enum State {
+		DYING, ALIVE
+	}
 	
-	public static TextureRegion[] frames;
+	public State		state = State.ALIVE;
+	private float		stateTime = 0;
+	
+
+	
+	public static Vector2 SIZE = new Vector2((30f/64f), (15/60f));
+	private static float SPEED = 10f;
+	protected float 	DAMP;
+	public Vector2 		acceleration;
+	public Vector2 		velocity;
+	public Vector2		MAX_VEL;
+	private int DIRECTION;
 	
 	private AbstractEnemy target;
 	private int damage;
 	
 	/** Used to determine if missile needs to be removed */
 	private boolean alive = true;
+	
+	public static TextureRegion[] frames;
 	
 	/**
 	 * 
@@ -28,6 +43,17 @@ public class Missile extends Entity {
 		super(pos, SIZE);
 		this.target = target;
 		this.damage = damage;
+		
+		// Make new movement vectors
+		DAMP = 0.85f;
+		//this.SPEED = (float) (rand.nextDouble() * SPEED);
+		MAX_VEL = new Vector2(SPEED*2f, SPEED*2f);
+		acceleration = new Vector2(SPEED, 0);
+		
+		// Set initial velocity
+		Vector2 V = target.position.cpy().sub(position);
+		// Unit vector = V / magnitude of V
+		velocity = V.div(V.len());
 		
 		
 	}	
@@ -42,45 +68,27 @@ public class Missile extends Entity {
 		// Unit vector = V / magnitude of V
 		Vector2 unitVec = V.div(V.len());
 		
-		// Update missile position
-		position.add(unitVec.scl(SPEED * delta));
-		bounds.x = position.x;
-		bounds.y = position.y;
+		// Set acceleration to the unit vector * speed
+		acceleration = unitVec.scl(SPEED);
+		
+		// update angle
+		float x_diff = target.position.cpy().x - position.x;
+		float y_diff = target.position.cpy().y - position.y;
+		
+		// Update direction based on x_diff
+		if (x_diff < 0) DIRECTION = -1;
+		else DIRECTION = 1;
+		
+		// Angle = sin^-1 (opposite / Hypotenuse)
+		angle = (float) Math.toDegrees( Math.atan(y_diff / x_diff) );
+		
+		if (x_diff < 0) angle += 180;
 		
 		
-		// Check if missile collides with target
-		if (collision()) {
-			target.health -= damage;	
-			alive = false;
-		}
+
+		
 	}
 	
-	private boolean collision() {
-		// Get the Missile Rectangle 
-		Rectangle missileRect = rectPool.obtain();
-		missileRect.set(this.getBounds().x, this.getBounds().y,
-				this.getBounds().width, this.getBounds().height);
-		
-		// Get the enemy rectangle
-		// Obtain the rectangle from the pool instead of instantiating it
-		Rectangle enemyRect = rectPool.obtain();
-		// set the rectangle to enemy's bounding box
-		enemyRect.set(target.getBounds().x, target.getBounds().y,
-				target.getBounds().width, target.getBounds().height);
-		
-		// Check for collision
-		if (missileRect.overlaps(enemyRect)) return true;
-		else return false;
-	}
-	
-	// This is the rectangle pool used in collision detection
-	// Good to avoid instantiation each frame
-	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
-		@Override
-		protected Rectangle newObject() {
-			return new Rectangle();
-		}
-	};
 	
 	public TextureRegion[] getFrames() {
 		return frames;
@@ -88,6 +96,15 @@ public class Missile extends Entity {
 	
 	public boolean isAlive() {
 		return alive;
+	}
+	public AbstractEnemy getTarget() {
+		return target;
+	}
+	public int getDamage() {
+		return damage;
+	}
+	public int getDIRECTION() {
+		return DIRECTION;
 	}
 	
 	/**
