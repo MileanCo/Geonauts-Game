@@ -3,10 +3,14 @@
  */
 package com.me.geonauts.model.entities.heroes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -35,8 +39,11 @@ public abstract class Hero extends Entity {
 
 	// Other attributes
 	public int health;
-	
 	public boolean grounded;
+	
+	protected List<Target> targets;
+	private int MAX_TARGETS = 1;
+	protected float reloadTime;
 	
 	// Textures
 	//public static TextureRegion[] heroFrames;
@@ -49,6 +56,7 @@ public abstract class Hero extends Entity {
 	public Hero(Vector2 position, Vector2 SIZE, float ROTATION_SPEED, float PITCH, float SPEED, int health) {
 		super(position, SIZE);
 		this.health = health;
+		targets = new ArrayList<Target>();
 		
 		// Set movement constants
 		this.ROTATION_SPEED = ROTATION_SPEED;
@@ -93,7 +101,6 @@ public abstract class Hero extends Entity {
 			state = State.FALLING;
 			angle -= ROTATION_SPEED;
 		}
-		//System.out.println(position.toString());
 		
 		// If the Hero isn't on the ground, UPDATE ANGLE AND ACCELERATION
 		if (! grounded) {
@@ -122,24 +129,42 @@ public abstract class Hero extends Entity {
 		//System.out.println(angle);
 	}
 	
+	public boolean addTarget(Target e) {
+		if (targets.size() < MAX_TARGETS) {
+			targets.add(e);
+			return true;
+		} else 
+			return false;
+	}
+	public void removeTarget(Target e) {
+		//if (targets.contains(e) {
+			targets.remove(e);
+		//} else {
+			
+		//}
+	}
+	public List<Target> getTargets() {
+		return targets;
+	}
 	public float getStateTime() {
 		return stateTime;
 	}
 	public float getCamOffsetPosX() {
 		return position.x - WorldRenderer.CAM_OFFSET + 1;
 	}
-
 	public float getDAMP() {
 		return DAMP;
 	}
-
 	public Vector2 getMAX_VEL() {
 		return MAX_VEL;
 	}
-	
 	public long getTimeDied() {
 		return timeDied;
 	}
+	public float getReloadTime() {
+		return reloadTime;
+	}
+	
 	
 	// All Heros must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();

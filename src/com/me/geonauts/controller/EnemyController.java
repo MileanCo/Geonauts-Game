@@ -59,8 +59,7 @@ public class EnemyController {
 		checkCollisionWithBlocks(delta);
 
 		// apply damping to halt enemy nicely
-		//enemy.velocity.scl(DAMP);
-		//enemy.velocity.y *= enemy.getDAMP();
+		enemy.velocity.y *= enemy.getDAMP();
 		
 		// ensure terminal X velocity is not exceeded
 		if (enemy.velocity.x > enemy.MAX_VEL.x) 
@@ -189,6 +188,7 @@ public class EnemyController {
 	}
 	
 	private void die() {
+		enemy.alive = false;
 		enemy.state = AbstractEnemy.State.DYING;
 		world.getEnemyControllers().remove(this);
 	}

@@ -14,14 +14,14 @@ import com.me.geonauts.model.entities.Entity;
  *
  */
 public abstract class AbstractEnemy extends Entity {
-	private Random rand = new Random();
+	protected Random rand = new Random();
 	// State stuff
 	public enum State {
-		DYING, ALIVE
+		DYING, FLYING, FALLING
 	}
 	
-	public State		state = State.ALIVE;
-	private float		stateTime = 0;
+	public State		state = State.FALLING;
+	protected float		stateTime = 0;
 	
 	// Movement attributes
 	protected float 	SPEED;
@@ -32,7 +32,8 @@ public abstract class AbstractEnemy extends Entity {
 	
 	// Other attributes
 	public int health;
-	private int damage;
+	protected int damage;
+	public boolean alive = true;
 	
 	
 	
@@ -42,7 +43,7 @@ public abstract class AbstractEnemy extends Entity {
 		// Make new movement vectors
 		DAMP = 0.85f;
 		this.SPEED = (float) (rand.nextDouble() * SPEED);
-		MAX_VEL = new Vector2(SPEED*1.5f, SPEED);
+		MAX_VEL = new Vector2(SPEED, SPEED * 2f);
 		acceleration = new Vector2(SPEED, 0);
 		velocity = new Vector2();
 		

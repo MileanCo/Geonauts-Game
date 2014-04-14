@@ -23,7 +23,8 @@ public class Sage extends Hero {
 	 * @param position
 	 */
 	public Sage(Vector2 position) {
-		super(position, SIZE, ROTATION_SPEED, PITCH, SPEED, health);		
+		super(position, SIZE, ROTATION_SPEED, PITCH, SPEED, health);
+		reloadTime = 0.2f;
 	}
 
 	@Override

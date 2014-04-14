@@ -20,6 +20,7 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
+import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
@@ -63,7 +64,7 @@ public class WorldRenderer {
 	private Animation heroAnimation;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = true;
+	private boolean debug = false;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -134,10 +135,13 @@ public class WorldRenderer {
 			Dwain.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/dwain0" + i + ".png")));
 		}
 		
+		// Load missile frames
 		Missile.frames = new TextureRegion[1];
-		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/missiles/missile1.png")));//(/images/laser_yellow00.png")));
+		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/laser_yellow00.png"))); //images/missiles/missile1.png")));
 		
-		
+		// Load target frames
+		Target.frames = new TextureRegion[1];
+		Target.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/target2.png")));
 
 		
 		/**
@@ -186,7 +190,7 @@ public class WorldRenderer {
 		// Draw everything to the screen
 		spriteBatch.begin();
 			drawChunks();
-			drawHero();
+			drawHero(delta);
 			
 			// DRAW and UPDATE enemies in same loop for performance improvement
 			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
@@ -196,6 +200,11 @@ public class WorldRenderer {
 			// DRAW and UPDATE MISSILES
 			for (int i = 0; i < world.getMissileControllers().size(); i++ ) {
 				drawUpdateMissile(i, delta);
+			}
+			
+			// DRAW and UPDATE TARGETS
+			for (int i = 0; i < world.getHero().getTargets().size(); i++) {
+				drawUpdateTarget(i, delta);
 			}
 
 			
@@ -225,7 +234,7 @@ public class WorldRenderer {
 	/**
 	 * Draws hero in our world and updates his animation.
 	 */
-	private void drawHero() {
+	private void drawHero(float delta) {
 		Hero hero = world.getHero();
 		
 				
@@ -239,6 +248,8 @@ public class WorldRenderer {
 		// Draw hero's frame in the proper position
 		TextureRegion[] frames = hero.getFrames();
 		drawEntity(hero, frames[0]);
+		
+
 
 	}
 	
@@ -286,6 +297,21 @@ public class WorldRenderer {
 			drawEntity(e, frames[0]);
 			
 		}	
+	}
+	
+	private void drawUpdateTarget(int i, float delta) {
+		Hero hero = world.getHero();
+		
+		// Draw targets 
+		Target t = hero.getTargets().get(i);
+		// Check if target is past hero, then delete it
+		if (hero.position.x > t.position.x || ! t.getEnemy().alive) {
+			hero.getTargets().remove(i);
+		} else {
+			t.update(delta);
+			drawEntity(t, t.getFrames()[0]);
+		}
+		
 	}
 	
 

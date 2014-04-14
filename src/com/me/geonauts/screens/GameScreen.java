@@ -6,6 +6,7 @@ package com.me.geonauts.screens;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -107,8 +108,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.Z)
 			heroController.flyPressed();
-		if (keycode == Keys.X)
-			heroController.firePressed(Gdx.input.getX() / renderer.getPPUX(), Gdx.input.getY()  / renderer.getPPUY());
+			
 		return true;
 	}
 
@@ -116,8 +116,6 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean keyUp(int keycode) {
 		if (keycode == Keys.Z)
 			heroController.flyReleased();
-		if (keycode == Keys.X)
-			heroController.fireReleased();
 		
 		// Check if escape is pressed to show the main menu
 		if (keycode == Keys.ESCAPE) {
@@ -145,15 +143,25 @@ public class GameScreen implements Screen, InputProcessor {
 	// 				TOUCH CONTROLS
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (!Gdx.app.getType().equals(ApplicationType.Android))
-			return false;
+		
+		if (!Gdx.app.getType().equals(ApplicationType.Android)) {
+			if (button == Input.Buttons.LEFT) {
+				// Mouse thinks Y 0 is at top, GAME thinks y 0 is at bottom. Convert to fix.
+				heroController.targetPressed(x / renderer.getPPUX(), 
+						WorldRenderer.CAMERA_HEIGHT - (y / renderer.getPPUY()) );
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 		// Touch on Left hand-side of screen
 		if (x < width / 3) {
 			heroController.flyPressed();
 		}
 		// Touch on Right hand-side of screen
 		if (x > width / 3) {
-			heroController.firePressed(x, y);
+			heroController.targetPressed(x, y);
 		}
 		return true;
 	}
@@ -168,7 +176,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 		// Touch on Right hand-side of screen
 		if (x > width / 3) {
-			heroController.fireReleased();
+			heroController.targetReleased();
 		}
 		return true;
 	}

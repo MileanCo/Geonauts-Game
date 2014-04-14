@@ -18,8 +18,8 @@ public class Missile extends Entity {
 	
 
 	
-	public static Vector2 SIZE = new Vector2((30f/64f), (15/60f));
-	private static float SPEED = 10f;
+	public static Vector2 SIZE = new Vector2((22f/64f), (26/60f));
+	private static float SPEED = 12f;
 	protected float 	DAMP;
 	public Vector2 		acceleration;
 	public Vector2 		velocity;
@@ -68,23 +68,25 @@ public class Missile extends Entity {
 		// Unit vector = V / magnitude of V
 		Vector2 unitVec = V.div(V.len());
 		
-		// Set acceleration to the unit vector * speed
-		acceleration = unitVec.scl(SPEED);
-		
-		// update angle
+		// Get difference in x and y from target to position
 		float x_diff = target.position.cpy().x - position.x;
 		float y_diff = target.position.cpy().y - position.y;
 		
-		// Update direction based on x_diff
-		if (x_diff < 0) DIRECTION = -1;
-		else DIRECTION = 1;
-		
-		// Angle = sin^-1 (opposite / Hypotenuse)
-		angle = (float) Math.toDegrees( Math.atan(y_diff / x_diff) );
-		
-		if (x_diff < 0) angle += 180;
-		
-		
+		// If the target is infront of the missile, update acceleration with unit vec
+		if (x_diff > 0) {
+			//if (x_diff < 1) 
+				velocity = unitVec.scl(SPEED);
+			// else 
+				// Set acceleration to the unit vector * speed
+			//	acceleration = unitVec.scl(SPEED);
+			
+			// Update direction based on x_diff
+			if (x_diff < 0) DIRECTION = -1;
+			else DIRECTION = 1;
+			
+			// Angle = sin^-1 (opposite / Hypotenuse)
+			angle = (float) Math.toDegrees( Math.atan(y_diff / x_diff) );
+		}
 
 		
 	}
@@ -106,14 +108,9 @@ public class Missile extends Entity {
 	public int getDIRECTION() {
 		return DIRECTION;
 	}
-	
-	/**
-	public void draw (SpriteBatch sb) {
-		System.out.println("Asdf");
-		//WorldRenderer
-		sb.draw(frames[0], position.x * 64, position.y * 60,
-				SIZE.x * 64 / 2, SIZE.y * 60 / 2);//WorldRenderer.drawEntityTween(sb, this);
+
+	public float getDAMP() {
+		return DAMP;
 	}
-	*/
 
 }

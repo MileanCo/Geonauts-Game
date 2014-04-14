@@ -5,9 +5,7 @@ import java.util.Map;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
-import aurelienribon.tweenengine.equations.Elastic;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -17,6 +15,8 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
+import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.model.entities.heroes.Hero;
 
 public class HeroController {
@@ -26,13 +26,16 @@ public class HeroController {
 
 	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
-	// Used to make the boundinx box for the hero smaller.
+	// Used to make the bounding box for the hero smaller.
 	private Vector2 BOUND_BOX_OFFSET;
 
 	// Model objects
 	private World world;
 	private Hero hero;
 	private TweenManager manager;
+	
+	//
+	private float lastShootTime;
 
 
 	// Keys
@@ -82,25 +85,18 @@ public class HeroController {
 	 * @param x of the mouse/touch in WORLD COORDINATES (not pixels)
 	 * @param y of the mouse/touch in WORLD COORDINATES (not pixels)
 	 */
-	public void firePressed(float x, float y) {
+	public void targetPressed(float x, float y) {
 		keys.get(keys.put(Keys.FIRE, true));
 		
 		// Add hero's position to X so it's inside the camera view
 		x += hero.getCamOffsetPosX();
-		System.out.println("TOUCH: " + x + " " + y);
 		
 		// Try to find a target
 		for (EnemyController ec : world.getEnemyControllers()) {
-			
-			//System.out.println("enemy: " + ec.getEnemyEntity().getBounds());
-			// If touch enemy, fire missile
-			if (!pointInRectangle(ec.getEnemyEntity().getBounds(), x, y)) { 
-				
-				// CREATE NEW MISSILE w/ TARGET
-				Missile m = new Missile(hero.position.cpy(), ec.getEnemy(), 25);
-				MissileController mc = new MissileController(world, m);
-				System.out.println("new missile: " + m);
-				world.getMissileControllers().add(mc);
+			// If touch enemy, add that to list of targets
+			if (ec.getEnemyEntity().getBounds().contains(x, y)) {
+				Target t = new Target(ec.getEnemy());
+				hero.addTarget(t);
 				
 				return;
 			}
@@ -118,7 +114,7 @@ public class HeroController {
 			.start(manager);
 		*/
 	}
-	public void fireReleased() {
+	public void targetReleased() {
 		keys.get(keys.put(Keys.FIRE, false));
 	}
 	
@@ -127,11 +123,6 @@ public class HeroController {
 	}
 	public void flyReleased() {
 		keys.get(keys.put(Keys.FLY, false));
-	}
-	
-	private static boolean pointInRectangle (Rectangle r, float x, float y) {
-	    return r.x <= x && (r.x + r.width >= x) 
-	    		&& r.y <= y && (r.y + r.height >= y);
 	}
 
 	/**
@@ -143,8 +134,20 @@ public class HeroController {
 		if (hero.state != Hero.State.DYING) 
 			processInput();
 		
-		
+		// Check for targets to shoot at IF it's time to shoot
+		if (hero.getStateTime() - lastShootTime > hero.getReloadTime()) {
+			for (Target t : hero.getTargets()) {
+				// CREATE NEW MISSILE w/ TARGET
+				Missile m = new Missile(hero.position.cpy(), t.getEnemy(), 25);
+				MissileController mc = new MissileController(world, m);
 
+				world.getMissileControllers().add(mc);
+				
+			}
+
+			lastShootTime = hero.getStateTime();
+		}
+		
 		// Convert acceleration to frame time
 		hero.acceleration.scl(delta);
 

@@ -8,6 +8,7 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
+import com.me.geonauts.view.WorldRenderer;
 
 public class MissileController {
 
@@ -41,7 +42,18 @@ public class MissileController {
 	 * Update the Missile's position and check collisions
 	 * @param delta
 	 */
-	public void update(float delta) {				
+	public void update(float delta) {
+		// Check if missile is off screen
+		if (missile.position.x - world.getHero().getCamOffsetPosX() > WorldRenderer.CAMERA_WIDTH ||
+				missile.position.x - world.getHero().getCamOffsetPosX() < 0 ||
+				missile.position.y < 0 || 
+				missile.position.y > WorldRenderer.CAMERA_HEIGHT ) {
+			world.getMissileControllers().remove(this);
+			System.out.println(missile.position.x - world.getHero().getCamOffsetPosX());
+			
+			return;
+		}
+		
 		// Convert acceleration to frame time
 		missile.acceleration.scl(delta);
 
@@ -53,9 +65,9 @@ public class MissileController {
 
 		// apply damping to halt Missile nicely
 		//Missile.velocity.scl(DAMP);
-		//Missile.velocity.y *= Missile.getDAMP();
+		//missile.velocity.scl(missile.getDAMP());
 		
-		/**
+		
 		// ensure terminal X velocity is not exceeded
 		if (missile.velocity.x > missile.MAX_VEL.x) 
 			missile.velocity.x = missile.MAX_VEL.x;
@@ -66,7 +78,7 @@ public class MissileController {
 		else if (missile.velocity.y <  -missile.MAX_VEL.y) 
 			missile.velocity.y = -missile.MAX_VEL.y;
 		
-		*/
+		
 		// simply updates the state time
 		missile.update(delta);
 
@@ -76,13 +88,6 @@ public class MissileController {
 	private void checkCollisions(float delta) {
 		// scale velocity to frame units
 		missile.velocity.scl(delta);
-
-		// Obtain the rectangle from the pool instead of instantiating it
-		Rectangle missileRect = rectPool.obtain();
-		// set the rectangle to missile's bounding box
-		missileRect.set(missile.getBounds().x, missile.getBounds().y,
-				missile.getBounds().width, missile.getBounds().height);
-
 		
 		// Check if missile collides with Target
 		if (collisionWithTarget()) {
@@ -90,7 +95,14 @@ public class MissileController {
 			die();
 			return;
 		}
-				
+		
+		// CHECK COLLISION WITH BLOCKS ---- >
+		
+		// Obtain the rectangle from the pool instead of instantiating it
+		Rectangle missileRect = rectPool.obtain();
+		// set the rectangle to missile's bounding box
+		missileRect.set(missile.getBounds().x, missile.getBounds().y,
+				missile.getBounds().width, missile.getBounds().height);
 		
 		// we first check the movement on the horizontal X axis
 		int startX, endX;
@@ -167,6 +179,10 @@ public class MissileController {
 	
 	
 	private boolean collisionWithTarget() {
+		// First check if target is alive
+		if (! missile.getTarget().alive) 
+			return false;
+		
 		// Get the Missile Rectangle 
 		Rectangle missileRect = rectPool.obtain();
 		missileRect.set(missile.getBounds().x, missile.getBounds().y,
