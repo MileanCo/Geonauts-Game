@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -21,6 +22,8 @@ import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.anims.AbstractAnimation;
+import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
@@ -42,7 +45,7 @@ public class WorldRenderer {
 	public static final int WIDTH = (int) CAMERA_WIDTH;
 	public static final int HEIGHT = (int) CAMERA_HEIGHT;
 	
-	private static final float RUNNING_FRAME_DURATION = 0.06f;
+	private static final float EXPLOSION_DURATION = 0.5f;
 	
 	private World world;
 	private OrthographicCamera cam;
@@ -51,21 +54,16 @@ public class WorldRenderer {
 	ShapeRenderer debugRenderer;
 
 	/** Textures **/
-	//private TextureRegion heroIdleLeft;
-	//private TextureRegion heroIdleRight;
-	//private TextureRegion blockTexture;
-	//private TextureRegion heroJumpLeft;
 	public HashMap<BlockType, TextureRegion> blockTextures = new HashMap<BlockType, TextureRegion>();
 	public HashMap<String, TextureRegion> backgroundTextures = new HashMap<String, TextureRegion> ();
-	//private HashMap<HeroType, TextureRegion[]> heroTextures = new HashMap<HeroType, TextureRegion[]> ();
 	private ParallaxBackground background;
 	
-	
 	/** Animations **/
-	private Animation heroAnimation;
+	//private Animation explosion10Anim;
+	//private Animation explosion11Anim;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = true;
+	private boolean debug = false;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -105,10 +103,19 @@ public class WorldRenderer {
 	 * Load our textures
 	 */
 	private void loadTextures() {
-		Texture.setEnforcePotImages(false); // TO DO: remove this when using TextureAtlases
+		//Texture.setEnforcePotImages(false); // TO DO: remove this when using TextureAtlases
 		
-		// Load texture atlases
-		//TextureAtlas backgroundAtlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
+		// Load all Atlases
+		TextureAtlas enemiesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/enemies/enemies.pack"));
+		TextureAtlas explosion_10Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_10/explosion_10.pack"));
+		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_11/explosion_11.pack"));
+		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
+		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
+		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
+		TextureAtlas tilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/tiles/tiles.pack"));
+		
+		
+		// Load background images
 		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
 		//Texture planet_blue = new Texture(Gdx.files.internal("images/planets/planet-8.png"));	
 	
@@ -119,63 +126,64 @@ public class WorldRenderer {
 	           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 	      }, width, height, 0.5f, this);
 		
+		
+		
 		// Load all Block Textures
-		blockTextures.put(BlockType.NIGHT, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/night.png"))));
-		blockTextures.put(BlockType.ROCK, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/rock.png"))));
-		blockTextures.put(BlockType.GRASS, new TextureRegion(new Texture(Gdx.files.internal("images/tiles/grass.png"))));
+		blockTextures.put(BlockType.NIGHT, tilesAtlas.findRegion("night"));
+		blockTextures.put(BlockType.ROCK, tilesAtlas.findRegion("rock"));
+		blockTextures.put(BlockType.GRASS, tilesAtlas.findRegion("grass"));
 		
 		// Load all Hero textures
 		int frames = 1;
 		Sage.heroFrames = new TextureRegion[frames];
 		for (int i = 0; i < frames; i++) {
-			Sage.heroFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/nauts/sage0" + i + ".png")));
+			Sage.heroFrames[i] = nautsAtlas.findRegion("sage0" + i);
 		}
 		
 		// Load all Enemy textures
 		Dwain.enemyFrames = new TextureRegion[frames];
 		for (int i = 0; i < frames; i++) {
-			Dwain.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/dwain0" + i + ".png")));
+			Dwain.enemyFrames[i] = enemiesAtlas.findRegion("dwain0" + i);
 		}
 		FireMob.enemyFrames = new TextureRegion[frames];
 		for (int i = 0; i < frames; i++) {
-			FireMob.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/fire_mob0" + i + ".png")));
+			FireMob.enemyFrames[i] = enemiesAtlas.findRegion("fire_mob0" + i);
 		}
 		
 		// Load missile frames
 		Missile.frames = new TextureRegion[1];
-		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/missiles/laser_yellow00.png"))); //images/missiles/missile1.png")));
+		Missile.frames[0] =  missilesAtlas.findRegion("laser_yellow0" + 0);
 		
 		// Load target frames
 		Target.frames = new TextureRegion[1];
-		Target.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/target2.png")));
+		Target.frames[0] =   miscAtlas.findRegion("target2");
 
-		
-		/**
-		
-		bobIdleLeft = atlas.findRegion("bob-01");
-		bobIdleRight = new TextureRegion(bobIdleLeft);
-		bobIdleRight.flip(true, false);
-		blockTexture = atlas.findRegion("block");
-		TextureRegion[] walkLeftFrames = new TextureRegion[5];
-		for (int i = 0; i < 5; i++) {
-			walkLeftFrames[i] = atlas.findRegion("bob-0" + (i + 2));
+		// Load animations
+		// Explosion 10
+		TextureRegion[] explosion_10Frames = new TextureRegion[32];
+		for (int i = 0; i < 32; i++) {
+			String s = "expl-0" + i;
+			System.out.println(s);
+			if (i < 10) {
+				explosion_10Frames[i] = explosion_10Atlas.findRegion(s);
+			} else {
+				explosion_10Frames[i] = explosion_10Atlas.findRegion(s);
+			}
+			System.out.println(explosion_10Frames[i].toString());
 		}
-		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
-
-		TextureRegion[] walkRightFrames = new TextureRegion[5];
-
-		for (int i = 0; i < 5; i++) {
-			walkRightFrames[i] = new TextureRegion(walkLeftFrames[i]);
-			walkRightFrames[i].flip(true, false);
+		Explosion10.anim =  new Animation(EXPLOSION_DURATION, explosion_10Frames);
+		
+		// explosion 11
+		TextureRegion[] explosion_11Frames = new TextureRegion[24];
+		for (int i = 0; i < 24; i++) {
+			if (i < 10) {
+				explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_10_000" + i);
+			} else {
+				explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_10_00" + i);
+			}
 		}
-		walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, walkRightFrames);
-		bobJumpLeft = atlas.findRegion("bob-up");
-		bobJumpRight = new TextureRegion(bobJumpLeft);
-		bobJumpRight.flip(true, false);
-		bobFallLeft = atlas.findRegion("bob-down");
-		bobFallRight = new TextureRegion(bobFallLeft);
-		bobFallRight.flip(true, false);
-		*/
+		//explosion11Anim = new Animation(EXPLOSION_DURATION, explosion_11Frames);
+
 	}
 
 	/**
@@ -212,6 +220,10 @@ public class WorldRenderer {
 			for (int i = 0; i < world.getHero().getTargets().size(); i++) {
 				drawUpdateTarget(i, delta);
 			}
+			
+			for (int i = 0; i < world.getAnimations().size(); i++) {
+				drawUpdateAnimation(i, delta);
+			}
 
 			
 		spriteBatch.end();
@@ -220,6 +232,7 @@ public class WorldRenderer {
 			drawDebug();
 		
 	}
+
 
 	private void drawChunks() {
 		// Draw current chunk
@@ -243,7 +256,7 @@ public class WorldRenderer {
 	private void drawHero(float delta) {
 		Hero hero = world.getHero();
 		
-				
+
 		// Get hero's current frame if he's walking
 		//if (hero.getState().equals(State.MOVING)) {
 		//	heroFrame = hero.isFacingLeft() ? moveLeftAnimation.getKeyFrame(hero.getStateTime(), true) : moveRightAnimation.getKeyFrame(hero.getStateTime(), true);
@@ -296,10 +309,6 @@ public class WorldRenderer {
 			TextureRegion[] frames = mc.getFrames();
 			// Update and draw objects
 			mc.update(delta);
-			
-			//if (mc.getMissile().getDIRECTION() == -1) 
-			//	frames[0].flip(true, false);
-			
 			drawEntity(e, frames[0]);
 			
 		}	
@@ -310,6 +319,7 @@ public class WorldRenderer {
 		
 		// Draw targets 
 		Target t = hero.getTargets().get(i);
+		
 		// Check if target is past hero, then delete it
 		if (hero.position.x > t.position.x || ! t.getEnemy().alive) {
 			hero.getTargets().remove(i);
@@ -318,6 +328,16 @@ public class WorldRenderer {
 			drawEntity(t, t.getFrames()[0]);
 		}
 		
+	}
+	
+	private void drawUpdateAnimation(int i, float delta) {
+		AbstractAnimation a = world.getAnimations().get(i);
+		a.update(delta);
+		//System.out.println(a.getAnimation().toString());
+		
+		TextureRegion frame = a.getAnimation().getKeyFrame(a.getStateTime(), true);
+		System.out.println(frame);
+		drawEntity(a, frame);
 	}
 	
 
@@ -350,8 +370,7 @@ public class WorldRenderer {
 			debugRenderer.rect(eRect.x * ppuX, eRect.y * ppuY, eRect.width * ppuY, eRect.height * ppuY);
 		}
 		debugRenderer.end();
-		
-		// render enemies
+
 
 		
 	}

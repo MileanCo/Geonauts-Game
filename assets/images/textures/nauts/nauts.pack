@@ -1,0 +1,26 @@
+
+nauts.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flagship00
+  rotate: false
+  xy: 2, 2
+  size: 103, 96
+  orig: 103, 96
+  offset: 0, 0
+  index: -1
+sage00
+  rotate: false
+  xy: 172, 49
+  size: 64, 49
+  orig: 64, 49
+  offset: 0, 0
+  index: -1
+sniper00
+  rotate: false
+  xy: 107, 38
+  size: 63, 60
+  orig: 63, 60
+  offset: 0, 0
+  index: -1

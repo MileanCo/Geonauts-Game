@@ -48,9 +48,7 @@ public class MissileController {
 				missile.position.x - world.getHero().getCamOffsetPosX() < 0 ||
 				missile.position.y < 0 || 
 				missile.position.y > WorldRenderer.CAMERA_HEIGHT ) {
-			world.getMissileControllers().remove(this);
-			System.out.println(missile.position.x - world.getHero().getCamOffsetPosX());
-			
+			world.getMissileControllers().remove(this);			
 			return;
 		}
 		

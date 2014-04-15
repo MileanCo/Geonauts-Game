@@ -27,6 +27,7 @@ public abstract class Hero extends Entity {
 	private long		timeDied = 0;
 	
 	// Movement attributes
+	private float 		SPEED_INCREMENT = 1.001f;
 	protected float 	SPEED;
 	protected float 	DAMP;
 	public Vector2 		acceleration;
@@ -42,11 +43,9 @@ public abstract class Hero extends Entity {
 	public boolean grounded;
 	
 	protected List<Target> targets;
-	private int MAX_TARGETS = 1;
+	private int MAX_TARGETS = 2;
 	protected float reloadTime;
-	
-	// Textures
-	//public static TextureRegion[] heroFrames;
+
 	
 	/**
 	 * Creates a new Hero that is an Entity.
@@ -121,7 +120,10 @@ public abstract class Hero extends Entity {
 			acceleration.x = SPEED;
 			acceleration.y = (float) (SPEED * angle);
 		}
-
+		
+		// Increase speed
+		MAX_VEL.x *= SPEED_INCREMENT;
+		MAX_VEL.y *= SPEED_INCREMENT;
 		
 		// System.out.println(velocity.y);
 		//System.out.println(ROTATION_SPEED * delta);
@@ -129,12 +131,13 @@ public abstract class Hero extends Entity {
 		//System.out.println(angle);
 	}
 	
-	public boolean addTarget(Target e) {
+	public void addTarget(Target e) {
 		if (targets.size() < MAX_TARGETS) {
 			targets.add(e);
-			return true;
-		} else 
-			return false;
+		} else {
+			targets.remove(0);
+			targets.add(0, e);
+		}
 	}
 	public void removeTarget(Target e) {
 		//if (targets.contains(e) {

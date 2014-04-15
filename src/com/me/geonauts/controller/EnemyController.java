@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 
 public class EnemyController {
@@ -191,6 +192,9 @@ public class EnemyController {
 		enemy.alive = false;
 		enemy.state = AbstractEnemy.State.DYING;
 		world.getEnemyControllers().remove(this);
+		
+		// add new explosion
+		world.getAnimations().add(new Explosion10(enemy.position));
 	}
 	
 	/**

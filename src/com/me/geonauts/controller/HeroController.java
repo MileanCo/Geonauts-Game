@@ -91,16 +91,31 @@ public class HeroController {
 		// Add hero's position to X so it's inside the camera view
 		x += hero.getCamOffsetPosX();
 		
+		Vector2 touch = new Vector2(x, y);
+		float lastDist = 99; //dummy value for first comparison
+		AbstractEnemy closestEnemy = null;
+		
 		// Try to find a target
-		for (EnemyController ec : world.getEnemyControllers()) {
+		for (EnemyController ec : world.getEnemyControllers() ) {
+			AbstractEnemy e = ec.getEnemy();
 			// If touch enemy, add that to list of targets
 			if (ec.getEnemyEntity().getBounds().contains(x, y)) {
-				Target t = new Target(ec.getEnemy());
-				hero.addTarget(t);
-				
-				return;
+				closestEnemy = e;
+				break;
+			}
+			// See if current enemy is closer than previous enemy
+			float dist = touch.sub(e.position).len();
+			if (dist < lastDist) {
+				lastDist = dist;
+				closestEnemy = e;
 			}
 		}
+		// If we found a closest enemy
+		if (closestEnemy != null) {
+			Target t = new Target(closestEnemy);
+			hero.addTarget(t);
+		}
+		
 		/**
 		Tween.from(hero, EntityAccessor.POSITION_XY, 1.0f)
 			.target(hero.position.x, hero.position.y)

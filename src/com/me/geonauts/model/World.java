@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
@@ -32,6 +33,8 @@ public class World {
 	
 	private List<MissileController> missiles;
 	private List<EnemyController> enemies;
+	private List<AbstractAnimation> anims;
+	
 	private Random randomGen = new Random();
 	
 	/** Screen of the game */
@@ -51,6 +54,7 @@ public class World {
 		// Create default lists
 		enemies = new ArrayList<EnemyController>();
 		missiles = new ArrayList<MissileController> ();
+		anims = new ArrayList<AbstractAnimation> ();
 		
 		resetChunks();
 	}
@@ -88,6 +92,8 @@ public class World {
 			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);
 		}
+		
+		// WORLD RENDERER HANDLES DRAWING AND UPDATING OF ALL ENTITIES
 		
 		
 	}
@@ -128,6 +134,9 @@ public class World {
 	}
 	public List<MissileController> getMissileControllers() {
 		return missiles;
+	}
+	public List<AbstractAnimation> getAnimations() {
+		return anims;
 	}
 	
 	public Block[][] getBlocks() {
