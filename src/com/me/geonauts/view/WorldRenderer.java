@@ -65,7 +65,7 @@ public class WorldRenderer {
 	private Animation heroAnimation;
 	
 	private SpriteBatch spriteBatch;
-	private boolean debug = false;
+	private boolean debug = true;
 	private int width;
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
@@ -110,12 +110,12 @@ public class WorldRenderer {
 		// Load texture atlases
 		//TextureAtlas backgroundAtlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
 		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
-		Texture planet_blue = new Texture(Gdx.files.internal("images/planets/planet-8.png"));	
+		//Texture planet_blue = new Texture(Gdx.files.internal("images/planets/planet-8.png"));	
 	
 		background = new ParallaxBackground(new ParallaxLayer[] {
 	           new ParallaxLayer(new TextureRegion(bg1), new Vector2(0.1f, 0), new Vector2(0, 0)),
 	            
-	           // new ParallaxLayer(new TextureRegion(planet_blue), new Vector2(0.25f, 0), new Vector2(1000, 0)),
+	           //new ParallaxLayer(new TextureRegion(planet_blue), new Vector2(0.25f, 0), new Vector2(1000, 0)),
 	           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 	      }, width, height, 0.5f, this);
 		
