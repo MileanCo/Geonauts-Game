@@ -22,6 +22,7 @@ import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.enemies.Dwain;
+import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.model.enums.BlockType;
@@ -109,11 +110,12 @@ public class WorldRenderer {
 		// Load texture atlases
 		//TextureAtlas backgroundAtlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
 		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
+		Texture planet_blue = new Texture(Gdx.files.internal("images/planets/planet-8.png"));	
 	
 		background = new ParallaxBackground(new ParallaxLayer[] {
-	            new ParallaxLayer(new TextureRegion(bg1), new Vector2(0.2f, 0), new Vector2(0, 0)),
+	           new ParallaxLayer(new TextureRegion(bg1), new Vector2(0.1f, 0), new Vector2(0, 0)),
 	            
-	          //  new ParallaxLayer(backgroundAtlas.findRegion("bg2"),new Vector2(1.0f,1.0f),new Vector2(0, 500)),
+	           // new ParallaxLayer(new TextureRegion(planet_blue), new Vector2(0.25f, 0), new Vector2(1000, 0)),
 	           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 	      }, width, height, 0.5f, this);
 		
@@ -134,10 +136,14 @@ public class WorldRenderer {
 		for (int i = 0; i < frames; i++) {
 			Dwain.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/dwain0" + i + ".png")));
 		}
+		FireMob.enemyFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			FireMob.enemyFrames[i] = new TextureRegion(new Texture(Gdx.files.internal("images/enemies/fire_mob0" + i + ".png")));
+		}
 		
 		// Load missile frames
 		Missile.frames = new TextureRegion[1];
-		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/laser_yellow00.png"))); //images/missiles/missile1.png")));
+		Missile.frames[0] =  new TextureRegion(new Texture(Gdx.files.internal("images/missiles/laser_yellow00.png"))); //images/missiles/missile1.png")));
 		
 		// Load target frames
 		Target.frames = new TextureRegion[1];

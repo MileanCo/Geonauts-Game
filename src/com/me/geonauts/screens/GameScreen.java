@@ -143,12 +143,15 @@ public class GameScreen implements Screen, InputProcessor {
 	// 				TOUCH CONTROLS
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+
+		float x_world = x / renderer.getPPUX();
+		float y_world = y / renderer.getPPUY();
 		
 		if (!Gdx.app.getType().equals(ApplicationType.Android)) {
 			if (button == Input.Buttons.LEFT) {
 				// Mouse thinks Y 0 is at top, GAME thinks y 0 is at bottom. Convert to fix.
-				heroController.targetPressed(x / renderer.getPPUX(), 
-						WorldRenderer.CAMERA_HEIGHT - (y / renderer.getPPUY()) );
+				y_world = WorldRenderer.CAMERA_HEIGHT - y_world;
+				heroController.targetPressed(x_world, y_world);
 				return true;
 			} else {
 				return false;
@@ -161,7 +164,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 		// Touch on Right hand-side of screen
 		if (x > width / 3) {
-			heroController.targetPressed(x, y);
+			heroController.targetPressed(x_world, y_world);
 		}
 		return true;
 	}

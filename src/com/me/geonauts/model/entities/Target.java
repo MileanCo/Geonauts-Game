@@ -8,7 +8,7 @@ public class Target extends Entity {
 	
 	private float		stateTime = 0;
 	private static final Vector2 SIZE = new Vector2((40/64f), (40/60f));
-	public static final float ROTATION_SPEED = 2f; // angles per second??
+	public static final float ROTATION_SPEED = 3f; // angles per second??
 	
 	// Textures
 	public static TextureRegion[] frames;

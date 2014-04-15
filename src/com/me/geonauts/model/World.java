@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
-import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.enemies.Dwain;
+import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.screens.GameScreen;
@@ -76,11 +76,16 @@ public class World {
 		}
 				
 		// Spawn some enemies!
-		int spawn = randomGen.nextInt(100 - 0) + 0;
+		int spawn = randomGen.nextInt(150 - 0) + 0;
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
 		if (spawn == 50) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
+			enemies.add(ec);
+			
+		} else if (spawn == 51) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);
 		}
 		

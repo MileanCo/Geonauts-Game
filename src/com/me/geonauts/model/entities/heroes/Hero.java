@@ -42,7 +42,7 @@ public abstract class Hero extends Entity {
 	public boolean grounded;
 	
 	protected List<Target> targets;
-	private int MAX_TARGETS = 1;
+	private int MAX_TARGETS = 3;
 	protected float reloadTime;
 	
 	// Textures
