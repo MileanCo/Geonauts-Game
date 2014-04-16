@@ -8,6 +8,7 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
+import com.me.geonauts.model.entities.anims.ExplosionHit;
 import com.me.geonauts.view.WorldRenderer;
 
 public class MissileController {
@@ -128,7 +129,7 @@ public class MissileController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (missileRect.overlaps(block.getBounds())) {
-				System.out.println("Missile Collision @ " + block.position.toString());
+				//System.out.println("Missile Collision @ " + block.position.toString());
 				die();
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
@@ -156,7 +157,7 @@ public class MissileController {
 		for (Block block : collidable) {
 			if (block == null) 	continue;
 			if (missileRect.overlaps(block.getBounds())) {
-				System.out.println("missile Collision @ " + block.position.toString());
+				//System.out.println("missile Collision @ " + block.position.toString());
 				die();
 				world.getCollisionRects().add(block.getBounds());
 				break;
@@ -212,6 +213,7 @@ public class MissileController {
 	
 	private void die() {
 		world.getMissileControllers().remove(this);
+		world.getAnimations().add(new ExplosionHit(missile.position, missile.SIZE.x));
 	}
 	
 	/**

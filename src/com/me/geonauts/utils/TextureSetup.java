@@ -24,10 +24,10 @@ public class TextureSetup {
 	public static void main(String[] args) {
 		
 		// Animations
-		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_06", ROOT_DIR + "textures/explosion_06", "explosion_06.pack");
-		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_10", ROOT_DIR + "textures/explosion_10", "explosion_10.pack");
-		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_11", ROOT_DIR + "textures/explosion_11", "explosion_11.pack");
-		
+		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_06", ROOT_DIR + "textures/explosions", "explosion_06.pack");
+		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_10", ROOT_DIR + "textures/explosions", "explosion_10.pack");
+		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_11", ROOT_DIR + "textures/explosions", "explosion_11.pack");
+		TexturePacker2.process(ASSET_FOLDER + "animations/hit", ROOT_DIR + "textures/explosions", "hit.pack");
 		
 		// enemies
 		TexturePacker2.process(ASSET_FOLDER + "enemies", ROOT_DIR + "textures/enemies", "enemies.pack");

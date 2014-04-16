@@ -23,8 +23,10 @@ import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
+import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
+import com.me.geonauts.model.entities.anims.ExplosionHit;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
@@ -108,9 +110,10 @@ public class WorldRenderer {
 		
 		// Load all Atlases
 		TextureAtlas enemiesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/enemies/enemies.pack"));
-		TextureAtlas explosion_06Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_06/explosion_06.pack"));
-		TextureAtlas explosion_10Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_10/explosion_10.pack"));
-		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_11/explosion_11.pack"));
+		TextureAtlas explosion_06Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_06.pack"));
+		TextureAtlas explosion_10Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_10.pack"));
+		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_11.pack"));
+		TextureAtlas explosionHitAtlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/hit.pack"));
 		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
 		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
 		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
@@ -161,12 +164,19 @@ public class WorldRenderer {
 		Target.frames[0] =   miscAtlas.findRegion("target2");
 
 		// Load animations
+		//hit
+		TextureRegion[] explosionHitFrames = new TextureRegion[8];
+		for (int i = 0; i < 8; i++) {
+			explosionHitFrames[i] = explosionHitAtlas.findRegion("hit", i);
+		}
+		ExplosionHit.anim =  new Animation(EXPLOSION_DURATION, explosionHitFrames);
+		
 		// Explosion 06
 		TextureRegion[] explosion_06Frames = new TextureRegion[31];
 		for (int i = 0; i < 31; i++) {
-			explosion_06Frames[i] = explosion_06Atlas.findRegion("expl", i);
+			explosion_06Frames[i] = explosion_06Atlas.findRegion("expl_06", i);
 		}
-		//Explosion10.anim =  new Animation(EXPLOSION_DURATION, explosion_06Frames);
+		Explosion06.anim =  new Animation(EXPLOSION_DURATION, explosion_06Frames);
 		
 		// Explosion 10
 		TextureRegion[] explosion_10Frames = new TextureRegion[38];
@@ -204,7 +214,8 @@ public class WorldRenderer {
 			drawChunks();
 			drawHero(delta);
 			
-			// DRAW and UPDATE enemies in same loop for performance improvement
+			// Draw & Update in SAME loop for performance improvement
+			// DRAW and UPDATE enemies
 			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
 				drawUpdateEnemy(i, delta);
 			}
@@ -219,6 +230,7 @@ public class WorldRenderer {
 				drawUpdateTarget(i, delta);
 			}
 			
+			// DRAW and UPDATE ANIMATIONS
 			for (int i = 0; i < world.getAnimations().size(); i++) {
 				drawUpdateAnimation(i, delta);
 			}

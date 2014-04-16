@@ -34,8 +34,9 @@ public class HeroController {
 	private Hero hero;
 	private TweenManager manager;
 	
-	//
+	// Shooting fields
 	private float lastShootTime;
+	private int MAX_TARGET_RADIUS = 5;
 
 
 	// Keys
@@ -92,26 +93,30 @@ public class HeroController {
 		x += hero.getCamOffsetPosX();
 		
 		Vector2 touch = new Vector2(x, y);
-		float lastDist = 99; //dummy value for first comparison
+		float dist;
+		float closestDist = 99; //dummy value for first comparison
 		AbstractEnemy closestEnemy = null;
 		
 		// Try to find a target
 		for (EnemyController ec : world.getEnemyControllers() ) {
 			AbstractEnemy e = ec.getEnemy();
-			// If touch enemy, add that to list of targets
+			
+			// See if current enemy is closer than previous enemy
+			dist = touch.sub(e.position).len();
+			if (dist < closestDist) {
+				closestDist = dist;
+				closestEnemy = e;
+			}
+			
+			// If actually the touch enemy, add that to list of targets
 			if (ec.getEnemyEntity().getBounds().contains(x, y)) {
 				closestEnemy = e;
 				break;
 			}
-			// See if current enemy is closer than previous enemy
-			float dist = touch.sub(e.position).len();
-			if (dist < lastDist) {
-				lastDist = dist;
-				closestEnemy = e;
-			}
+			
 		}
 		// If we found a closest enemy
-		if (closestEnemy != null) {
+		if (closestEnemy != null && closestDist < MAX_TARGET_RADIUS) {
 			Target t = new Target(closestEnemy);
 			hero.addTarget(t);
 		}

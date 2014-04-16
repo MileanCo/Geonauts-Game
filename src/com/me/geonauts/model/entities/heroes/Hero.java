@@ -27,7 +27,7 @@ public abstract class Hero extends Entity {
 	private long		timeDied = 0;
 	
 	// Movement attributes
-	private float 		SPEED_INCREMENT = 1.0001f;
+	private float 		SPEED_INCREMENT = 1.0003f;
 	protected float 	SPEED;
 	protected float 	DAMP;
 	public Vector2 		acceleration;

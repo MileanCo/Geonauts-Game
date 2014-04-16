@@ -24,20 +24,23 @@ import com.me.geonauts.view.WorldRenderer;
  *
  */
 public class World {
-	private static final long DEAD_TIME = 1500;
+	/** Time spent the Hero is dead. */
+	private static final long DEAD_TIME = 2500;
 	
 	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
 	/** Our player controlled hero **/
 	private Hero hero;
 	
+	// List of main categories of entities in the world
 	private List<MissileController> missiles;
 	private List<EnemyController> enemies;
 	private List<AbstractAnimation> anims;
 	
 	public Random randomGen = new Random();
 	
-	/** Screen of the game */
+	/** Screen of the Geonauts Game, (first file loaded when starting the program, 
+	 * sets the different screens of gameplay) */
 	private GameScreen screen;
 	/** List of chunks that are to move through the world. */
 	private LinkedList<Chunk> chunks;
