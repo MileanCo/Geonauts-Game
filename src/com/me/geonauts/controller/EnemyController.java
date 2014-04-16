@@ -8,6 +8,7 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.anims.Explosion10;
+import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 
 public class EnemyController {
@@ -194,7 +195,16 @@ public class EnemyController {
 		world.getEnemyControllers().remove(this);
 		
 		// add new explosion
-		world.getAnimations().add(new Explosion10(enemy.position));
+		int r = world.randomGen.nextInt(2 - 0) + 0;
+		switch (r) {
+			case 0: 
+				world.getAnimations().add(new Explosion10(enemy.position, enemy.SIZE.x));
+				break;
+			case 1: 
+				world.getAnimations().add(new Explosion11(enemy.position, enemy.SIZE.x));
+				break;
+		}
+		
 	}
 	
 	/**

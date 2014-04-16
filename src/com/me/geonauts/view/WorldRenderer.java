@@ -24,6 +24,7 @@ import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Explosion10;
+import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
@@ -45,7 +46,7 @@ public class WorldRenderer {
 	public static final int WIDTH = (int) CAMERA_WIDTH;
 	public static final int HEIGHT = (int) CAMERA_HEIGHT;
 	
-	private static final float EXPLOSION_DURATION = 0.5f;
+	private static final float EXPLOSION_DURATION = 0.03f; //seconds
 	
 	private World world;
 	private OrthographicCamera cam;
@@ -107,6 +108,7 @@ public class WorldRenderer {
 		
 		// Load all Atlases
 		TextureAtlas enemiesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/enemies/enemies.pack"));
+		TextureAtlas explosion_06Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_06/explosion_06.pack"));
 		TextureAtlas explosion_10Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_10/explosion_10.pack"));
 		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosion_11/explosion_11.pack"));
 		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
@@ -159,30 +161,26 @@ public class WorldRenderer {
 		Target.frames[0] =   miscAtlas.findRegion("target2");
 
 		// Load animations
+		// Explosion 06
+		TextureRegion[] explosion_06Frames = new TextureRegion[31];
+		for (int i = 0; i < 31; i++) {
+			explosion_06Frames[i] = explosion_06Atlas.findRegion("expl", i);
+		}
+		//Explosion10.anim =  new Animation(EXPLOSION_DURATION, explosion_06Frames);
+		
 		// Explosion 10
-		TextureRegion[] explosion_10Frames = new TextureRegion[32];
-		for (int i = 0; i < 32; i++) {
-			String s = "expl-0" + i;
-			System.out.println(s);
-			if (i < 10) {
-				explosion_10Frames[i] = explosion_10Atlas.findRegion(s);
-			} else {
-				explosion_10Frames[i] = explosion_10Atlas.findRegion(s);
-			}
-			System.out.println(explosion_10Frames[i].toString());
+		TextureRegion[] explosion_10Frames = new TextureRegion[38];
+		for (int i = 0; i < 38; i++) {
+			explosion_10Frames[i] = explosion_10Atlas.findRegion("expl", i);
 		}
 		Explosion10.anim =  new Animation(EXPLOSION_DURATION, explosion_10Frames);
 		
 		// explosion 11
-		TextureRegion[] explosion_11Frames = new TextureRegion[24];
-		for (int i = 0; i < 24; i++) {
-			if (i < 10) {
-				explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_10_000" + i);
-			} else {
-				explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_10_00" + i);
-			}
+		TextureRegion[] explosion_11Frames = new TextureRegion[30];
+		for (int i = 0; i < 30; i++) {
+			explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_11", i);
 		}
-		//explosion11Anim = new Animation(EXPLOSION_DURATION, explosion_11Frames);
+		Explosion11.anim =  new Animation(EXPLOSION_DURATION, explosion_11Frames);
 
 	}
 
@@ -330,14 +328,21 @@ public class WorldRenderer {
 		
 	}
 	
+	/**
+	 * Updates and Draws an animation to the screen
+	 * @param i
+	 * @param delta
+	 */
 	private void drawUpdateAnimation(int i, float delta) {
 		AbstractAnimation a = world.getAnimations().get(i);
-		a.update(delta);
-		//System.out.println(a.getAnimation().toString());
-		
-		TextureRegion frame = a.getAnimation().getKeyFrame(a.getStateTime(), true);
-		System.out.println(frame);
-		drawEntity(a, frame);
+		if (a.isAnimationFinished()) {
+			world.getAnimations().remove(i);
+		} else {
+			a.update(delta);
+			
+			TextureRegion frame = a.getAnimation().getKeyFrame(a.getStateTime(), false);
+			drawEntity(a, frame);
+		}
 	}
 	
 

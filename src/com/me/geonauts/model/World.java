@@ -35,7 +35,7 @@ public class World {
 	private List<EnemyController> enemies;
 	private List<AbstractAnimation> anims;
 	
-	private Random randomGen = new Random();
+	public Random randomGen = new Random();
 	
 	/** Screen of the game */
 	private GameScreen screen;

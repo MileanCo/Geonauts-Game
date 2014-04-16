@@ -15,7 +15,7 @@ public class FireMob extends AbstractEnemy {
 
 	public static final float SPEED = 0.4f;	// unit per second
 	public final int DIRECTION = -1;
-	private static Vector2 SIZE = new Vector2((74/64)/1.5f, (71/60)/1.5f);
+	private static Vector2 SIZE = new Vector2((50/64f), (50/60f));
 	private static int health = 50;
 	private static int damage = 10;
 	

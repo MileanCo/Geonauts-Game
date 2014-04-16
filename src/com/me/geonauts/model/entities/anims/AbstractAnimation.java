@@ -23,5 +23,9 @@ public abstract class AbstractAnimation extends Entity {
 	}
 	
 	public abstract Animation getAnimation();
+	
+	public boolean isAnimationFinished() {
+		return getAnimation().isAnimationFinished(stateTime);
+	}
 
 }
