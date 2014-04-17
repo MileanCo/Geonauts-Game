@@ -26,6 +26,8 @@ import com.me.geonauts.view.WorldRenderer;
 public class World {
 	/** Time spent the Hero is dead. */
 	private static final long DEAD_TIME = 2500;
+	/** Amount the game speed increases over time */
+	public static final float SPEED_INCREMENT = 0.01f;
 	
 	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
@@ -76,6 +78,7 @@ public class World {
 			chunks.addLast(move_me);
 		}
 		
+		// If hero is dying, and time spent dead is long enough, go back to menu.
 		if (hero.state == Hero.State.DYING) {
 			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
 				screen.toMainMenu();

@@ -28,6 +28,7 @@ public class Target extends Entity {
 		// Constantly rotate the entity
 		angle += ROTATION_SPEED;
 		if (angle > 360) angle = 0;
+		
 	}
 
 	public TextureRegion[] getFrames() {

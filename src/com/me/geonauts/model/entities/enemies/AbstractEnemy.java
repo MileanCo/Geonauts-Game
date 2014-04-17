@@ -33,9 +33,7 @@ public abstract class AbstractEnemy extends Entity {
 	// Other attributes
 	public int health;
 	protected int damage;
-	public boolean alive = true;
-	
-	
+	public boolean alive = true;	
 	
 	public AbstractEnemy(Vector2 pos, Vector2 SIZE, float SPEED, int health, int damage) {
 		super(pos, SIZE);		

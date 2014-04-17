@@ -3,14 +3,16 @@
  */
 package com.me.geonauts.model.entities.heroes;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.Chunk;
+import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -27,7 +29,6 @@ public abstract class Hero extends Entity {
 	private long		timeDied = 0;
 	
 	// Movement attributes
-	private float 		SPEED_INCREMENT = 1.0003f;
 	protected float 	SPEED;
 	protected float 	DAMP;
 	public Vector2 		acceleration;
@@ -41,10 +42,14 @@ public abstract class Hero extends Entity {
 	// Other attributes
 	public int health;
 	public boolean grounded;
-	
-	protected List<Target> targets;
-	private int MAX_TARGETS = 2;
 	protected float reloadTime;
+	protected int money;
+	protected int score;
+	
+	// Targetting stuff
+	protected LinkedList<Target> targets;
+	private int MAX_TARGETS = 4;
+
 
 	
 	/**
@@ -55,7 +60,7 @@ public abstract class Hero extends Entity {
 	public Hero(Vector2 position, Vector2 SIZE, float ROTATION_SPEED, float PITCH, float SPEED, int health) {
 		super(position, SIZE);
 		this.health = health;
-		targets = new ArrayList<Target>();
+		targets = new LinkedList<Target>();
 		
 		// Set movement constants
 		this.ROTATION_SPEED = ROTATION_SPEED;
@@ -80,7 +85,6 @@ public abstract class Hero extends Entity {
 		stateTime += delta;
 		
 		if (health <= 0) state = State.DYING;
-		
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {
@@ -121,9 +125,10 @@ public abstract class Hero extends Entity {
 			acceleration.y = (float) (SPEED * angle);
 		}
 		
-		// Increase speed
-		MAX_VEL.x *= SPEED_INCREMENT;
-		MAX_VEL.y *= SPEED_INCREMENT;
+		// Increase speed over time
+		MAX_VEL.x += delta * World.SPEED_INCREMENT;
+		MAX_VEL.y += delta * World.SPEED_INCREMENT;
+		//System.out.println(position.x );
 		
 		// System.out.println(velocity.y);
 		//System.out.println(ROTATION_SPEED * delta);
@@ -133,18 +138,14 @@ public abstract class Hero extends Entity {
 	
 	public void addTarget(Target e) {
 		if (targets.size() < MAX_TARGETS) {
-			targets.add(e);
+			targets.addFirst(e);
 		} else {
-			targets.remove(0);
-			targets.add(0, e);
+			targets.removeLast();
+			addTarget(e);
 		}
 	}
 	public void removeTarget(Target e) {
-		//if (targets.contains(e) {
-			targets.remove(e);
-		//} else {
-			
-		//}
+		targets.removeLast();
 	}
 	public List<Target> getTargets() {
 		return targets;
@@ -171,6 +172,22 @@ public abstract class Hero extends Entity {
 	
 	// All Heros must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();
+
+	/**
+	 * Checks if the hero is targetting given enemy 
+	 * @param e AbstractEnemy
+	 * @return boolean
+	 */
+	public boolean targettingEnemy(AbstractEnemy e) {
+		// Check if Hero is targetting given enemy e
+		for (Target t : targets) {
+			if (t.getEnemy().equals(e)) {
+				return true;
+			}
+		}
+		// Hero wasn't targetting enemy e
+		return false;
+	}
 	
 }
 	

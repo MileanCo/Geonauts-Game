@@ -58,6 +58,7 @@ public class Chunk {
 		}
 		blocks[WIDTH-1][1] =  new Block(new Vector2(WIDTH-1 + position.x, 1), BlockType.ROCK);
 		
+		
 		// Make some walls
 		int col = random.nextInt(WIDTH/2-1 - 0) + 0;
 		for (int r = 0; r < HEIGHT/2; r++) {

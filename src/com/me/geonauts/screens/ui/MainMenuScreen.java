@@ -85,9 +85,10 @@ public class MainMenuScreen extends AbstractScreen {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+			// THIS DOESN'T WORK ON ANDROID. It throws the above exception, and then tries to write to a 'writer' that is null....
 			//health, attack, reload time, money, targets
-			writer.print("100\n25\n.5\n100\n1");
-			writer.close();
+			//writer.print("100\n25\n.5\n100\n1");
+			//writer.close();
 		} else{
 			btnNewGame = new TextButton("Continue", style);
 		}

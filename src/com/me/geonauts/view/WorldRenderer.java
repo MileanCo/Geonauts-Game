@@ -28,6 +28,7 @@ import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
 import com.me.geonauts.model.entities.enemies.Dwain;
+import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
@@ -154,6 +155,10 @@ public class WorldRenderer {
 		for (int i = 0; i < frames; i++) {
 			FireMob.enemyFrames[i] = enemiesAtlas.findRegion("fire_mob0" + i);
 		}
+		Fiend.enemyFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			Fiend.enemyFrames[i] = enemiesAtlas.findRegion("fiend0" + i);
+		}
 		
 		// Load missile frames
 		Missile.frames = new TextureRegion[1];
@@ -265,21 +270,11 @@ public class WorldRenderer {
 	 */
 	private void drawHero(float delta) {
 		Hero hero = world.getHero();
-		
-
-		// Get hero's current frame if he's walking
-		//if (hero.getState().equals(State.MOVING)) {
-		//	heroFrame = hero.isFacingLeft() ? moveLeftAnimation.getKeyFrame(hero.getStateTime(), true) : moveRightAnimation.getKeyFrame(hero.getStateTime(), true);
-		
-		// Get hero's frame if he's jumping or falling
-		//}
-		
-		// Draw hero's frame in the proper position
-		TextureRegion[] frames = hero.getFrames();
-		drawEntity(hero, frames[0]);
-		
-
-
+		if (! hero.grounded) {
+			// Draw hero's frame in the proper position
+			TextureRegion[] frames = hero.getFrames();
+			drawEntity(hero, frames[0]);
+		}
 	}
 	
 	/**
@@ -293,7 +288,7 @@ public class WorldRenderer {
 		Entity e = ec.getEnemyEntity();
 
 		// Check if enemy is off the screen
-		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
+		if (e.position.x < (world.getHero().getCamOffsetPosX() - e.SIZE.x)) {
 			world.getEnemyControllers().remove(index);
 			
 		// Otherwise draw and update
@@ -332,6 +327,7 @@ public class WorldRenderer {
 		
 		// Check if target is past hero, then delete it
 		if (hero.position.x > t.position.x || ! t.getEnemy().alive) {
+			System.out.println("removed target @ " + t.toString());
 			hero.getTargets().remove(i);
 		} else {
 			t.update(delta);
