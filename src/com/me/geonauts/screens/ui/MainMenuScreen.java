@@ -3,15 +3,13 @@ package com.me.geonauts.screens.ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Scanner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,17 +36,24 @@ public class MainMenuScreen extends AbstractScreen {
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 	private static final String TITLE = "G E O N A U T S";
-	private int FONT_SIZE = 32;
 
+	
 	// Buttons
 	private TextButton btnNewGame;
 	private TextButton btnShop;
 	private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
+	
+	private int highscore  = 0;
 
 	public MainMenuScreen(Game game) {
 		super(game);
+		
+		// Load preferences
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		
+		highscore = prefs.getInteger("highscore");
 
 		font = new BitmapFont(
 				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
@@ -60,13 +65,13 @@ public class MainMenuScreen extends AbstractScreen {
 		stage.addActor(table);
 
 		// Skins
-		Skin skin = new Skin();//Gdx.files.internal("images/ui/uiskin.json"));
-		//skin.getAtlas().getTextures().iterator().next().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		// btnSkin.addRegions(buttonsAtlas);
-
+		Skin skin = new Skin(Gdx.files.internal("images/ui/uiskin.json"));
+		
+		// Load textures
+		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
 		// TextureRegions
-		TextureRegion upRegion = new TextureRegion(new Texture(Gdx.files.internal("images/ui/button_up.png")));
-		TextureRegion downRegion = new TextureRegion(new Texture(Gdx.files.internal("images/ui/button_down.png")));
+		TextureRegion upRegion = uiAtlas.findRegion("buttonNormal");
+		TextureRegion downRegion = uiAtlas.findRegion("buttonPressed");
 
 		// Styles
 		TextButtonStyle style = new TextButtonStyle();
@@ -74,6 +79,10 @@ public class MainMenuScreen extends AbstractScreen {
 		style.down = new TextureRegionDrawable(downRegion);
 		style.font = new BitmapFont();
 
+		// Labels
+		Label lblTitle = new Label(TITLE, skin);
+		Label lblScore = new Label("High score: " + highscore, skin);
+		
 		File f = new File("game.dat");
 		// Buttons
 		if(!f.exists()){
@@ -89,7 +98,7 @@ public class MainMenuScreen extends AbstractScreen {
 			//health, attack, reload time, money, targets
 			//writer.print("100\n25\n.5\n100\n1");
 			//writer.close();
-		} else{
+		} else {
 			btnNewGame = new TextButton("Continue", style);
 		}
 		btnNewGame.addListener(new InputListener() {
@@ -141,6 +150,8 @@ public class MainMenuScreen extends AbstractScreen {
 				System.exit(0);
 			}
 		});	
+		table.add(lblTitle);
+		table.row();
 		table.add(btnNewGame);
 		table.row();
 		table.add(btnShop);
@@ -150,12 +161,17 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(btnCredits);
 		table.row();
 		table.add(btnQuit);
-
+		table.row();
+		table.add(lblScore);
+		
+		// Create the game screen once
+		gameScreen = new GameScreen(game);
 	}
 
 	public void render(float delta) {
 		super.render(delta);
 		
+		//System.out.println(highscore);
 		/**
 		batch.begin();
 			font.draw(batch, TITLE, stage.getWidth() / 2 - FONT_SIZE * TITLE.length(), stage.getHeight() - FONT_SIZE);
@@ -173,9 +189,7 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	private void newGame() {
-		gameScreen = new GameScreen(game);
 		game.setScreen(gameScreen);
-
 	}
 	
 	private void shop(){

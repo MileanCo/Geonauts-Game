@@ -9,10 +9,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
 import com.me.geonauts.screens.ui.MainMenuScreen;
@@ -42,14 +41,9 @@ public class GameScreen implements Screen, InputProcessor {
 		// init
 		this.game = game;
 		
-		// Create new game world objects
-		world = new World(this);
-		renderer = new WorldRenderer(world); // Renderer updates and draws enemies.
-		heroController = new HeroController(world);
-		
-		
+		// Create new Renderer and load graphic. Aim is to only load graphics once.
+		renderer = new WorldRenderer(); // Renderer updates and draws enemies.
 	}
-	
 	
 	/**
 	 * Start a new game AKA CONSTRUCTOR
@@ -57,6 +51,11 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
+		
+		// Create new game objects
+		world = new World(this);
+		renderer.setWorld(world); // Tell the renderer about the new World.
+		heroController = new HeroController(world);
 	}
 
 	/**
@@ -129,8 +128,27 @@ public class GameScreen implements Screen, InputProcessor {
 	 * Sets the game screen to main menu
 	 */
 	public void toMainMenu() {
+		saveGame();
+		
 		MainMenuScreen menu = new MainMenuScreen(game);
 		game.setScreen(menu);
+	}
+	
+	/**
+	 * Saves the game by saving highscore, money, level, stats, gear, etc.
+	 */
+	private void saveGame() {
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		
+		// Check if new score is bigger than highscore
+		int highscore = prefs.getInteger("highscore");
+		if (world.score > highscore) {
+			// save new highscore
+			prefs.putInteger("highscore", world.score);
+		}
+		
+		prefs.flush();
+		
 	}
 
 	@Override

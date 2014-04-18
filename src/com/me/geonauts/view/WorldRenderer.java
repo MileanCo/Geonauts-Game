@@ -80,6 +80,10 @@ public class WorldRenderer {
 	private String HELP_MESSAGE = "Tap on left to fly!";
 	private float HELP_MESSAGE_TIME = 5; //seconds
 	
+	public WorldRenderer() {
+		this(null);
+	}
+	
 	public WorldRenderer(World world) {
 		this.world = world;		
 		this.debug = debug;
@@ -447,6 +451,9 @@ public class WorldRenderer {
 	}
 	public World getWorld() {
 		return world;
+	}
+	public void setWorld(World w) {
+		this.world = w;
 	}
 
 }
