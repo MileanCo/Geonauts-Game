@@ -48,6 +48,8 @@ public class World {
 	private LinkedList<Chunk> chunks;
 	/** Number of chunks to use */
 	public static int NUM_CHUNKS = 3;
+	/** Score of the game */
+	public int score;
 	
 	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
@@ -168,6 +170,4 @@ public class World {
 			return chunks.getFirst().getBlock(col, row);
 		
 	}
-
-
 }

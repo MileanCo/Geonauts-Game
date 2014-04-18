@@ -158,11 +158,10 @@ public class HeroController {
 		if (hero.getStateTime() - lastShootTime > hero.getReloadTime()) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
-				Missile m = new Missile(hero.position.cpy(), t.getEnemy(), 25);
+				Missile m = new Missile(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);
 				MissileController mc = new MissileController(world, m);
 
 				world.getMissileControllers().add(mc);
-				
 			}
 
 			lastShootTime = hero.getStateTime();

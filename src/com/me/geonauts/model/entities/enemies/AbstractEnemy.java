@@ -65,4 +65,6 @@ public abstract class AbstractEnemy extends Entity {
 
 	// All Enemies must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();
+	
+	public abstract int getValue();
 }

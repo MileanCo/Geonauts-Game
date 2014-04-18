@@ -9,6 +9,7 @@ public class Turret extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2(1, 1);
 	private static int health = 50;
 	private static int damage = 5;
+	private static int value = 10;
 	
 	// Textures
 	public static TextureRegion[] enemyFrames;
@@ -31,6 +32,13 @@ public class Turret extends AbstractEnemy {
 	@Override
 	public TextureRegion[] getFrames() {
 		return enemyFrames;
+	}
+
+
+
+	@Override
+	public int getValue() {
+		return value;
 	}
 
 }

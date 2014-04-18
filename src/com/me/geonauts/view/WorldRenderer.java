@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -73,12 +74,28 @@ public class WorldRenderer {
 	private float ppuX;	// pixels per unit on the X axis
 	private float ppuY;	// pixels per unit on the Y axis
 	
+	// Fonts
+	protected BitmapFont font_fipps_small;
+	protected BitmapFont font_fipps;
+	private String HELP_MESSAGE = "Tap on left to fly!";
+	private float HELP_MESSAGE_TIME = 5; //seconds
+	
 	public WorldRenderer(World world) {
 		this.world = world;		
 		this.debug = debug;
 		spriteBatch = new SpriteBatch();
 		debugRenderer = new ShapeRenderer();
 		loadTextures();
+		
+		// Fonts
+		this.font_fipps_small = new BitmapFont(
+				Gdx.files.internal("fonts/fipps/fipps_small.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_small.png"), false);
+		
+		this.font_fipps = new BitmapFont(
+				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
+		//this.font_fipps.setScale(0.75f);
 	}
 	
 	/**
@@ -239,7 +256,17 @@ public class WorldRenderer {
 			for (int i = 0; i < world.getAnimations().size(); i++) {
 				drawUpdateAnimation(i, delta);
 			}
-
+			
+			// Draw texts
+			font_fipps_small.draw(spriteBatch, "Score: " + world.score, 
+					cam.position.x + width/3 + 4, height - 2);
+			
+			// draw help message in beginning
+			if (HELP_MESSAGE_TIME > 0) {
+				font_fipps_small.drawMultiLine(spriteBatch, HELP_MESSAGE, 
+						width/2 + 4, height-4);
+				HELP_MESSAGE_TIME -= delta;
+			}
 			
 		spriteBatch.end();
 		

@@ -18,6 +18,7 @@ public class FireMob extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((50/64f), (50/60f));
 	private static int health = 50;
 	private static int damage = 10;
+	private static int value = 5;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 1;
@@ -75,6 +76,11 @@ public class FireMob extends AbstractEnemy {
 	@Override
 	public TextureRegion[] getFrames() {
 		return enemyFrames;
+	}
+	
+	@Override
+	public int getValue() {
+		return value;
 	}
 
 	

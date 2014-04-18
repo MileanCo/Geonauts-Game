@@ -49,7 +49,7 @@ public class Chunk {
 		
 		// Make the ROCK
 		blocks[0][1] =  new Block(new Vector2(position.x, 1), BlockType.ROCK);
-		int row = 0;
+		int row = 0;//random.nextInt(2 - 0) + 2;
 		for (int col = 0; col < WIDTH; col++ ) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, row); 
@@ -60,8 +60,8 @@ public class Chunk {
 		
 		
 		// Make some walls
-		int col = random.nextInt(WIDTH/2-1 - 0) + 0;
-		for (int r = 0; r < HEIGHT/2; r++) {
+		int col = random.nextInt(WIDTH/2-2 - 0) + 0;
+		for (int r = 0; r < HEIGHT/2 - 1; r++) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.
@@ -69,8 +69,8 @@ public class Chunk {
 		}
 		
 		// Make some ceiling walls
-		col = random.nextInt(WIDTH - WIDTH/2) +  WIDTH/2;
-		for (int r = HEIGHT-1; r >= HEIGHT/2; r--) {
+		col = random.nextInt(WIDTH - WIDTH/2) +  WIDTH/2 - 1;
+		for (int r = HEIGHT-1; r >= HEIGHT/2+2; r--) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.

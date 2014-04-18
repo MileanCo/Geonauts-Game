@@ -50,9 +50,9 @@ public class MainMenuScreen extends AbstractScreen {
 	public MainMenuScreen(Game game) {
 		super(game);
 
-		this.font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_gray.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_gray.png"), false);
+		font = new BitmapFont(
+				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
 
 		// Table
 		Table table = new Table();

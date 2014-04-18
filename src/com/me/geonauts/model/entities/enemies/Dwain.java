@@ -15,6 +15,7 @@ public class Dwain extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((74/64f), (71/60f));
 	private static int health = 50;
 	private static int damage = 15;
+	private static int value = 20;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 2;
@@ -78,5 +79,9 @@ public class Dwain extends AbstractEnemy {
 		return enemyFrames;
 	}
 
+	@Override
+	public int getValue() {
+		return value;
+	}
 	
 }

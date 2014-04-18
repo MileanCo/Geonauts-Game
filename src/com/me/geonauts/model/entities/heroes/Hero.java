@@ -44,7 +44,6 @@ public abstract class Hero extends Entity {
 	public boolean grounded;
 	protected float reloadTime;
 	protected int money;
-	protected int score;
 	
 	// Targetting stuff
 	protected LinkedList<Target> targets;
