@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.MissileController;
+import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
@@ -237,7 +238,10 @@ public class WorldRenderer {
 		
 		// Draw everything to the screen
 		spriteBatch.begin();
-			drawChunks();
+			// Draw chunks
+			drawChunk( world.getCurrentChunk() );
+			drawChunk( world.getNextChunk() );
+			
 			drawHero(delta);
 			
 			// Draw & Update in SAME loop for performance improvement
@@ -280,20 +284,35 @@ public class WorldRenderer {
 	}
 
 
-	private void drawChunks() {
-		// Draw current chunk
-		//System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
-		for (Block block : world.getCurrentChunk().getDrawableBlocks() ) {
-			drawEntity(block, blockTextures.get(block.getType()));
-		}
-		
-		// Try to draw part of the next chunk.
-		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
-		for (Block block : world.getNextChunk().getDrawableBlocks() ) {
-			drawEntity(block, blockTextures.get(block.getType()));
-		}
-		
-
+	private void drawChunk(Chunk c) {		
+		// If the chunk's position is inside the screen
+		if (c.position.x <= world.getHero().getCamOffsetPosX() + CAMERA_WIDTH ) {		
+			// Get the X of the left-hand side of the screen
+			int x1 = (int) (world.getHero().getCamOffsetPosX() - c.position.x) ;
+			int y1 = 0; 
+			if (x1 < 0) 	x1 = 0;	
+			
+			// get Right-hand side of screen		
+			int x2 = (int) (world.getHero().getCamOffsetPosX() + WIDTH + 1 - c.position.x );
+			int y2 = HEIGHT - 1;
+			
+			if (x2 >= Chunk.WIDTH) x2 = Chunk.WIDTH - 1;
+			if (y2 >= Chunk.HEIGHT) y2 = Chunk.HEIGHT - 1;
+			
+			//System.out.println(x1 + " " + x2);
+			
+			// Make a list of all blocks within x...x2, y....y2
+			Block block;
+			for (int col = x1; col <= x2; col++) {
+				for (int row = y1; row <= y2; row++) {
+					block = c.getBlock(col, row);
+					// If there's a block here, draw it
+					if (block != null) {
+						drawEntity(block, blockTextures.get(block.getType()));
+					}
+				}
+			}
+		}		
 	}
 	
 	/**

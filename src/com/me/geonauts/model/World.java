@@ -47,7 +47,7 @@ public class World {
 	/** List of chunks that are to move through the world. */
 	private LinkedList<Chunk> chunks;
 	/** Number of chunks to use */
-	public static int NUM_CHUNKS = 3;
+	public static int NUM_CHUNKS = 2;
 	/** Score of the game */
 	public int score;
 	

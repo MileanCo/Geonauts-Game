@@ -98,12 +98,13 @@ public class Chunk {
 	 * @param height of screen
 	 * @return List<Block> 
 	 */
-	public List<Block> getDrawableBlocks() {
+	@Deprecated
+	public List<Block> getDrawableBlocks() { // WorldRenderer draws the chunk, with less for-loops
 		// List to contain all drawable blocks
 		List<Block> drawableBlocks = new ArrayList<Block>();
 		
 		// If the chunk's position is inside the screen
-		if (position.x < world.getHero().getCamOffsetPosX() + WorldRenderer.CAMERA_WIDTH) {		
+		if (position.x < world.getHero().getCamOffsetPosX() + WorldRenderer.CAMERA_WIDTH - 1) {		
 			// Get the X of the left-hand side of the screen
 			int x1 = (int) (world.getHero().getCamOffsetPosX() - position.x) ;
 			int y1 = 0; 
