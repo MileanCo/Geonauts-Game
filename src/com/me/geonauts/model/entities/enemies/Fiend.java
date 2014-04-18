@@ -3,7 +3,7 @@ package com.me.geonauts.model.entities.enemies;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Dwain extends AbstractEnemy {
+public class Fiend extends AbstractEnemy {
 	
 	// Rotation stuff
 	public float ROTATION_SPEED = 0.3f; // angles per second??
@@ -12,10 +12,10 @@ public class Dwain extends AbstractEnemy {
 
 	public static final float SPEED = 0.5f;	// unit per second
 	public final int DIRECTION = -1;
-	private static Vector2 SIZE = new Vector2((74/64f), (71/60f));
+	private static Vector2 SIZE = new Vector2((100/64f), (45/60f));
 	private static int health = 50;
 	private static int damage = 15;
-	private static int value = 20;
+	private static int value = 10;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 2;
@@ -28,7 +28,7 @@ public class Dwain extends AbstractEnemy {
 	 * @param pos
 	 * @param SIZE
 	 */
-	public Dwain(Vector2 pos) {
+	public Fiend(Vector2 pos) {
 		super(pos, SIZE, SPEED, health, damage);
 		PITCH = rand.nextInt(20-12) + 12;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();

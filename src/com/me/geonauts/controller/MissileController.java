@@ -213,7 +213,7 @@ public class MissileController {
 	
 	private void die() {
 		world.getMissileControllers().remove(this);
-		world.getAnimations().add(new ExplosionHit(missile.position, missile.SIZE.x));
+		world.getAnimations().add(new ExplosionHit(missile.position, 1));//missile.SIZE.x));
 	}
 	
 	/**

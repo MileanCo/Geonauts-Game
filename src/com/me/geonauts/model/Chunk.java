@@ -49,7 +49,7 @@ public class Chunk {
 		
 		// Make the ROCK
 		blocks[0][1] =  new Block(new Vector2(position.x, 1), BlockType.ROCK);
-		int row = 0;
+		int row = 0;//random.nextInt(2 - 0) + 2;
 		for (int col = 0; col < WIDTH; col++ ) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, row); 
@@ -58,9 +58,10 @@ public class Chunk {
 		}
 		blocks[WIDTH-1][1] =  new Block(new Vector2(WIDTH-1 + position.x, 1), BlockType.ROCK);
 		
+		
 		// Make some walls
-		int col = random.nextInt(WIDTH/2-1 - 0) + 0;
-		for (int r = 0; r < HEIGHT/2; r++) {
+		int col = random.nextInt(WIDTH/2-2 - 0) + 0;
+		for (int r = 0; r < HEIGHT/2 - 1; r++) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.
@@ -68,8 +69,8 @@ public class Chunk {
 		}
 		
 		// Make some ceiling walls
-		col = random.nextInt(WIDTH - WIDTH/2) +  WIDTH/2;
-		for (int r = HEIGHT-1; r >= HEIGHT/2; r--) {
+		col = random.nextInt(WIDTH - WIDTH/2) +  WIDTH/2 - 1;
+		for (int r = HEIGHT-1; r >= HEIGHT/2+2; r--) {
 			// Make the block position relative to the WORLD. Not in the chunk
 			Vector2 block_pos = new Vector2(position.x + col, r); 
 			// Set the new block @ its right point in the chunk.
@@ -97,12 +98,13 @@ public class Chunk {
 	 * @param height of screen
 	 * @return List<Block> 
 	 */
-	public List<Block> getDrawableBlocks() {
+	@Deprecated
+	public List<Block> getDrawableBlocks() { // WorldRenderer draws the chunk, with less for-loops
 		// List to contain all drawable blocks
 		List<Block> drawableBlocks = new ArrayList<Block>();
 		
 		// If the chunk's position is inside the screen
-		if (position.x < world.getHero().getCamOffsetPosX() + WorldRenderer.CAMERA_WIDTH) {		
+		if (position.x < world.getHero().getCamOffsetPosX() + WorldRenderer.CAMERA_WIDTH - 1) {		
 			// Get the X of the left-hand side of the screen
 			int x1 = (int) (world.getHero().getCamOffsetPosX() - position.x) ;
 			int y1 = 0; 

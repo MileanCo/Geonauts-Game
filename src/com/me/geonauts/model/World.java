@@ -26,6 +26,8 @@ import com.me.geonauts.view.WorldRenderer;
 public class World {
 	/** Time spent the Hero is dead. */
 	private static final long DEAD_TIME = 2500;
+	/** Amount the game speed increases over time */
+	public static final float SPEED_INCREMENT = 0.01f;
 	
 	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
@@ -45,7 +47,9 @@ public class World {
 	/** List of chunks that are to move through the world. */
 	private LinkedList<Chunk> chunks;
 	/** Number of chunks to use */
-	public static int NUM_CHUNKS = 3;
+	public static int NUM_CHUNKS = 2;
+	/** Score of the game */
+	public int score;
 	
 	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
@@ -76,6 +80,7 @@ public class World {
 			chunks.addLast(move_me);
 		}
 		
+		// If hero is dying, and time spent dead is long enough, go back to menu.
 		if (hero.state == Hero.State.DYING) {
 			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
 				screen.toMainMenu();
@@ -165,6 +170,4 @@ public class World {
 			return chunks.getFirst().getBlock(col, row);
 		
 	}
-
-
 }

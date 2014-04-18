@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
@@ -47,7 +48,7 @@ public class EnemyController {
 	 */
 	public void update(float delta) {
 		if (enemy.health <= 0) {
-			die();
+			die(true);
 			return;
 		}
 		
@@ -98,7 +99,7 @@ public class EnemyController {
 		// Does it collide? 
 		if (enemyRect.overlaps(heroRect)) {
 			world.getHero().health -= enemy.getDamage() * 5;
-			die();
+			die(false);
 			return;
 		} 
 		
@@ -131,7 +132,7 @@ public class EnemyController {
 			if (block == null)  continue;
 			if (enemyRect.overlaps(block.getBounds())) {
 				System.out.println("Enemy Collision @ " + block.position.toString());
-				die();
+				die(false);
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
 			}
@@ -159,7 +160,7 @@ public class EnemyController {
 			if (block == null) 	continue;
 			if (enemyRect.overlaps(block.getBounds())) {
 				System.out.println("Enemy Collision @ " + block.position.toString());
-				die();
+				die(false);
 				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
@@ -189,13 +190,20 @@ public class EnemyController {
 		}
 	}
 	
-	private void die() {
+	private void die(boolean shotDown) {
 		enemy.alive = false;
 		enemy.state = AbstractEnemy.State.DYING;
 		world.getEnemyControllers().remove(this);
 		
 		// add new explosion
 		int r = world.randomGen.nextInt(2 - 0) + 0;
+		
+		// Check if enemy was shot down or not
+		if (! shotDown) r = 10;
+		else 
+			// Increase the score
+			world.score += enemy.getValue();
+		
 		switch (r) {
 			case 0: 
 				world.getAnimations().add(new Explosion10(enemy.position, enemy.SIZE.x));
@@ -203,8 +211,10 @@ public class EnemyController {
 			case 1: 
 				world.getAnimations().add(new Explosion11(enemy.position, enemy.SIZE.x));
 				break;
-		}
-		
+			case 10:
+				world.getAnimations().add(new Explosion06(enemy.position, enemy.SIZE.x));
+				break;
+		}		
 	}
 	
 	/**

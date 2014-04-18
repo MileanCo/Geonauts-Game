@@ -17,7 +17,7 @@ public class TextureSetup {
 	private static final String ASSET_FOLDER = "/home/joel/workspace/libgdx/assets/Geonauts/";
 	
 	/** "internal" folder where textures and texture.pack should be put */
-	private static final String ROOT_DIR = "/home/joel/workspace/libgdx/Geonauts/Geonauts/assets/images/";
+	private static final String ROOT_DIR = "/home/joel/workspace/libgdx/Geonauts/Geonauts-android/assets/images/";
 	
 	
 	
@@ -43,6 +43,9 @@ public class TextureSetup {
 		
 		// misc
 		TexturePacker2.process(ASSET_FOLDER + "misc", ROOT_DIR + "textures/misc", "misc.pack");
+		
+		// UI stuff
+		TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
 
 	}
 }

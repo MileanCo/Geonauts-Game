@@ -16,6 +16,7 @@ import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.model.entities.heroes.Hero;
 
@@ -48,8 +49,6 @@ public class HeroController {
 	
 	/** When the fly button was pressed */
 	private long flyPressedTime;
-	/** True as long as the Fly button is being pressed */
-	private Vector2 target;
 
 	/**
 	 * Constructor to make the Controller for hero
@@ -102,14 +101,15 @@ public class HeroController {
 			AbstractEnemy e = ec.getEnemy();
 			
 			// See if current enemy is closer than previous enemy
-			dist = touch.sub(e.position).len();
-			if (dist < closestDist) {
+			dist = touch.dst(e.position);
+			if (dist < closestDist && ! hero.targettingEnemy(e) ) {
 				closestDist = dist;
 				closestEnemy = e;
 			}
 			
 			// If actually the touch enemy, add that to list of targets
 			if (ec.getEnemyEntity().getBounds().contains(x, y)) {
+				closestDist = 0;
 				closestEnemy = e;
 				break;
 			}
@@ -158,11 +158,10 @@ public class HeroController {
 		if (hero.getStateTime() - lastShootTime > hero.getReloadTime()) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
-				Missile m = new Missile(hero.position.cpy(), t.getEnemy(), 25);
+				Missile m = new Missile(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);
 				MissileController mc = new MissileController(world, m);
 
 				world.getMissileControllers().add(mc);
-				
 			}
 
 			lastShootTime = hero.getStateTime();
@@ -297,6 +296,7 @@ public class HeroController {
 		hero.velocity.x = 0;
 		hero.velocity.y = 0;
 		hero.grounded = true;
+		world.getAnimations().add(new Explosion06(hero.position, hero.SIZE.x));
 	}
 
 	/** Change Hero's state and parameters based on input controls **/

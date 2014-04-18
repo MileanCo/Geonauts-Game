@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.MissileController;
+import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
@@ -28,6 +30,7 @@ import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
 import com.me.geonauts.model.entities.enemies.Dwain;
+import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
@@ -72,12 +75,32 @@ public class WorldRenderer {
 	private float ppuX;	// pixels per unit on the X axis
 	private float ppuY;	// pixels per unit on the Y axis
 	
+	// Fonts
+	protected BitmapFont font_fipps_small;
+	protected BitmapFont font_fipps;
+	private String HELP_MESSAGE = "Tap on left to fly!";
+	private float HELP_MESSAGE_TIME = 5; //seconds
+	
+	public WorldRenderer() {
+		this(null);
+	}
+	
 	public WorldRenderer(World world) {
 		this.world = world;		
 		this.debug = debug;
 		spriteBatch = new SpriteBatch();
 		debugRenderer = new ShapeRenderer();
 		loadTextures();
+		
+		// Fonts
+		this.font_fipps_small = new BitmapFont(
+				Gdx.files.internal("fonts/fipps/fipps_small.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_small.png"), false);
+		
+		this.font_fipps = new BitmapFont(
+				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
+		//this.font_fipps.setScale(0.75f);
 	}
 	
 	/**
@@ -154,6 +177,10 @@ public class WorldRenderer {
 		for (int i = 0; i < frames; i++) {
 			FireMob.enemyFrames[i] = enemiesAtlas.findRegion("fire_mob0" + i);
 		}
+		Fiend.enemyFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			Fiend.enemyFrames[i] = enemiesAtlas.findRegion("fiend0" + i);
+		}
 		
 		// Load missile frames
 		Missile.frames = new TextureRegion[1];
@@ -211,7 +238,10 @@ public class WorldRenderer {
 		
 		// Draw everything to the screen
 		spriteBatch.begin();
-			drawChunks();
+			// Draw chunks
+			drawChunk( world.getCurrentChunk() );
+			drawChunk( world.getNextChunk() );
+			
 			drawHero(delta);
 			
 			// Draw & Update in SAME loop for performance improvement
@@ -234,7 +264,17 @@ public class WorldRenderer {
 			for (int i = 0; i < world.getAnimations().size(); i++) {
 				drawUpdateAnimation(i, delta);
 			}
-
+			
+			// Draw texts
+			font_fipps_small.draw(spriteBatch, "Score: " + world.score, 
+					cam.position.x + width/3 + 4, height - 2);
+			
+			// draw help message in beginning
+			if (HELP_MESSAGE_TIME > 0) {
+				font_fipps_small.drawMultiLine(spriteBatch, HELP_MESSAGE, 
+						width/2 + 4, height-4);
+				HELP_MESSAGE_TIME -= delta;
+			}
 			
 		spriteBatch.end();
 		
@@ -244,20 +284,35 @@ public class WorldRenderer {
 	}
 
 
-	private void drawChunks() {
-		// Draw current chunk
-		//System.out.println(" --- c " + world.getCurrentChunk().getDrawableBlocks().size());
-		for (Block block : world.getCurrentChunk().getDrawableBlocks() ) {
-			drawEntity(block, blockTextures.get(block.getType()));
-		}
-		
-		// Try to draw part of the next chunk.
-		//System.out.println(" --- n " + world.getNextChunk().getDrawableBlocks().size());
-		for (Block block : world.getNextChunk().getDrawableBlocks() ) {
-			drawEntity(block, blockTextures.get(block.getType()));
-		}
-		
-
+	private void drawChunk(Chunk c) {		
+		// If the chunk's position is inside the screen
+		if (c.position.x <= world.getHero().getCamOffsetPosX() + CAMERA_WIDTH ) {		
+			// Get the X of the left-hand side of the screen
+			int x1 = (int) (world.getHero().getCamOffsetPosX() - c.position.x) ;
+			int y1 = 0; 
+			if (x1 < 0) 	x1 = 0;	
+			
+			// get Right-hand side of screen		
+			int x2 = (int) (world.getHero().getCamOffsetPosX() + WIDTH + 1 - c.position.x );
+			int y2 = HEIGHT - 1;
+			
+			if (x2 >= Chunk.WIDTH) x2 = Chunk.WIDTH - 1;
+			if (y2 >= Chunk.HEIGHT) y2 = Chunk.HEIGHT - 1;
+			
+			//System.out.println(x1 + " " + x2);
+			
+			// Make a list of all blocks within x...x2, y....y2
+			Block block;
+			for (int col = x1; col <= x2; col++) {
+				for (int row = y1; row <= y2; row++) {
+					block = c.getBlock(col, row);
+					// If there's a block here, draw it
+					if (block != null) {
+						drawEntity(block, blockTextures.get(block.getType()));
+					}
+				}
+			}
+		}		
 	}
 	
 	/**
@@ -265,21 +320,11 @@ public class WorldRenderer {
 	 */
 	private void drawHero(float delta) {
 		Hero hero = world.getHero();
-		
-
-		// Get hero's current frame if he's walking
-		//if (hero.getState().equals(State.MOVING)) {
-		//	heroFrame = hero.isFacingLeft() ? moveLeftAnimation.getKeyFrame(hero.getStateTime(), true) : moveRightAnimation.getKeyFrame(hero.getStateTime(), true);
-		
-		// Get hero's frame if he's jumping or falling
-		//}
-		
-		// Draw hero's frame in the proper position
-		TextureRegion[] frames = hero.getFrames();
-		drawEntity(hero, frames[0]);
-		
-
-
+		if (! hero.grounded) {
+			// Draw hero's frame in the proper position
+			TextureRegion[] frames = hero.getFrames();
+			drawEntity(hero, frames[0]);
+		}
 	}
 	
 	/**
@@ -293,7 +338,7 @@ public class WorldRenderer {
 		Entity e = ec.getEnemyEntity();
 
 		// Check if enemy is off the screen
-		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
+		if (e.position.x < (world.getHero().getCamOffsetPosX() - e.SIZE.x)) {
 			world.getEnemyControllers().remove(index);
 			
 		// Otherwise draw and update
@@ -332,6 +377,7 @@ public class WorldRenderer {
 		
 		// Check if target is past hero, then delete it
 		if (hero.position.x > t.position.x || ! t.getEnemy().alive) {
+			System.out.println("removed target @ " + t.toString());
 			hero.getTargets().remove(i);
 		} else {
 			t.update(delta);
@@ -424,6 +470,9 @@ public class WorldRenderer {
 	}
 	public World getWorld() {
 		return world;
+	}
+	public void setWorld(World w) {
+		this.world = w;
 	}
 
 }
