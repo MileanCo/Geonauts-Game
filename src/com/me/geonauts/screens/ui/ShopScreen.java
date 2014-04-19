@@ -1,9 +1,5 @@
 package com.me.geonauts.screens.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,35 +12,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.me.geonauts.model.entities.heroes.Hero;
 
 
 public class ShopScreen extends AbstractScreen{
 
-	//users shop values
-	int reload;
-	int attack;
-	int health;
-	int x_money;
-	int targets;
 	
 	//buttons
 	private TextButton btnReload;
+	private TextButton btnRinfo;
+	private TextButton btnRcost;
 	private TextButton btnAttack;
+	private TextButton btnAinfo;
+	private TextButton btnAcost;
 	private TextButton btnHealth;
+	private TextButton btnHinfo;
+	private TextButton btnHcost;
 	private TextButton btnMoney;
+	private TextButton btnMinfo;
+	private TextButton btnMcost;
 	private TextButton btnMultiTarget;
+	private TextButton btnMTinfo;
+	private TextButton btnMTcost;
 	
 	
 	public ShopScreen(Game game){
 		super(game);
-		
-		String content;
-		try {
-			content = new Scanner(new File("game.dat")).next();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		
 		
 		//Table
@@ -90,8 +82,10 @@ public class ShopScreen extends AbstractScreen{
 		
 		
 		//Buttons
-		btnReload = new TextButton("Reload Time", styleG);
-		btnReload.addListener(new InputListener() {
+		btnReload = new TextButton("Reload", styleG);
+		btnRinfo = new TextButton("Attack Speed Increase", styleG);
+		btnRcost = new TextButton("*Cost*", styleG);
+		btnRcost.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
@@ -100,7 +94,9 @@ public class ShopScreen extends AbstractScreen{
 				//action
 			}
 		});
-		btnAttack = new TextButton("Increase Attack", styleR);
+		btnAttack = new TextButton("Attack", styleR);
+		btnAinfo = new TextButton("Attack Damage Increase", styleR);
+		btnAcost = new TextButton("*Cost*", styleR);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -110,7 +106,9 @@ public class ShopScreen extends AbstractScreen{
 				//action
 			}
 		});
-		btnHealth = new TextButton("Increase Max Health", styleB);
+		btnHealth = new TextButton("Health", styleB);
+		btnHinfo = new TextButton("Health Increase", styleB);
+		btnHcost = new TextButton("*Cost*", styleB);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -120,7 +118,9 @@ public class ShopScreen extends AbstractScreen{
 				//action
 			}
 		});
-		btnMoney = new TextButton("Double Money", styleY);
+		btnMoney = new TextButton("Money", styleY);
+		btnMinfo = new TextButton("Money Increase", styleY);
+		btnMcost = new TextButton("*Cost*", styleY);
 		btnMoney.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -130,7 +130,9 @@ public class ShopScreen extends AbstractScreen{
 				//action
 			}
 		});
-		btnMultiTarget = new TextButton("Increase Multi-Target", styleP);
+		btnMultiTarget = new TextButton("Multi-Target", styleP);
+		btnMTinfo = new TextButton("Increase Number of Targets", styleP);
+		btnMTcost = new TextButton("*Cost*", styleP);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -141,14 +143,24 @@ public class ShopScreen extends AbstractScreen{
 			}
 		});
 		table.add(btnReload);
+		table.add(btnRinfo);
+		table.add(btnRcost);
 		table.row();
 		table.add(btnAttack);
+		table.add(btnAinfo);
+		table.add(btnAcost);
 		table.row();
 		table.add(btnHealth);
+		table.add(btnHinfo);
+		table.add(btnHcost);
 		table.row();
 		table.add(btnMoney);
+		table.add(btnMinfo);
+		table.add(btnMcost);
 		table.row();
 		table.add(btnMultiTarget);
+		table.add(btnMTinfo);
+		table.add(btnMTcost);
 	}
 	
 	public void render(float delta) {

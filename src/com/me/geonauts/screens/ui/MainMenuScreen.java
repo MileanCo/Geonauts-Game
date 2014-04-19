@@ -32,6 +32,7 @@ public class MainMenuScreen extends AbstractScreen {
 	/** GameScreen object where main gameplay takes place */
 	private Screen gameScreen;
 	private Screen shopScreen;
+	private Screen creditScreen;
 
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -56,8 +57,8 @@ public class MainMenuScreen extends AbstractScreen {
 		highscore = prefs.getInteger("highscore");
 
 		font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
+				Gdx.files.internal("fonts/fipps/fipps_gray.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_gray.png"), false);
 
 		// Table
 		Table table = new Table();
@@ -137,7 +138,7 @@ public class MainMenuScreen extends AbstractScreen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//newGame();
+				credit();
 			}
 		});
 		btnQuit = new TextButton("Quit", style);
@@ -195,5 +196,10 @@ public class MainMenuScreen extends AbstractScreen {
 	private void shop(){
 		shopScreen = new ShopScreen(game);
 		game.setScreen(shopScreen);
+	}
+	
+	private void credit(){
+		creditScreen = new CreditScreen(game);
+		game.setScreen(creditScreen);
 	}
 }
