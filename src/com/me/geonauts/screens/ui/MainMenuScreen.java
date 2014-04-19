@@ -1,9 +1,5 @@
 package com.me.geonauts.screens.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -33,6 +29,7 @@ public class MainMenuScreen extends AbstractScreen {
 	private Screen gameScreen;
 	private Screen shopScreen;
 	private Screen creditScreen;
+	private Screen optionsScreen;
 
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -84,24 +81,8 @@ public class MainMenuScreen extends AbstractScreen {
 		Label lblTitle = new Label(TITLE, skin);
 		Label lblScore = new Label("High score: " + highscore, skin);
 		
-		File f = new File("game.dat");
-		// Buttons
-		if(!f.exists()){
-			//make button say new game and put default values into player stats file
-			btnNewGame = new TextButton("New Game", style);
-			PrintWriter writer = null;
-			try {
-				writer = new PrintWriter("game.dat");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			// THIS DOESN'T WORK ON ANDROID. It throws the above exception, and then tries to write to a 'writer' that is null....
-			//health, attack, reload time, money, targets
-			//writer.print("100\n25\n.5\n100\n1");
-			//writer.close();
-		} else {
-			btnNewGame = new TextButton("Continue", style);
-		}
+		
+		btnNewGame = new TextButton("New Game", style);	
 		btnNewGame.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -128,7 +109,7 @@ public class MainMenuScreen extends AbstractScreen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//newGame();
+				options();
 			}
 		});
 		btnCredits = new TextButton("Credits", style);
@@ -201,5 +182,10 @@ public class MainMenuScreen extends AbstractScreen {
 	private void credit(){
 		creditScreen = new CreditScreen(game);
 		game.setScreen(creditScreen);
+	}
+	
+	private void options(){
+		optionsScreen = new OptionsScreen(game);
+		game.setScreen(optionsScreen);;
 	}
 }
