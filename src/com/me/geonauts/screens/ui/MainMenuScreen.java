@@ -1,9 +1,5 @@
 package com.me.geonauts.screens.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -32,6 +28,8 @@ public class MainMenuScreen extends AbstractScreen {
 	/** GameScreen object where main gameplay takes place */
 	private Screen gameScreen;
 	private Screen shopScreen;
+	private Screen creditScreen;
+	//private Screen optionsScreen;
 
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -41,23 +39,24 @@ public class MainMenuScreen extends AbstractScreen {
 	// Buttons
 	private TextButton btnNewGame;
 	private TextButton btnShop;
-	private TextButton btnOptions;
+	//private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
 	
 	private int highscore  = 0;
+	
+	// Load preferences
+	Preferences prefs = Gdx.app.getPreferences("game-prefs");
+			
 
 	public MainMenuScreen(Game game) {
 		super(game);
 		
-		// Load preferences
-		Preferences prefs = Gdx.app.getPreferences("game-prefs");
-		
 		highscore = prefs.getInteger("highscore");
 
 		font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
+				Gdx.files.internal("fonts/fipps/fipps_gray.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_gray.png"), false);
 
 		// Table
 		Table table = new Table();
@@ -83,22 +82,9 @@ public class MainMenuScreen extends AbstractScreen {
 		Label lblTitle = new Label(TITLE, skin);
 		Label lblScore = new Label("High score: " + highscore, skin);
 		
-		File f = new File("game.dat");
-		// Buttons
-		if(!f.exists()){
-			//make button say new game and put default values into player stats file
+		if(prefs.getInteger("Reload") == 0){
 			btnNewGame = new TextButton("New Game", style);
-			PrintWriter writer = null;
-			try {
-				writer = new PrintWriter("game.dat");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			// THIS DOESN'T WORK ON ANDROID. It throws the above exception, and then tries to write to a 'writer' that is null....
-			//health, attack, reload time, money, targets
-			//writer.print("100\n25\n.5\n100\n1");
-			//writer.close();
-		} else {
+		} else{
 			btnNewGame = new TextButton("Continue", style);
 		}
 		btnNewGame.addListener(new InputListener() {
@@ -120,16 +106,16 @@ public class MainMenuScreen extends AbstractScreen {
 				shop();
 			}
 		});
-		btnOptions = new TextButton("Options", style);
+		/*btnOptions = new TextButton("Options", style);
 		btnOptions.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//newGame();
+				options();
 			}
-		});
+		});*/
 		btnCredits = new TextButton("Credits", style);
 		btnCredits.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -137,7 +123,7 @@ public class MainMenuScreen extends AbstractScreen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//newGame();
+				credit();
 			}
 		});
 		btnQuit = new TextButton("Quit", style);
@@ -155,8 +141,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(btnNewGame);
 		table.row();
 		table.add(btnShop);
-		table.row();
-		table.add(btnOptions);
+		//table.row();
+		//table.add(btnOptions);
 		table.row();
 		table.add(btnCredits);
 		table.row();
@@ -193,6 +179,13 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	private void newGame() {
+		if(prefs.getInteger("Reload") == 0){
+			prefs.putInteger("Reload", 1);
+			prefs.putInteger("Attack", 1);
+			prefs.putInteger("Health", 1);
+			prefs.putInteger("Moneyx", 1);
+			prefs.putInteger("Multi-Target", 1);
+		}
 		game.setScreen(gameScreen);
 	}
 	
@@ -200,4 +193,14 @@ public class MainMenuScreen extends AbstractScreen {
 		shopScreen = new ShopScreen(game);
 		game.setScreen(shopScreen);
 	}
+	
+	private void credit(){
+		creditScreen = new CreditScreen(game);
+		game.setScreen(creditScreen);
+	}
+	
+	/*private void options(){
+		optionsScreen = new OptionsScreen(game);
+		game.setScreen(optionsScreen);;
+	}*/
 }
