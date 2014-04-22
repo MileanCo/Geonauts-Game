@@ -29,7 +29,7 @@ public class MainMenuScreen extends AbstractScreen {
 	private Screen gameScreen;
 	private Screen shopScreen;
 	private Screen creditScreen;
-	private Screen optionsScreen;
+	//private Screen optionsScreen;
 
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -39,7 +39,7 @@ public class MainMenuScreen extends AbstractScreen {
 	// Buttons
 	private TextButton btnNewGame;
 	private TextButton btnShop;
-	private TextButton btnOptions;
+	//private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
 	
@@ -102,7 +102,7 @@ public class MainMenuScreen extends AbstractScreen {
 				shop();
 			}
 		});
-		btnOptions = new TextButton("Options", style);
+		/*btnOptions = new TextButton("Options", style);
 		btnOptions.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -111,7 +111,7 @@ public class MainMenuScreen extends AbstractScreen {
 				Gdx.app.log("my app", "Released");
 				options();
 			}
-		});
+		});*/
 		btnCredits = new TextButton("Credits", style);
 		btnCredits.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -137,8 +137,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(btnNewGame);
 		table.row();
 		table.add(btnShop);
-		table.row();
-		table.add(btnOptions);
+		//table.row();
+		//table.add(btnOptions);
 		table.row();
 		table.add(btnCredits);
 		table.row();
@@ -184,8 +184,8 @@ public class MainMenuScreen extends AbstractScreen {
 		game.setScreen(creditScreen);
 	}
 	
-	private void options(){
+	/*private void options(){
 		optionsScreen = new OptionsScreen(game);
 		game.setScreen(optionsScreen);;
-	}
+	}*/
 }
