@@ -86,8 +86,10 @@ public class ParallaxBackground {
 		// TO-DO: there needs to be higher res images for 
 		// bigger screens. Scaling it doesnt make use of the bigger resolution.
 		for (ParallaxLayer layer : layers) {
-			layer.scale = screenH / layer.region.getRegionHeight();
-			
+			if (layer.fill)
+				layer.scale = screenH / layer.region.getRegionHeight();
+			else
+				layer.scale = 1;
 		}
 	}
 }

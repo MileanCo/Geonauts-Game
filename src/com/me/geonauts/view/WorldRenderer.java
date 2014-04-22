@@ -1,6 +1,7 @@
 package com.me.geonauts.view;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -55,6 +56,7 @@ public class WorldRenderer {
 	
 	private static final float EXPLOSION_DURATION = 0.03f; //seconds
 	
+	private Random randomGen = new Random();
 	private World world;
 	private OrthographicCamera cam;
 
@@ -64,7 +66,10 @@ public class WorldRenderer {
 	/** Textures **/
 	public HashMap<BlockType, TextureRegion> blockTextures = new HashMap<BlockType, TextureRegion>();
 	public HashMap<String, TextureRegion> backgroundTextures = new HashMap<String, TextureRegion> ();
-	private ParallaxBackground background;
+	private ParallaxBackground backgroundCave;
+	private ParallaxBackground backgroundSpace1;
+	private ParallaxBackground backgroundSpace2;
+	private ParallaxBackground backgroundCity;
 	
 	/** Animations **/
 	//private Animation explosion10Anim;
@@ -116,7 +121,13 @@ public class WorldRenderer {
 		ppuX = (float)width / CAMERA_WIDTH;
 		ppuY = (float)height / CAMERA_HEIGHT;
 		cam = new OrthographicCamera((float)w, (float)h);
-		background.setSize((float)w, (float)h);
+		
+		// Set background stuff
+		backgroundCave.setSize((float)w, (float)h);
+		backgroundSpace1.setSize((float)w, (float)h);
+		backgroundSpace2.setSize((float)w, (float)h);
+		backgroundCity.setSize((float)w, (float)h);
+		
 		System.out.println(w + " " + h);
 		
 	}
@@ -143,18 +154,38 @@ public class WorldRenderer {
 		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
 		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
 		TextureAtlas tilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/tiles/tiles.pack"));
+		TextureAtlas planetAtlas = new TextureAtlas(Gdx.files.internal("images/textures/planets/planets.pack"));
 		
 		
 		// Load background images
-		Texture bg1 = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));	
-		//Texture planet_blue = new Texture(Gdx.files.internal("images/planets/planet-8.png"));	
-	
-		background = new ParallaxBackground(new ParallaxLayer[] {
-	           new ParallaxLayer(new TextureRegion(bg1), new Vector2(0.1f, 0), new Vector2(0, 0)),
-	            
-	           //new ParallaxLayer(new TextureRegion(planet_blue), new Vector2(0.25f, 0), new Vector2(1000, 0)),
-	           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
+		Texture caveBG = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));
+		Texture starsWhiteBG = new Texture(Gdx.files.internal("images/backgrounds/stars.png"));	
+		Texture starsYellowBG = new Texture(Gdx.files.internal("images/backgrounds/stars_yellow.png"));
+		Texture cityBG = new Texture(Gdx.files.internal("images/backgrounds/city_background_night.png"));
+		
+		backgroundCave = new ParallaxBackground(new ParallaxLayer[] {
+	           new ParallaxLayer(new TextureRegion(caveBG), new Vector2(0.2f, 0), new Vector2(0, 0), true),
 	      }, width, height, 0.5f, this);
+		
+		int bgPosX = randomGen.nextInt((2000 - 0) + 0);
+		int bgPosY = randomGen.nextInt((512 - 0) + 0);
+		backgroundSpace1 = new ParallaxBackground(new ParallaxLayer[] {
+		           new ParallaxLayer(new TextureRegion(starsWhiteBG), new Vector2(0.2f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(bgPosX, bgPosY), new Vector2(2048, 0), false),
+		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
+		      }, width, height, 0.5f, this);
+		
+		bgPosX = randomGen.nextInt((2000 - 0) + 0);
+		bgPosY = randomGen.nextInt((300 - 0) + 0);
+		backgroundSpace2 = new ParallaxBackground(new ParallaxLayer[] {
+		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_red"), new Vector2(0.5f, 0), new Vector2(bgPosX, bgPosY), new Vector2(2048, 0), false),
+		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
+		      }, width, height, 0.5f, this);
+		
+		backgroundCity = new ParallaxBackground(new ParallaxLayer[] {
+		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.5f, 0), new Vector2(0, 0), false),
+		      }, width, height, 0.5f, this);
 		
 		
 		
@@ -256,7 +287,20 @@ public class WorldRenderer {
 		spriteBatch.setProjectionMatrix(cam.combined);
 		
 		// Draw the parallax scrolling background
-		background.render(delta);
+		switch (world.getBackgroundType()) {
+			case 0:
+				backgroundCave.render(delta);
+				break;
+			case 1:
+				backgroundSpace1.render(delta);
+				break;
+			case 2:
+				backgroundSpace2.render(delta);
+				break;
+			case 3:
+				backgroundCity.render(delta);
+				break;
+		}
 		
 		// Draw everything to the screen
 		spriteBatch.begin();

@@ -41,6 +41,9 @@ public class TextureSetup {
 		// tiles
 		TexturePacker2.process(ASSET_FOLDER + "tiles", ROOT_DIR + "textures/tiles", "tiles.pack");
 		
+		// Planets
+		TexturePacker2.process(ASSET_FOLDER + "planets", ROOT_DIR + "textures/planets", "planets.pack");
+		
 		// misc
 		TexturePacker2.process(ASSET_FOLDER + "misc", ROOT_DIR + "textures/misc", "misc.pack");
 		

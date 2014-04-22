@@ -220,9 +220,11 @@ public class EnemyController {
 		
 		// Check if enemy was shot down or not
 		if (! shotDown) r = 10;
-		else 
+		else {
 			// Increase the score
 			world.score += enemy.getValue();
+			world.money += enemy.getValue();
+		}
 		
 		// Center explosion position to middle of enemy
 		Vector2 explPos = enemy.position.cpy();

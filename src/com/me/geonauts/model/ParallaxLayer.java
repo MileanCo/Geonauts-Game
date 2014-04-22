@@ -9,6 +9,7 @@ public class ParallaxLayer {
 	public Vector2 startPosition;
 	public Vector2 padding;
 	public float scale;
+	public boolean fill;
 
 	/**
 	 * Create a new layer in the background.
@@ -17,9 +18,9 @@ public class ParallaxLayer {
 	 * @param parallaxRatio
 	 * @param padding
 	 */
-	public ParallaxLayer(TextureRegion region, Vector2 parallaxRatio,
-			Vector2 padding) {
-		this(region, parallaxRatio, new Vector2(0, 0), padding);
+	public ParallaxLayer(TextureRegion region, Vector2 parallaxRatio, Vector2 padding, boolean fill) {
+		this(region, parallaxRatio, new Vector2(0, 0), padding, fill);
+		
 	}
 
 	/**
@@ -29,11 +30,11 @@ public class ParallaxLayer {
 	 * @param startPosition the init position of x,y
 	 * @param padding the padding of the region at x,y
 	 */
-	public ParallaxLayer(TextureRegion region, Vector2 parallaxRatio,
-			Vector2 startPosition, Vector2 padding) {
+	public ParallaxLayer(TextureRegion region, Vector2 parallaxRatio, Vector2 startPosition, Vector2 padding, boolean fill) {
 		this.region = region;
 		this.parallaxRatio = parallaxRatio;
 		this.startPosition = startPosition;
 		this.padding = padding;
+		this.fill = fill;
 	}
 }

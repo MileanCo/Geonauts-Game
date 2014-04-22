@@ -54,6 +54,9 @@ public class World {
 	
 	/** Score of the game */
 	public int score;
+	/** Money of the game */
+	public int money;
+	
 	/** How far the Hero went in this world */
 	private int distance;
 	
@@ -64,6 +67,8 @@ public class World {
 	private int SPAWN_INCREASE_RATE = 25;
 	
 	private boolean changed_spawn = false;
+	
+	private int backgroundType = 0;
 	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
@@ -78,6 +83,8 @@ public class World {
 		enemyMissiles = new ArrayList<EnemyMissileController> ();
 		
 		resetChunks();
+		
+		backgroundType = randomGen.nextInt(4 - 0) + 0;
 	}
 	
 	/**
@@ -198,5 +205,9 @@ public class World {
 		else
 			return chunks.getFirst().getBlock(col, row);
 		
+	}
+	
+	public int getBackgroundType() {
+		return backgroundType;
 	}
 }

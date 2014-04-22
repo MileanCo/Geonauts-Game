@@ -36,7 +36,7 @@ public class Chunk {
 		this.position = pos;
 		this.world = world;
 	
-		System.out.println("cpos: " + pos);
+		// System.out.println("cpos: " + pos);
 		//loadChunkFile("chunk1");
 		newBuild();
 	}

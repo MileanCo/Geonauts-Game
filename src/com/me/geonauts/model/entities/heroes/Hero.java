@@ -43,7 +43,7 @@ public abstract class Hero extends Entity {
 	public int health;
 	public boolean grounded;
 	protected float reloadTime;
-	protected int money;
+
 	
 	// Targetting stuff
 	protected LinkedList<Target> targets;
@@ -169,7 +169,6 @@ public abstract class Hero extends Entity {
 		// Check if Hero is targetting given enemy e
 		for (Target t : targets) {
 			if (t.getEnemy().equals(e)) {
-				System.out.println("YO!");
 				return true;
 			}
 		}

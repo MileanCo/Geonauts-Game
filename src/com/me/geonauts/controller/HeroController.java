@@ -163,7 +163,7 @@ public class HeroController {
 			processInput();
 		
 		// Check for targets to shoot at IF it's time to shoot
-		if (hero.getStateTime() - lastShootTime > hero.getReloadTime() && hero.state != Hero.State.DYING) {
+		if (hero.getStateTime() - lastShootTime > hero.getReloadTime() && ! hero.grounded) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
 				Missile m = new YellowLaser(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);

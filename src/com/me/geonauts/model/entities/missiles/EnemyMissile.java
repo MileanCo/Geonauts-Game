@@ -55,8 +55,8 @@ public abstract class EnemyMissile extends Entity {
 		//acceleration = unitVec.scl(SPEED);
 		
 		// Get difference in x and y from target to position
-		float x_diff = target.position.cpy().x - position.x;
-		float y_diff = target.position.cpy().y - position.y;
+		float x_diff = position.x - target.position.x;
+		float y_diff = position.y - target.position.y;
 		angle = (float) Math.toDegrees( Math.atan(y_diff / x_diff) );
 	}	
 	
