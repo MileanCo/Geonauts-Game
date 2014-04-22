@@ -11,6 +11,7 @@ import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
 
 public class EnemyController {
 
@@ -20,6 +21,9 @@ public class EnemyController {
 	// Model objects
 	private World world;
 	private AbstractEnemy enemy;
+	
+	// Shooting fields
+	private float lastShootTime;
 	
 	/**
 	 * Constructor to make the Controller for enemy
@@ -50,6 +54,21 @@ public class EnemyController {
 		if (enemy.health <= 0) {
 			die(true);
 			return;
+		}
+		
+		// Check for targets to shoot at IF it's time to shoot
+		if (enemy.getStateTime() - lastShootTime > enemy.getReloadTime() 
+				&& enemy.getReloadTime() > 0 
+				&& enemy.position.x > world.getHero().position.x ) {
+			
+			// CREATE NEW MISSILE w/ TARGET
+			EnemyMissile m = enemy.newMissile(enemy.position.cpy().add(enemy.SIZE.x/1.5f, 0), world.getHero());
+			//, t.getEnemy(), 25);
+			EnemyMissileController emc = new EnemyMissileController(world, m);
+
+			world.getEnemyMissileControllers().add(emc);
+		
+			lastShootTime = enemy.getStateTime();
 		}
 		
 		// Convert acceleration to frame time

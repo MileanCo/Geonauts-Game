@@ -147,6 +147,11 @@ public class GameScreen implements Screen, InputProcessor {
 			prefs.putInteger("highscore", world.score);
 		}
 		
+		// Increase # of games played
+		int games_played = prefs.getInteger("games_played");
+		games_played += 1;
+		prefs.putInteger("games_played", games_played);
+		
 		prefs.flush();
 		
 	}

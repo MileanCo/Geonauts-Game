@@ -8,23 +8,24 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
 import com.me.geonauts.model.entities.missiles.Missile;
 import com.me.geonauts.view.WorldRenderer;
 
-public class MissileController {
+public class EnemyMissileController {
 
 	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
 	
 	// Model objects
 	private World world;
-	private Missile missile;
+	private EnemyMissile missile;
 	
 	/**
 	 * Constructor to make the Controller for Missile
 	 * @param world
 	 */
-	public MissileController(World world, Missile m) {
+	public EnemyMissileController(World world, EnemyMissile m) {
 		this.world = world;
 		this.missile = m;
 	}
@@ -178,10 +179,6 @@ public class MissileController {
 	
 	
 	private boolean collisionWithTarget() {
-		// First check if target is alive
-		if (! missile.getTarget().alive) 
-			return false;
-		
 		// Get the Missile Rectangle 
 		Rectangle missileRect = rectPool.obtain();
 		missileRect.set(missile.getBounds().x, missile.getBounds().y,
@@ -212,7 +209,7 @@ public class MissileController {
 	}
 	
 	private void die() {
-		world.getMissileControllers().remove(this);
+		world.getEnemyMissileControllers().remove(this);
 		world.getAnimations().add(new ExplosionHit(missile.position, 1));//missile.SIZE.x));
 	}
 	
@@ -227,7 +224,7 @@ public class MissileController {
 	public Entity getMissileEntity() {
 		return missile;
 	}
-	public Missile getMissile() {
+	public EnemyMissile getMissile() {
 		return missile;
 	}
 	

@@ -23,9 +23,9 @@ import com.me.geonauts.screens.GameScreen;
 
 /**
  * Resources used: -
- * http://libdgxtutorials.blogspot.com/2013/09/libgdx-tutorial-
- * 10-button-and-stage-2d.html - https://github.com/libgdx/libgdx/wiki/Scene2d.ui
- * - https://github.com/libgdx/libgdx/wiki/Scene2d
+ * http://libdgxtutorials.blogspot.com/2013/09/libgdx-tutorial-10-button-and-stage-2d.html 
+ * https://github.com/libgdx/libgdx/wiki/Scene2d.ui
+ * https://github.com/libgdx/libgdx/wiki/Scene2d
  */
 
 public class MainMenuScreen extends AbstractScreen {
@@ -186,6 +186,10 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+		
+		// Load preferences
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		highscore = prefs.getInteger("highscore");
 	}
 
 	private void newGame() {

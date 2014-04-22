@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.geonauts.controller.EnemyController;
+import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
@@ -35,6 +36,7 @@ public class World {
 	private Hero hero;
 	
 	// List of main categories of entities in the world
+	private List<EnemyMissileController> enemyMissiles;
 	private List<MissileController> missiles;
 	private List<EnemyController> enemies;
 	private List<AbstractAnimation> anims;
@@ -48,9 +50,20 @@ public class World {
 	private LinkedList<Chunk> chunks;
 	/** Number of chunks to use */
 	public static int NUM_CHUNKS = 2;
+	
+	
 	/** Score of the game */
 	public int score;
+	/** How far the Hero went in this world */
+	private int distance;
 	
+	/** Spawning variables */
+	private int SPAWN_THRESHOLD = 350;
+	private final int MIN_SPAWN = 100;
+	private int INCREASE_DISTANCE_EVERY = 35; //units
+	private int SPAWN_INCREASE_RATE = 25;
+	
+	private boolean changed_spawn = false;
 	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
@@ -62,6 +75,7 @@ public class World {
 		enemies = new ArrayList<EnemyController>();
 		missiles = new ArrayList<MissileController> ();
 		anims = new ArrayList<AbstractAnimation> ();
+		enemyMissiles = new ArrayList<EnemyMissileController> ();
 		
 		resetChunks();
 	}
@@ -76,7 +90,7 @@ public class World {
 			Chunk move_me = chunks.pop();
 			System.out.println("Swapped chunk @ " + move_me.position.x);
 			move_me.position.x = chunks.getLast().position.x + Chunk.WIDTH;
-			move_me.build();
+			move_me.newBuild();
 			chunks.addLast(move_me);
 		}
 		
@@ -88,9 +102,9 @@ public class World {
 		}
 				
 		// Spawn some enemies!
-		int spawn = randomGen.nextInt(150 - 0) + 0;
+		int spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
-		if (spawn == 50) {
+		if (spawn == 49 || spawn == 50) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
@@ -101,6 +115,18 @@ public class World {
 			enemies.add(ec);
 		}
 		
+		distance = (int) hero.position.x;
+		
+		// Check if we need to increase spawn rate
+		if (distance % INCREASE_DISTANCE_EVERY == 0 && SPAWN_THRESHOLD >= MIN_SPAWN && !changed_spawn) {
+			SPAWN_THRESHOLD -= SPAWN_INCREASE_RATE;
+			System.out.println("increased spawn: " + SPAWN_THRESHOLD);
+			changed_spawn = true;
+		} else if (distance % INCREASE_DISTANCE_EVERY != 0)
+			changed_spawn = false;
+		
+		
+
 		// WORLD RENDERER HANDLES DRAWING AND UPDATING OF ALL ENTITIES
 		
 		
@@ -142,6 +168,9 @@ public class World {
 	}
 	public List<MissileController> getMissileControllers() {
 		return missiles;
+	}
+	public List<EnemyMissileController> getEnemyMissileControllers() {
+		return enemyMissiles;
 	}
 	public List<AbstractAnimation> getAnimations() {
 		return anims;

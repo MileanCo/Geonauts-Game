@@ -8,6 +8,9 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
 
 /**
  * @author joel
@@ -33,7 +36,11 @@ public abstract class AbstractEnemy extends Entity {
 	// Other attributes
 	public int health;
 	protected int damage;
+	protected float reloadTime = -1; // -1 means they can't shoot. Overwrite to make it shoot.
 	public boolean alive = true;	
+	
+	// Targetting stuff
+	protected Target target;
 	
 	public AbstractEnemy(Vector2 pos, Vector2 SIZE, float SPEED, int health, int damage) {
 		super(pos, SIZE);		
@@ -51,6 +58,8 @@ public abstract class AbstractEnemy extends Entity {
 	}
 	
 	public abstract void update(float delta);
+	
+	public abstract EnemyMissile newMissile(Vector2 pos, Hero target);
 
 	/** Getters and Setters */
 	public float getStateTime() {
@@ -61,6 +70,9 @@ public abstract class AbstractEnemy extends Entity {
 	}
 	public float getDAMP() {
 		return DAMP;
+	}
+	public float getReloadTime() {
+		return reloadTime;
 	}
 
 	// All Enemies must implement the getFrames() method to return the proper images 

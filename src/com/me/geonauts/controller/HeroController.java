@@ -10,15 +10,18 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.EntityAccessor;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.heroes.Hero.State;
+import com.me.geonauts.model.entities.missiles.Missile;
+import com.me.geonauts.model.entities.missiles.YellowLaser;
 
 public class HeroController {
 	enum Keys {
@@ -37,7 +40,7 @@ public class HeroController {
 	
 	// Shooting fields
 	private float lastShootTime;
-	private int MAX_TARGET_RADIUS = 5;
+	private int MAX_TARGET_RADIUS = 3;
 
 
 	// Keys
@@ -158,12 +161,11 @@ public class HeroController {
 		if (hero.getStateTime() - lastShootTime > hero.getReloadTime()) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
-				Missile m = new Missile(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);
+				Missile m = new YellowLaser(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);
 				MissileController mc = new MissileController(world, m);
 
 				world.getMissileControllers().add(mc);
 			}
-
 			lastShootTime = hero.getStateTime();
 		}
 		
@@ -173,8 +175,7 @@ public class HeroController {
 		// apply acceleration to change velocity
 		hero.velocity.add(hero.acceleration.x, hero.acceleration.y);
 				
-		// checking collisions with the surrounding blocks depending on Hero's
-		// velocity
+		// checking collisions with the surrounding blocks depending on Hero's velocity
 		checkCollisionWithBlocks(delta);
 
 		// apply damping to halt Hero nicely
@@ -189,6 +190,24 @@ public class HeroController {
 			hero.velocity.y = hero.MAX_VEL.y;
 		else if (hero.velocity.y <  -hero.MAX_VEL.y) 
 			hero.velocity.y = -hero.MAX_VEL.y;
+		
+		// Make sure hero doesn't go above or below screen.
+		if (hero.position.y > Chunk.HEIGHT - hero.SIZE.y && hero.state != State.DYING) {
+			hero.state = State.FALLING;
+			hero.angle -= hero.ROTATION_SPEED;
+			
+		// If he's below the screen, wrap to top if there arent any blocks there.
+		} else if (hero.position.y < -hero.SIZE.y/2f && hero.state != State.DYING) {
+			// Now check if there are blocks above the hero
+			if (world.getBlock((int)(hero.position.x + hero.velocity.x), (int)Chunk.HEIGHT) == null) {
+				hero.position.y = Chunk.HEIGHT;
+				
+			} else {
+				// Bounce the hero
+				hero.state = State.FLYING;
+				hero.angle += hero.ROTATION_SPEED;
+			}
+		}
 		
 		// Update the rest of the Hero object
 		manager.update(delta); // elapsed seconds != delta

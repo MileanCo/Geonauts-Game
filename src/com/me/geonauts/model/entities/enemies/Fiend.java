@@ -2,6 +2,8 @@ package com.me.geonauts.model.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
 
 public class Fiend extends AbstractEnemy {
 	
@@ -82,6 +84,13 @@ public class Fiend extends AbstractEnemy {
 	@Override
 	public int getValue() {
 		return value;
+	}
+
+
+	@Override
+	public EnemyMissile newMissile(Vector2 pos, Hero target) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -2,6 +2,9 @@ package com.me.geonauts.model.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
+import com.me.geonauts.model.entities.missiles.GreenEnemyLaser;
 
 public class Dwain extends AbstractEnemy {
 	
@@ -31,6 +34,7 @@ public class Dwain extends AbstractEnemy {
 	public Dwain(Vector2 pos) {
 		super(pos, SIZE, SPEED, health, damage);
 		PITCH = rand.nextInt(20-12) + 12;
+		reloadTime = 1.0f;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 		//System.out.println(ROTATION_SPEED);
@@ -82,6 +86,11 @@ public class Dwain extends AbstractEnemy {
 	@Override
 	public int getValue() {
 		return value;
+	}
+
+	@Override
+	public EnemyMissile newMissile(Vector2 pos, Hero target) {
+		return new GreenEnemyLaser(pos, target, damage);
 	}
 	
 }
