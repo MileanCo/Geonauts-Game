@@ -55,8 +55,8 @@ public class MainMenuScreen extends AbstractScreen {
 		highscore = prefs.getInteger("highscore");
 
 		font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_gray.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_gray.png"), false);
+				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
 
 		// Table
 		Table table = new Table();
