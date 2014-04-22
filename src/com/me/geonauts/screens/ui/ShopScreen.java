@@ -4,12 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -33,20 +33,27 @@ public class ShopScreen extends AbstractScreen{
 	
 	//buttons
 	private TextButton btnReload;
-	private TextButton btnRinfo;
-	private TextButton btnRcost;
+	private Label lblRinfo;
+	private Label lblRcost;
+	
 	private TextButton btnAttack;
-	private TextButton btnAinfo;
-	private TextButton btnAcost;
+	private Label lblAinfo;
+	private Label lblAcost;
+	
 	private TextButton btnHealth;
-	private TextButton btnHinfo;
-	private TextButton btnHcost;
+	private Label lblHinfo;
+	private Label lblHcost;
+	
+	/**
 	private TextButton btnMoney;
-	private TextButton btnMinfo;
-	private TextButton btnMcost;
+	private Label 		lblMinfo;
+	private Label btnMcost;
+	*/
+	
 	private TextButton btnMultiTarget;
-	private TextButton btnMTinfo;
-	private TextButton btnMTcost;
+	private Label 		lblMTinfo;
+	private Label 		lblMTcost;
+	
 	private TextButton btnQuit;
 	
 	//player values
@@ -67,7 +74,7 @@ public class ShopScreen extends AbstractScreen{
 		table.setFillParent(true);
 		stage.addActor(table);
 		
-		Skin skin = new Skin();
+		Skin skin = new Skin(Gdx.files.internal("images/ui/uiskin.json"));
 		
 		// TextureRegions
 		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
@@ -110,11 +117,11 @@ public class ShopScreen extends AbstractScreen{
 		styleQ.font = new BitmapFont();
 		
 		
-		//Buttons
-		btnReload = new TextButton("Reload", styleG);
-		btnRinfo = new TextButton("Attack Speed Increase", styleG);
-		btnRcost = new TextButton(String.valueOf(costR), styleG);
-		btnRcost.addListener(new InputListener() {
+		// GUI SHIT
+		lblRinfo = new Label("Current reload time: " + reload, skin);
+		lblRcost = new Label("Cost: " + String.valueOf(costR), skin);
+		btnReload = new TextButton("Decrease Reload Time", styleG);
+		lblRcost.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
@@ -126,9 +133,9 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		btnAttack = new TextButton("Attack", styleR);
-		btnAinfo = new TextButton("Attack Damage Increase", styleR);
-		btnAcost = new TextButton(String.valueOf(costA), styleR);
+		lblAinfo = new Label("Current attack: " + attack, skin);
+		lblAcost = new Label("Cost: " + String.valueOf(costA), skin);
+		btnAttack = new TextButton("Increase Attack Damage", styleR);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -141,9 +148,10 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		btnHealth = new TextButton("Health", styleB);
-		btnHinfo = new TextButton("Health Increase", styleB);
-		btnHcost = new TextButton(String.valueOf(costH), styleB);
+		
+		lblHinfo = new Label("Current health: " + health, skin);
+		lblHcost = new Label("Cost: " + String.valueOf(costH), skin);
+		btnHealth = new TextButton("Increase Health", styleB);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -156,8 +164,9 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
+		/**
 		btnMoney = new TextButton("Money", styleY);
-		btnMinfo = new TextButton("Money Increase", styleY);
+		lblMinfo = new Label("Money Increase", skin);
 		btnMcost = new TextButton(String.valueOf(costM), styleY);
 		btnMoney.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -171,9 +180,10 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		btnMultiTarget = new TextButton("Multi-Target", styleP);
-		btnMTinfo = new TextButton("Increase Number of Targets", styleP);
-		btnMTcost = new TextButton(String.valueOf(costMT), styleP);
+		*/
+		lblMTinfo = new Label("Max Number of Targets: " + multitarget, skin);
+		lblMTcost = new Label("Cost: " + String.valueOf(costMT), skin);
+		btnMultiTarget = new TextButton("Increase Multi-Target", styleP);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -192,30 +202,31 @@ public class ShopScreen extends AbstractScreen{
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("my app", "Released");
 				quit();
 			}
 		});
 		
 		table.add(btnReload);
-		table.add(btnRinfo);
-		table.add(btnRcost);
+		table.add(lblRinfo);
+		table.add(lblRcost);
 		table.row();
 		table.add(btnAttack);
-		table.add(btnAinfo);
-		table.add(btnAcost);
+		table.add(lblAinfo);
+		table.add(lblAcost);
 		table.row();
 		table.add(btnHealth);
-		table.add(btnHinfo);
-		table.add(btnHcost);
+		table.add(lblHinfo);
+		table.add(lblHcost);
 		table.row();
+		/**
 		table.add(btnMoney);
-		table.add(btnMinfo);
+		table.add(lblMinfo);
 		table.add(btnMcost);
 		table.row();
+		*/
 		table.add(btnMultiTarget);
-		table.add(btnMTinfo);
-		table.add(btnMTcost);
+		table.add(lblMTinfo);
+		table.add(lblMTcost);
 		table.row();
 		table.add(btnQuit);
 	}

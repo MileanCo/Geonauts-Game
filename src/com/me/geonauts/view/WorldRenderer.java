@@ -184,7 +184,7 @@ public class WorldRenderer {
 		      }, width, height, 0.5f, this);
 		
 		backgroundCity = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.5f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.8f, 0), new Vector2(0, 0), false),
 		      }, width, height, 0.5f, this);
 		
 		

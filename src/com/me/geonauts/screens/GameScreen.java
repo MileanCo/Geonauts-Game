@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
 import com.me.geonauts.screens.ui.MainMenuScreen;
+import com.me.geonauts.screens.ui.ShopScreen;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -132,6 +133,13 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		MainMenuScreen menu = new MainMenuScreen(game);
 		game.setScreen(menu);
+	}
+	
+	public void toShopMenu() {
+		saveGame();
+		
+		ShopScreen shop = new ShopScreen(game);
+		game.setScreen(shop);
 	}
 	
 	/**

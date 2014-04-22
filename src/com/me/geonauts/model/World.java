@@ -104,7 +104,7 @@ public class World {
 		// If hero is dying, and time spent dead is long enough, go back to menu.
 		if (hero.state == Hero.State.DYING) {
 			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
-				screen.toMainMenu();
+				screen.toShopMenu();
 			}
 		}
 				
