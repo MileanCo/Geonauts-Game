@@ -82,8 +82,11 @@ public class MainMenuScreen extends AbstractScreen {
 		Label lblTitle = new Label(TITLE, skin);
 		Label lblScore = new Label("High score: " + highscore, skin);
 		
-		
-		btnNewGame = new TextButton("New Game", style);	
+		if(prefs.getInteger("Reload") == 0){
+			btnNewGame = new TextButton("New Game", style);
+		} else{
+			btnNewGame = new TextButton("Continue", style);
+		}
 		btnNewGame.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -172,11 +175,13 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	private void newGame() {
-		prefs.putInteger("Reload", 1);
-		prefs.putInteger("Attack", 1);
-		prefs.putInteger("Health", 1);
-		prefs.putInteger("Moneyx", 1);
-		prefs.putInteger("Multi-Target", 1);
+		if(prefs.getInteger("Reload") == 0){
+			prefs.putInteger("Reload", 1);
+			prefs.putInteger("Attack", 1);
+			prefs.putInteger("Health", 1);
+			prefs.putInteger("Moneyx", 1);
+			prefs.putInteger("Multi-Target", 1);
+		}
 		game.setScreen(gameScreen);
 	}
 	
