@@ -29,7 +29,7 @@ public class ShopScreen extends AbstractScreen{
 	int costA = 100 * (prefs.getInteger("Attack"));
 	int costH = 100 * (prefs.getInteger("Health"));
 	int costM = 100 * (prefs.getInteger("Money"));
-	int costMT = 100 * (prefs.getInteger("Multi-Target"));
+	int costMT = 300 * (prefs.getInteger("max targets"));
 	
 	//buttons
 	private TextButton btnReload;
@@ -43,6 +43,8 @@ public class ShopScreen extends AbstractScreen{
 	private TextButton btnHealth;
 	private Label lblHinfo;
 	private Label lblHcost;
+	
+	private Label lblMoney;
 	
 	/**
 	private TextButton btnMoney;
@@ -61,7 +63,7 @@ public class ShopScreen extends AbstractScreen{
 	int attack = prefs.getInteger("Attack");
 	int health = prefs.getInteger("Health");
 	int moneyx = prefs.getInteger("Moneyx");
-	int multitarget = prefs.getInteger("Multi-Target");
+	int multitarget = prefs.getInteger("max targets");
 	int money = prefs.getInteger("Money");
 	
 	
@@ -116,26 +118,28 @@ public class ShopScreen extends AbstractScreen{
 		styleQ.down = new TextureRegionDrawable(down);
 		styleQ.font = new BitmapFont();
 		
+		lblMoney = new Label("Money: " + money, skin);
 		
 		// GUI SHIT
 		lblRinfo = new Label("Current reload time: " + reload, skin);
 		lblRcost = new Label("Cost: " + String.valueOf(costR), skin);
-		btnReload = new TextButton("Decrease Reload Time", styleG);
+		btnReload = new TextButton("Decrease Reload", styleG);
 		lblRcost.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				if(money >= costR){
+				if (money >= costR){
 					reload++;
 					money = money - costR;
 				}
+				lblRinfo.setText("Current reload time" + reload);
 			}
 		});
-		lblAinfo = new Label("Current attack: " + attack, skin);
+		lblAinfo = new Label("Current damage: " + attack, skin);
 		lblAcost = new Label("Cost: " + String.valueOf(costA), skin);
-		btnAttack = new TextButton("Increase Attack Damage", styleR);
+		btnAttack = new TextButton("Increase Damage", styleR);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -183,7 +187,7 @@ public class ShopScreen extends AbstractScreen{
 		*/
 		lblMTinfo = new Label("Max Number of Targets: " + multitarget, skin);
 		lblMTcost = new Label("Cost: " + String.valueOf(costMT), skin);
-		btnMultiTarget = new TextButton("Increase Multi-Target", styleP);
+		btnMultiTarget = new TextButton("Increase Max Targets", styleP);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -194,6 +198,7 @@ public class ShopScreen extends AbstractScreen{
 					multitarget++;
 					money = money - costMT;
 				}
+				
 			}
 		});
 		btnQuit = new TextButton("Leave Shop", styleQ);
@@ -205,6 +210,8 @@ public class ShopScreen extends AbstractScreen{
 				quit();
 			}
 		});
+		table.add(lblMoney);
+		table.row();
 		
 		table.add(btnReload);
 		table.add(lblRinfo);
@@ -248,8 +255,10 @@ public class ShopScreen extends AbstractScreen{
 		prefs.putInteger("Attack", attack);
 		prefs.putInteger("Health", health);
 		prefs.putInteger("Moneyx", moneyx);
-		prefs.putInteger("Multi-Target", multitarget);
+		prefs.putInteger("max targets", multitarget);
 		prefs.putInteger("Money", money);
+		prefs.flush();
+		
 		MainMenuScreen = new MainMenuScreen(game);
 		game.setScreen(MainMenuScreen);
 	}

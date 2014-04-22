@@ -160,6 +160,10 @@ public class GameScreen implements Screen, InputProcessor {
 		games_played += 1;
 		prefs.putInteger("games_played", games_played);
 		
+		// Save money
+		//int currMoney = prefs.getInteger("Money");
+		prefs.putInteger("Money", world.money);
+		
 		prefs.flush();
 		
 	}

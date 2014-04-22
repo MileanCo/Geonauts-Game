@@ -6,6 +6,8 @@ package com.me.geonauts.model.entities.heroes;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.World;
@@ -40,14 +42,16 @@ public abstract class Hero extends Entity {
 	protected float 	PITCH;
 
 	// Other attributes
-	public int health;
 	public boolean grounded;
-	protected float reloadTime;
+	public int health;
+	protected double reloadTime;
+	protected int damage;
+	
 
 	
 	// Targetting stuff
 	protected LinkedList<Target> targets;
-	private int MAX_TARGETS = 4;
+	private int MAX_TARGETS;
 
 	
 	/**
@@ -57,7 +61,6 @@ public abstract class Hero extends Entity {
 	 */
 	public Hero(Vector2 position, Vector2 SIZE, float ROTATION_SPEED, float PITCH, float SPEED, int health) {
 		super(position, SIZE);
-		this.health = health;
 		targets = new LinkedList<Target>();
 		
 		// Set movement constants
@@ -71,6 +74,19 @@ public abstract class Hero extends Entity {
 		acceleration = new Vector2(SPEED, 0);
 		velocity = new Vector2();
 		
+		// Load preferences
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		MAX_TARGETS = prefs.getInteger("max targets");
+		reloadTime = Math.pow(prefs.getInteger("Reload"), -1);
+		this.health = health + prefs.getInteger("health") * 50;
+		damage = 25 + prefs.getInteger("Attack") * 5;
+		
+		/**
+		System.out.println(MAX_TARGETS);
+		System.out.println(reloadTime);
+		System.out.println(this.health);
+		System.out.println(damage);
+		*/
 		
 	}
 
@@ -86,12 +102,9 @@ public abstract class Hero extends Entity {
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {
-			//velocity.x /= 2;
-			//velocity.y = 0;
-			//acceleration.y = 0;
-			if (timeDied == 0) {
+			health = 0;
+			if (timeDied == 0) 
 				timeDied = System.currentTimeMillis();
-			}
 		} else {
 			timeDied = 0;
 		}
@@ -152,7 +165,7 @@ public abstract class Hero extends Entity {
 	public long getTimeDied() {
 		return timeDied;
 	}
-	public float getReloadTime() {
+	public double getReloadTime() {
 		return reloadTime;
 	}
 	
@@ -174,6 +187,10 @@ public abstract class Hero extends Entity {
 		}
 		// Hero wasn't targetting enemy e
 		return false;
+	}
+
+	public int getDamage() {
+		return damage;
 	}
 	
 }

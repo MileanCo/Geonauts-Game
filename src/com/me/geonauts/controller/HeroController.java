@@ -166,7 +166,7 @@ public class HeroController {
 		if (hero.getStateTime() - lastShootTime > hero.getReloadTime() && ! hero.grounded) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
-				Missile m = new YellowLaser(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);
+				Missile m = new YellowLaser(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), hero.getDamage());
 				MissileController mc = new MissileController(world, m);
 
 				world.getMissileControllers().add(mc);

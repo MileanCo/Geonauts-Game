@@ -170,7 +170,7 @@ public class WorldRenderer {
 		int bgPosX = randomGen.nextInt((2000 - 0) + 0);
 		int bgPosY = randomGen.nextInt((512 - 0) + 0);
 		backgroundSpace1 = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(starsWhiteBG), new Vector2(0.2f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(new TextureRegion(starsWhiteBG), new Vector2(0.2f, 0), new Vector2(0, 0), true),
 		           new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(bgPosX, bgPosY), new Vector2(2048, 0), false),
 		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 		      }, width, height, 0.5f, this);
@@ -178,13 +178,13 @@ public class WorldRenderer {
 		bgPosX = randomGen.nextInt((2000 - 0) + 0);
 		bgPosY = randomGen.nextInt((300 - 0) + 0);
 		backgroundSpace2 = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), true),
 		           new ParallaxLayer(planetAtlas.findRegion("planet_red"), new Vector2(0.5f, 0), new Vector2(bgPosX, bgPosY), new Vector2(2048, 0), false),
 		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 		      }, width, height, 0.5f, this);
 		
 		backgroundCity = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.8f, 0), new Vector2(0, 0), false),
+		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.8f, 0), new Vector2(0, 0), true),
 		      }, width, height, 0.5f, this);
 		
 		
@@ -337,13 +337,18 @@ public class WorldRenderer {
 			}
 			
 			// Draw texts
+			font_fipps_small.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			font_fipps_small.draw(spriteBatch, "Score: " + world.score, 
-					cam.position.x + width/4, height - 2);
+					cam.position.x - width/2, height);
+			font_fipps_small.setColor(1.0f, 0f, 0f, 1.0f);
+			font_fipps_small.draw(spriteBatch, "Health: " + world.getHero().health, 
+					cam.position.x - width/2, height - font_fipps_small.getLineHeight());
+			
 			
 			// draw help message in beginning
 			if (HELP_MESSAGE_TIME > 0) {
 				font_fipps.drawMultiLine(spriteBatch, HELP_MESSAGE, 
-						width/2 + 4, height-4);
+						cam.position.x - width/2, height/2 );
 				HELP_MESSAGE_TIME -= delta;
 			}
 			

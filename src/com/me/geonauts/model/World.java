@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -61,7 +63,7 @@ public class World {
 	private int distance;
 	
 	/** Spawning variables */
-	private int SPAWN_THRESHOLD = 400;
+	private int SPAWN_THRESHOLD = 475;
 	private final int MIN_SPAWN = 100;
 	private int INCREASE_DISTANCE_EVERY = 30; //units
 	private int SPAWN_INCREASE_RATE = 25;
@@ -85,6 +87,10 @@ public class World {
 		resetChunks();
 		
 		backgroundType = randomGen.nextInt(4 - 0) + 0;
+		
+		// Get preferences
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		money = prefs.getInteger("Money");
 	}
 	
 	/**
@@ -111,12 +117,12 @@ public class World {
 		// Spawn some enemies!
 		int spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
-		if (spawn == 49 || spawn == 50) {
+		if (spawn == 50) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
 			
-		} else if (spawn == 51) {
+		} else if (spawn == 51 || spawn == 52) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);

@@ -82,7 +82,7 @@ public class MainMenuScreen extends AbstractScreen {
 		Label lblTitle = new Label(TITLE, skin);
 		Label lblScore = new Label("High score: " + highscore, skin);
 		
-		if(prefs.getInteger("Reload") == 0){
+		if(prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
 		} else{
 			btnNewGame = new TextButton("Continue", style);
@@ -179,13 +179,17 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	private void newGame() {
-		if(prefs.getInteger("Reload") == 0){
+		//prefs.putInteger("games_played", 0);
+		if(prefs.getInteger("games_played") == 0) {
 			prefs.putInteger("Reload", 1);
 			prefs.putInteger("Attack", 1);
 			prefs.putInteger("Health", 1);
 			prefs.putInteger("Moneyx", 1);
-			prefs.putInteger("Multi-Target", 1);
+			prefs.putInteger("max targets", 1);
+			prefs.putInteger("Money", 100);
+			prefs.flush();
 		}
+		
 		game.setScreen(gameScreen);
 	}
 	
