@@ -2,18 +2,18 @@ package com.me.geonauts.model.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.me.geonauts.model.entities.enemies.AbstractEnemy.State;
 import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.missiles.EnemyMissile;
 
 public class FireMob extends AbstractEnemy {
 
 	
 	// Rotation stuff
-	public float ROTATION_SPEED = 2f; // angles per second??
+	public float ROTATION_SPEED = 1f; // angles per second??
 	private float PITCH;
 	
 
-	public static final float SPEED = 0.4f;	// unit per second
+	public static final float SPEED = 0.6f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((50/64f), (50/60f));
 	private static int health = 50;
@@ -36,7 +36,7 @@ public class FireMob extends AbstractEnemy {
 	 */
 	public FireMob(Vector2 pos, Hero hero) {
 		super(pos, SIZE, SPEED, health, damage);
-		PITCH = rand.nextInt(25-15) + 15;
+		PITCH = rand.nextInt(32-15) + 15;
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 		this.hero = hero;
@@ -81,6 +81,13 @@ public class FireMob extends AbstractEnemy {
 	@Override
 	public int getValue() {
 		return value;
+	}
+
+
+	@Override
+	public EnemyMissile newMissile(Vector2 pos, Hero target) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

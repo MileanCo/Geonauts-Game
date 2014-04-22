@@ -16,7 +16,7 @@ public abstract class Entity {
 	protected float height; 
 	
 	// Angle of the entity.
-	protected float angle;
+	public float angle;
 	
 	/**
 	 * Constructor to make a new Entity object.
@@ -50,9 +50,6 @@ public abstract class Entity {
 		return bounds;
 	}
 	
-	public void setPosition(Vector2 pos) {
-		position = pos;
-	}
 	public float getAngle() {
 		return angle;
 	}

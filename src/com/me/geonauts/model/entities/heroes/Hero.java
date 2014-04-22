@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Target;
@@ -37,6 +36,7 @@ public abstract class Hero extends Entity {
 
 	// Rotation stuff
 	public float 		ROTATION_SPEED;
+	private float 		ROTATION_SPEED_INCREMENT = 0.0025f;
 	protected float 	PITCH;
 
 	// Other attributes
@@ -48,7 +48,6 @@ public abstract class Hero extends Entity {
 	// Targetting stuff
 	protected LinkedList<Target> targets;
 	private int MAX_TARGETS = 4;
-
 
 	
 	/**
@@ -96,14 +95,7 @@ public abstract class Hero extends Entity {
 		} else {
 			timeDied = 0;
 		}
-		
-		
-		// Make sure hero doesn't go above screen.
-		if (position.y > Chunk.HEIGHT - SIZE.y) {
-			state = State.FALLING;
-			angle -= ROTATION_SPEED;
-		}
-		
+				
 		// If the Hero isn't on the ground, UPDATE ANGLE AND ACCELERATION
 		if (! grounded) {
 			// Update angle based State
@@ -127,12 +119,8 @@ public abstract class Hero extends Entity {
 		// Increase speed over time
 		MAX_VEL.x += delta * World.SPEED_INCREMENT;
 		MAX_VEL.y += delta * World.SPEED_INCREMENT;
-		//System.out.println(position.x );
-		
-		// System.out.println(velocity.y);
-		//System.out.println(ROTATION_SPEED * delta);
-		
-		//System.out.println(angle);
+		ROTATION_SPEED += delta * ROTATION_SPEED_INCREMENT;
+		//System.out.println(ROTATION_SPEED);
 	}
 	
 	public void addTarget(Target e) {

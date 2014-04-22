@@ -16,13 +16,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.EnemyController;
+import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
+import com.me.geonauts.model.BlockType;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.entities.Missile;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Explosion06;
@@ -34,7 +35,8 @@ import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
-import com.me.geonauts.model.enums.BlockType;
+import com.me.geonauts.model.entities.missiles.GreenEnemyLaser;
+import com.me.geonauts.model.entities.missiles.YellowLaser;
 
 
 /**
@@ -157,10 +159,27 @@ public class WorldRenderer {
 		
 		
 		// Load all Block Textures
-		blockTextures.put(BlockType.NIGHT, tilesAtlas.findRegion("night"));
-		blockTextures.put(BlockType.ROCK, tilesAtlas.findRegion("rock"));
-		blockTextures.put(BlockType.GRASS, tilesAtlas.findRegion("grass"));
+		blockTextures.put(BlockType.BLANK, tilesAtlas.findRegion("blank_tile"));
+		blockTextures.put(BlockType.FLOATING, tilesAtlas.findRegion("yellow_tile_floating"));
 		
+		blockTextures.put(BlockType.TILE_TOP, tilesAtlas.findRegion("yellow_tile_top"));
+		blockTextures.put(BlockType.TILE_BOT, new TextureRegion(blockTextures.get(BlockType.TILE_TOP)));
+		blockTextures.get(BlockType.TILE_BOT).flip(false, true); //flip to get bot tile
+		
+		blockTextures.put(BlockType.TILE_SIDE_LEFT, tilesAtlas.findRegion("yellow_tile_side_left"));
+		blockTextures.put(BlockType.TILE_SIDE_RIGHT, new TextureRegion(blockTextures.get(BlockType.TILE_SIDE_LEFT)));
+		blockTextures.get(BlockType.TILE_SIDE_RIGHT).flip(true, false); //flip to get bot tile
+		
+		
+		blockTextures.put(BlockType.WALL, tilesAtlas.findRegion("yellow_tile_wall"));
+		blockTextures.put(BlockType.WALL_END_BOT, tilesAtlas.findRegion("yellow_tile_wall_bot"));
+		blockTextures.put(BlockType.WALL_END_TOP, new TextureRegion(blockTextures.get(BlockType.WALL_END_BOT)));
+		blockTextures.get(BlockType.WALL_END_TOP).flip(false, true); //flip to get bot tile
+		
+		blockTextures.put(BlockType.CORNER_RIGHT, tilesAtlas.findRegion("yellow_tile_corner"));
+		blockTextures.put(BlockType.CORNER_LEFT, new TextureRegion(blockTextures.get(BlockType.CORNER_RIGHT)));
+		blockTextures.get(BlockType.CORNER_LEFT).flip(true, false); //flip to get bot tile
+				
 		// Load all Hero textures
 		int frames = 1;
 		Sage.heroFrames = new TextureRegion[frames];
@@ -183,8 +202,11 @@ public class WorldRenderer {
 		}
 		
 		// Load missile frames
-		Missile.frames = new TextureRegion[1];
-		Missile.frames[0] =  missilesAtlas.findRegion("laser_yellow0" + 0);
+		YellowLaser.frames = new TextureRegion[1];
+		YellowLaser.frames[0] =  missilesAtlas.findRegion("laser_yellow0" + 0);
+		GreenEnemyLaser.frames = new TextureRegion[1];
+		GreenEnemyLaser.frames[0] =  missilesAtlas.findRegion("laser_green0" + 0);
+		//Missile.frames[1] =  missilesAtlas.findRegion("laser_green0" + 0);
 		
 		// Load target frames
 		Target.frames = new TextureRegion[1];
@@ -255,6 +277,11 @@ public class WorldRenderer {
 				drawUpdateMissile(i, delta);
 			}
 			
+			// DRAW and UPDATE ENEMY MISSILES
+			for (int i = 0; i < world.getEnemyMissileControllers().size(); i++ ) {
+				drawUpdateEnemyMissile(i, delta);
+			}
+			
 			// DRAW and UPDATE TARGETS
 			for (int i = 0; i < world.getHero().getTargets().size(); i++) {
 				drawUpdateTarget(i, delta);
@@ -267,11 +294,11 @@ public class WorldRenderer {
 			
 			// Draw texts
 			font_fipps_small.draw(spriteBatch, "Score: " + world.score, 
-					cam.position.x + width/3 + 4, height - 2);
+					cam.position.x + width/4, height - 2);
 			
 			// draw help message in beginning
 			if (HELP_MESSAGE_TIME > 0) {
-				font_fipps_small.drawMultiLine(spriteBatch, HELP_MESSAGE, 
+				font_fipps.drawMultiLine(spriteBatch, HELP_MESSAGE, 
 						width/2 + 4, height-4);
 				HELP_MESSAGE_TIME -= delta;
 			}
@@ -369,6 +396,25 @@ public class WorldRenderer {
 		}	
 	}
 	
+	private void drawUpdateEnemyMissile(int index, float delta) {
+		// Get objects
+		EnemyMissileController emc = world.getEnemyMissileControllers().get(index);
+		Entity e = emc.getMissileEntity();
+		
+		// Check if missile is off the screen
+		if (e.position.x < world.getHero().getCamOffsetPosX() - e.SIZE.x) {
+			world.getEnemyMissileControllers().remove(index);
+			
+		// Otherwise draw and update
+		} else {
+			TextureRegion[] frames = emc.getFrames();
+			// Update and draw objects
+			emc.update(delta);
+			drawEntity(e, frames[0]);
+			
+		}	
+	}
+	
 	private void drawUpdateTarget(int i, float delta) {
 		Hero hero = world.getHero();
 		
@@ -409,11 +455,13 @@ public class WorldRenderer {
 		debugRenderer.setProjectionMatrix(cam.combined);
 		debugRenderer.begin(ShapeType.Line);
 		
+		/**
 		for (Block block : world.getCurrentChunk().getDrawableBlocks())  {
 			Rectangle rect = block.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(rect.x * ppuX, rect.y * ppuY, rect.width * ppuY, rect.height * ppuY);
 		}
+		*/
 		
 		// render hero
 		Hero hero = world.getHero();

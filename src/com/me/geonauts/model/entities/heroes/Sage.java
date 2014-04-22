@@ -8,11 +8,11 @@ public class Sage extends Hero {
 	public static final float SPEED = 3.0f;	// unit per second
 	
 	// Rotation stuff
-	public static final float ROTATION_SPEED = 1f; // angles per second??
+	public static final float ROTATION_SPEED = 1.2f; // angles per second??
 	private static final float PITCH = 20f; 
 	
 	// Other Attributes
-	private static int health = 100;
+	private static int health = 200;
 	private static final Vector2 SIZE = new Vector2(1.64f/1.5f, (4/3f)/1.5f); //textureWidth / ppuX
 	
 	// Textures
@@ -24,17 +24,11 @@ public class Sage extends Hero {
 	 */
 	public Sage(Vector2 position) {
 		super(position, SIZE, ROTATION_SPEED, PITCH, SPEED, health);
-		reloadTime = 0.2f;
+		reloadTime = 0.25f;
 	}
 
 	@Override
 	public TextureRegion[] getFrames() {
 		return heroFrames;
-	}
-	
-	
-	
-
-	
-	
+	}	
 }
