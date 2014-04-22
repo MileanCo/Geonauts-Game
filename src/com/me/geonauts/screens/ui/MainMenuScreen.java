@@ -27,7 +27,7 @@ import com.me.geonauts.screens.GameScreen;
 public class MainMenuScreen extends AbstractScreen {
 	/** GameScreen object where main gameplay takes place */
 	private Screen gameScreen;
-	private Screen shopScreen;
+	//private Screen shopScreen;
 	private Screen creditScreen;
 	//private Screen optionsScreen;
 
@@ -38,7 +38,7 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	// Buttons
 	private TextButton btnNewGame;
-	private TextButton btnShop;
+	//private TextButton btnShop;
 	//private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
@@ -55,8 +55,8 @@ public class MainMenuScreen extends AbstractScreen {
 		highscore = prefs.getInteger("highscore");
 
 		font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_gray.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_gray.png"), false);
+				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
+				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
 
 		// Table
 		Table table = new Table();
@@ -96,7 +96,7 @@ public class MainMenuScreen extends AbstractScreen {
 				newGame();
 			}
 		});
-		btnShop = new TextButton("Shop", style);
+		/*btnShop = new TextButton("Shop", style);
 		btnShop.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -105,7 +105,7 @@ public class MainMenuScreen extends AbstractScreen {
 				Gdx.app.log("my app", "Released");
 				shop();
 			}
-		});
+		});*/
 		/*btnOptions = new TextButton("Options", style);
 		btnOptions.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -139,8 +139,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(lblTitle);
 		table.row();
 		table.add(btnNewGame);
-		table.row();
-		table.add(btnShop);
+		//table.row();
+		//table.add(btnShop);
 		//table.row();
 		//table.add(btnOptions);
 		table.row();
@@ -189,10 +189,10 @@ public class MainMenuScreen extends AbstractScreen {
 		game.setScreen(gameScreen);
 	}
 	
-	private void shop(){
+	/*private void shop(){
 		shopScreen = new ShopScreen(game);
 		game.setScreen(shopScreen);
-	}
+	}*/
 	
 	private void credit(){
 		creditScreen = new CreditScreen(game);
