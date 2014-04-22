@@ -43,7 +43,7 @@ public abstract class AbstractEnemy extends Entity {
 	protected Target target;
 	
 	public AbstractEnemy(Vector2 pos, Vector2 SIZE, float SPEED, int health, int damage) {
-		super(pos, SIZE);		
+		super(pos, SIZE);
 		
 		// Make new movement vectors
 		DAMP = 0.85f;

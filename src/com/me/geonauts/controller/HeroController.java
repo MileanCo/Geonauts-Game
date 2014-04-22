@@ -105,21 +105,26 @@ public class HeroController {
 			
 			// See if current enemy is closer than previous enemy
 			dist = touch.dst(e.position);
-			if (dist < closestDist && ! hero.targettingEnemy(e) ) {
-				closestDist = dist;
-				closestEnemy = e;
+			if (dist < closestDist) {
+				if (! hero.targettingEnemy(e) ) {// more efficient to only check this if above is true
+					closestDist = dist;
+					closestEnemy = e;
+				}
 			}
 			
 			// If actually the touch enemy, add that to list of targets
 			if (ec.getEnemyEntity().getBounds().contains(x, y)) {
-				closestDist = 0;
-				closestEnemy = e;
-				break;
+				if (! hero.targettingEnemy(e) ) { // more efficient to only check this if above is true
+					closestDist = 0;
+					closestEnemy = e;
+					break;
+				}
 			}
 			
 		}
 		// If we found a closest enemy
 		if (closestEnemy != null && closestDist < MAX_TARGET_RADIUS) {
+			
 			Target t = new Target(closestEnemy);
 			hero.addTarget(t);
 		}
@@ -158,7 +163,7 @@ public class HeroController {
 			processInput();
 		
 		// Check for targets to shoot at IF it's time to shoot
-		if (hero.getStateTime() - lastShootTime > hero.getReloadTime()) {
+		if (hero.getStateTime() - lastShootTime > hero.getReloadTime() && hero.state != Hero.State.DYING) {
 			for (Target t : hero.getTargets()) {
 				// CREATE NEW MISSILE w/ TARGET
 				Missile m = new YellowLaser(hero.position.cpy().add(hero.SIZE.x/1.5f, 0), t.getEnemy(), 25);

@@ -169,6 +169,7 @@ public abstract class Hero extends Entity {
 		// Check if Hero is targetting given enemy e
 		for (Target t : targets) {
 			if (t.getEnemy().equals(e)) {
+				System.out.println("YO!");
 				return true;
 			}
 		}

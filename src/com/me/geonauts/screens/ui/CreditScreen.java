@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -30,8 +31,11 @@ public class CreditScreen extends AbstractScreen{
 		stage.addActor(table);
 		
 		//Texture
-		TextureRegion upCredits = new TextureRegion(new Texture(Gdx.files.internal("images/ui/hjm-small_gas_planet_0.png")));
-		TextureRegion downCredits = new TextureRegion(new Texture(Gdx.files.internal("images/ui/planet_down.png")));
+		// Load textures
+		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		
+		TextureRegion upCredits = uiAtlas.findRegion("hjm-small_gas_planet"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/hjm-small_gas_planet_0.png")));
+		TextureRegion downCredits = uiAtlas.findRegion("planet_down");
 
 		//Style
 		TextButtonStyle styleC = new TextButtonStyle();

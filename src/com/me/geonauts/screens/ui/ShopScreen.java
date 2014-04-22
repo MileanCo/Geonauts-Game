@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -69,12 +70,13 @@ public class ShopScreen extends AbstractScreen{
 		Skin skin = new Skin();
 		
 		// TextureRegions
-		TextureRegion upR = new TextureRegion(new Texture(Gdx.files.internal("images/ui/red.png")));
-		TextureRegion upB = new TextureRegion(new Texture(Gdx.files.internal("images/ui/blue.png")));
-		TextureRegion down = new TextureRegion(new Texture(Gdx.files.internal("images/ui/black.png")));
-		TextureRegion upG = new TextureRegion(new Texture(Gdx.files.internal("images/ui/green.png")));
-		TextureRegion upP = new TextureRegion(new Texture(Gdx.files.internal("images/ui/purple.png")));
-		TextureRegion upY = new TextureRegion(new Texture(Gdx.files.internal("images/ui/yellow.png")));
+		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		TextureRegion upR = uiAtlas.findRegion("red"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/red.png")));
+		TextureRegion upB = uiAtlas.findRegion("blue"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/blue.png")));
+		TextureRegion down = uiAtlas.findRegion("black"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/black.png")));
+		TextureRegion upG = uiAtlas.findRegion("green"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/green.png")));
+		TextureRegion upP = uiAtlas.findRegion("purple"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/purple.png")));
+		TextureRegion upY = uiAtlas.findRegion("yellow"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/yellow.png")));
 
 		// Styles
 		TextButtonStyle styleR = new TextButtonStyle();

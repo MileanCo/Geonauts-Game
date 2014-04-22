@@ -16,14 +16,16 @@ public class Target extends Entity {
 	private AbstractEnemy enemy;
 	
 	public Target(AbstractEnemy enemy) {
-		super(enemy.position, SIZE);
-		
+		super(enemy.position.cpy(), SIZE);		
 		this.enemy = enemy;
 	}
 	
 	public void update(float delta) {
 		stateTime += delta;
-		position = enemy.position;
+		
+		// Center position
+		position.x = enemy.position.x - SIZE.x/2f + enemy.SIZE.x /2f;
+		position.y = enemy.position.y - SIZE.y/2f + enemy.SIZE.y /2f;
 		
 		// Constantly rotate the entity
 		angle += ROTATION_SPEED;

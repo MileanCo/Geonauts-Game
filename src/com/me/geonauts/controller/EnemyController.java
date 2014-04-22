@@ -2,6 +2,7 @@ package com.me.geonauts.controller;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.me.geonauts.model.World;
@@ -223,15 +224,20 @@ public class EnemyController {
 			// Increase the score
 			world.score += enemy.getValue();
 		
+		// Center explosion position to middle of enemy
+		Vector2 explPos = enemy.position.cpy();
+		explPos.x -= enemy.SIZE.x/2f;
+		explPos.y -= enemy.SIZE.y/2f;
+		
 		switch (r) {
 			case 0: 
-				world.getAnimations().add(new Explosion10(enemy.position, enemy.SIZE.x));
+				world.getAnimations().add(new Explosion10(explPos, enemy.SIZE.x));
 				break;
 			case 1: 
-				world.getAnimations().add(new Explosion11(enemy.position, enemy.SIZE.x));
+				world.getAnimations().add(new Explosion11(explPos, enemy.SIZE.x));
 				break;
 			case 10:
-				world.getAnimations().add(new Explosion06(enemy.position, enemy.SIZE.x));
+				world.getAnimations().add(new Explosion06(explPos, enemy.SIZE.x));
 				break;
 		}		
 	}

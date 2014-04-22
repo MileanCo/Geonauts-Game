@@ -423,7 +423,6 @@ public class WorldRenderer {
 		
 		// Check if target is past hero, then delete it
 		if (hero.position.x > t.position.x || ! t.getEnemy().alive) {
-			System.out.println("removed target @ " + t.toString());
 			hero.getTargets().remove(i);
 		} else {
 			t.update(delta);
