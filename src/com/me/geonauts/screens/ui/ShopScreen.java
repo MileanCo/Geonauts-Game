@@ -2,6 +2,8 @@ package com.me.geonauts.screens.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class ShopScreen extends AbstractScreen{
 
+	private Screen MainMenuScreen;
 	
 	//buttons
 	private TextButton btnReload;
@@ -33,6 +36,17 @@ public class ShopScreen extends AbstractScreen{
 	private TextButton btnMultiTarget;
 	private TextButton btnMTinfo;
 	private TextButton btnMTcost;
+	private TextButton btnQuit;
+	
+	//load preferences
+	Preferences prefs = Gdx.app.getPreferences("game-prefs");
+	
+	//player values
+	int reload = prefs.getInteger("Reload");
+	int attack = prefs.getInteger("Attack");
+	int health = prefs.getInteger("Health");
+	int moneyx = prefs.getInteger("Money");
+	int multitarget = prefs.getInteger("Multi-Target");
 	
 	
 	public ShopScreen(Game game){
@@ -80,6 +94,11 @@ public class ShopScreen extends AbstractScreen{
 		styleY.down = new TextureRegionDrawable(down);
 		styleY.font = new BitmapFont();
 		
+		TextButtonStyle styleQ = new TextButtonStyle();
+		styleQ.up = new TextureRegionDrawable(down);
+		styleQ.down = new TextureRegionDrawable(down);
+		styleQ.font = new BitmapFont();
+		
 		
 		//Buttons
 		btnReload = new TextButton("Reload", styleG);
@@ -91,7 +110,7 @@ public class ShopScreen extends AbstractScreen{
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//action
+				reload++;
 			}
 		});
 		btnAttack = new TextButton("Attack", styleR);
@@ -103,7 +122,7 @@ public class ShopScreen extends AbstractScreen{
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//action
+				attack++;
 			}
 		});
 		btnHealth = new TextButton("Health", styleB);
@@ -115,7 +134,7 @@ public class ShopScreen extends AbstractScreen{
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//action
+				health++;
 			}
 		});
 		btnMoney = new TextButton("Money", styleY);
@@ -127,7 +146,7 @@ public class ShopScreen extends AbstractScreen{
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//action
+				moneyx++;
 			}
 		});
 		btnMultiTarget = new TextButton("Multi-Target", styleP);
@@ -139,9 +158,20 @@ public class ShopScreen extends AbstractScreen{
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				//action
+				multitarget++;
 			}
 		});
+		btnQuit = new TextButton("Leave Shop", styleQ);
+		btnQuit.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.log("my app", "Released");
+				quit();
+			}
+		});
+		
 		table.add(btnReload);
 		table.add(btnRinfo);
 		table.add(btnRcost);
@@ -161,6 +191,8 @@ public class ShopScreen extends AbstractScreen{
 		table.add(btnMultiTarget);
 		table.add(btnMTinfo);
 		table.add(btnMTcost);
+		table.row();
+		table.add(btnQuit);
 	}
 	
 	public void render(float delta) {
@@ -173,6 +205,16 @@ public class ShopScreen extends AbstractScreen{
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+	}
+	
+	public void quit(){
+		prefs.putInteger("Reload", reload);
+		prefs.putInteger("Attack", attack);
+		prefs.putInteger("Health", health);
+		prefs.putInteger("Moneyx", moneyx);
+		prefs.putInteger("Multi-Target", multitarget);
+		MainMenuScreen = new MainMenuScreen(game);
+		game.setScreen(MainMenuScreen);
 	}
 
 }

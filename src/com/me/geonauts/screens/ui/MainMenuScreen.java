@@ -44,12 +44,13 @@ public class MainMenuScreen extends AbstractScreen {
 	private TextButton btnQuit;
 	
 	private int highscore  = 0;
+	
+	// Load preferences
+	Preferences prefs = Gdx.app.getPreferences("game-prefs");
+			
 
 	public MainMenuScreen(Game game) {
 		super(game);
-		
-		// Load preferences
-		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		
 		highscore = prefs.getInteger("highscore");
 
@@ -171,6 +172,11 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	private void newGame() {
+		prefs.putInteger("Reload", 1);
+		prefs.putInteger("Attack", 1);
+		prefs.putInteger("Health", 1);
+		prefs.putInteger("Moneyx", 1);
+		prefs.putInteger("Multi-Target", 1);
 		game.setScreen(gameScreen);
 	}
 	
