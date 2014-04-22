@@ -20,6 +20,16 @@ public class ShopScreen extends AbstractScreen{
 
 	private Screen MainMenuScreen;
 	
+	//load preferences
+	Preferences prefs = Gdx.app.getPreferences("game-prefs");
+	
+	//calculate item costs
+	int costR = 100 * (prefs.getInteger("Reload"));
+	int costA = 100 * (prefs.getInteger("Attack"));
+	int costH = 100 * (prefs.getInteger("Health"));
+	int costM = 100 * (prefs.getInteger("Money"));
+	int costMT = 100 * (prefs.getInteger("Multi-Target"));
+	
 	//buttons
 	private TextButton btnReload;
 	private TextButton btnRinfo;
@@ -38,15 +48,13 @@ public class ShopScreen extends AbstractScreen{
 	private TextButton btnMTcost;
 	private TextButton btnQuit;
 	
-	//load preferences
-	Preferences prefs = Gdx.app.getPreferences("game-prefs");
-	
 	//player values
 	int reload = prefs.getInteger("Reload");
 	int attack = prefs.getInteger("Attack");
 	int health = prefs.getInteger("Health");
-	int moneyx = prefs.getInteger("Money");
+	int moneyx = prefs.getInteger("Moneyx");
 	int multitarget = prefs.getInteger("Multi-Target");
+	int money = prefs.getInteger("Money");
 	
 	
 	public ShopScreen(Game game){
@@ -103,62 +111,77 @@ public class ShopScreen extends AbstractScreen{
 		//Buttons
 		btnReload = new TextButton("Reload", styleG);
 		btnRinfo = new TextButton("Attack Speed Increase", styleG);
-		btnRcost = new TextButton("*Cost*", styleG);
+		btnRcost = new TextButton(String.valueOf(costR), styleG);
 		btnRcost.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				reload++;
+				if(money >= costR){
+					reload++;
+					money = money - costR;
+				}
 			}
 		});
 		btnAttack = new TextButton("Attack", styleR);
 		btnAinfo = new TextButton("Attack Damage Increase", styleR);
-		btnAcost = new TextButton("*Cost*", styleR);
+		btnAcost = new TextButton(String.valueOf(costA), styleR);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				attack++;
+				if(money >= costA){
+					attack++;
+					money = money - costA;
+				}
 			}
 		});
 		btnHealth = new TextButton("Health", styleB);
 		btnHinfo = new TextButton("Health Increase", styleB);
-		btnHcost = new TextButton("*Cost*", styleB);
+		btnHcost = new TextButton(String.valueOf(costH), styleB);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				health++;
+				if(money >= costH){
+					health++;
+					money = money - costH;
+				}
 			}
 		});
 		btnMoney = new TextButton("Money", styleY);
 		btnMinfo = new TextButton("Money Increase", styleY);
-		btnMcost = new TextButton("*Cost*", styleY);
+		btnMcost = new TextButton(String.valueOf(costM), styleY);
 		btnMoney.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				moneyx++;
+				if(money >= costM){
+					moneyx++;
+					money = money - costM;
+				}
 			}
 		});
 		btnMultiTarget = new TextButton("Multi-Target", styleP);
 		btnMTinfo = new TextButton("Increase Number of Targets", styleP);
-		btnMTcost = new TextButton("*Cost*", styleP);
+		btnMTcost = new TextButton(String.valueOf(costMT), styleP);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				multitarget++;
+				if(money >= costMT){
+					multitarget++;
+					money = money - costMT;
+				}
 			}
 		});
 		btnQuit = new TextButton("Leave Shop", styleQ);
@@ -213,6 +236,7 @@ public class ShopScreen extends AbstractScreen{
 		prefs.putInteger("Health", health);
 		prefs.putInteger("Moneyx", moneyx);
 		prefs.putInteger("Multi-Target", multitarget);
+		prefs.putInteger("Money", money);
 		MainMenuScreen = new MainMenuScreen(game);
 		game.setScreen(MainMenuScreen);
 	}
