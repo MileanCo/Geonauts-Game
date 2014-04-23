@@ -18,6 +18,10 @@ public class ParallaxBackground {
 	private WorldRenderer worldRenderer;
 	private float speed;
 
+	public ParallaxLayer[] getLayers() {
+		return layers;
+	}
+
 	/**
 	 * @param layers - The background layers
 	 * @param width - The screenWith

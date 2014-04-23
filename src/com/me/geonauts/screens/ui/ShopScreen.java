@@ -21,7 +21,7 @@ public class ShopScreen extends AbstractScreen{
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
 	//
-	private static final int VALUE_RELOAD = 100;
+	private static final int VALUE_RELOAD = 200;
 	private static final int VALUE_ATTACK = 100;
 	private static final int VALUE_HEALTH = 100;
 	private static final int VALUE_MULTITARGET = 300;
@@ -184,7 +184,7 @@ public class ShopScreen extends AbstractScreen{
 				if(money >= costH){
 					health++;
 					money = money - costH;
-					costH = VALUE_HEALTH * costH;
+					costH = VALUE_HEALTH * health;
 				}
 				lblHinfo.setText("Current health: " + health);
 				lblHcost.setText("Cost: " + String.valueOf(costH));

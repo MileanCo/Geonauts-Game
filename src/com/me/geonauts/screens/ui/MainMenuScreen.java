@@ -181,16 +181,23 @@ public class MainMenuScreen extends AbstractScreen {
 	private void newGame() {
 		//prefs.putInteger("games_played", 0);
 		if ( prefs.getInteger("games_played") == 0 || prefs.getInteger("Attack") == 0) {
-			prefs.putInteger("Reload", 1);
-			prefs.putInteger("Attack", 1);
-			prefs.putInteger("Health", 1);
-			prefs.putInteger("Moneyx", 1);
-			prefs.putInteger("max targets", 1);
-			prefs.putInteger("Money", 200);
-			prefs.flush();
+			resetPrefs();
+			
 		} 
 		
 		game.setScreen(game.getGameScreen());
+	}
+	
+	private void resetPrefs() {
+		//prefs.clear();
+		prefs.putInteger("games_played", 0);
+		prefs.putInteger("Reload", 1);
+		prefs.putInteger("Attack", 1);
+		prefs.putInteger("Health", 1);
+		prefs.putInteger("Moneyx", 1);
+		prefs.putInteger("max targets", 1);
+		prefs.putInteger("Money", 200);
+		prefs.flush();
 	}
 	
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -82,12 +83,14 @@ public class WorldRenderer {
 	private int height;
 	private float ppuX;	// pixels per unit on the X axis
 	private float ppuY;	// pixels per unit on the Y axis
+
+	private int backgroundType;
 	
 	// Fonts
 	protected BitmapFont font_fipps_small;
 	protected BitmapFont font_fipps;
-	private String HELP_MESSAGE = "Tap on left to fly!";
-	private float HELP_MESSAGE_TIME = 5; //seconds
+	public float HELP_MESSAGE_TIME = 4; //seconds
+	private String HELP_MESSAGE = "Tap on left <- to fly\n\nTap on enemies -> to shoot\n";
 	
 	public WorldRenderer() {
 		this(null);
@@ -170,7 +173,8 @@ public class WorldRenderer {
 		// Load background images
 		Texture caveBG = new Texture(Gdx.files.internal("images/backgrounds/background01_0.png"));
 		Texture starsWhiteBG = new Texture(Gdx.files.internal("images/backgrounds/stars.png"));	
-		Texture starsYellowBG = new Texture(Gdx.files.internal("images/backgrounds/stars_yellow.png"));
+		Texture starsYellowBG_2 = new Texture(Gdx.files.internal("images/backgrounds/stars_yellow.png"));
+		Texture starsYellowBG_3 = new Texture(Gdx.files.internal("images/backgrounds/stars_yellow.png"));
 		Texture cityBG = new Texture(Gdx.files.internal("images/backgrounds/city_background_night.png"));
 		
 		backgroundCave = new ParallaxBackground(new ParallaxLayer[] {
@@ -184,19 +188,20 @@ public class WorldRenderer {
 		      }, width, height, 0.5f, this);
 		
 		backgroundSpace2 = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), true),
+		           new ParallaxLayer(new TextureRegion(starsYellowBG_2), new Vector2(0.22f, 0), new Vector2(0, 0), true),
 		           new ParallaxLayer(planetAtlas.findRegion("planet_red"), new Vector2(0.5f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(2048, 0), false, true),
 		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),
 		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 		      }, width, height, 0.5f, this);
-		
+		 // FOR SOME REASON THIS SHIT NO WORK
+		/**
 		backgroundSpace3 = new ParallaxBackground(new ParallaxLayer[] {
-		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), true),
+		           new ParallaxLayer(new TextureRegion(starsYellowBG_3), new Vector2(0.25f, 0), new Vector2(0, 0), true),
 		           new ParallaxLayer(planetAtlas.findRegion("planet_yellow"), new Vector2(0.5f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1600, 0), false, true),
 		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),
 		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 		      }, width, height, 0.5f, this);
-		
+		*/
 		
 		backgroundCity = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.8f, 0), new Vector2(0, 0), true),
@@ -288,6 +293,24 @@ public class WorldRenderer {
 		Explosion11.anim =  new Animation(EXPLOSION_DURATION, explosion_11Frames);
 
 	}
+	
+	public void show() {
+		// Check preferences
+		Preferences prefs = Gdx.app.getPreferences("game-prefs");
+		if (prefs.getInteger("games_played") <= 3) {
+			HELP_MESSAGE_TIME = 4f; // seconds
+		} else {
+			HELP_MESSAGE_TIME = -1f; //-1 means off
+		}
+		
+		/**
+		for (ParallaxLayer layer : backgroundSpace1.getLayers() ) {
+			layer.startPosition = new Vector2(getRandPosX(), getRandPosY());
+		}
+		*/
+		
+		backgroundType = randomGen.nextInt(3 - 0) + 0;
+	}
 
 	/**
 	 * Draw all objects to the World
@@ -302,7 +325,8 @@ public class WorldRenderer {
 		spriteBatch.setProjectionMatrix(cam.combined);
 		
 		// Draw the parallax scrolling background
-		switch (world.getBackgroundType()) {
+		System.out.println(backgroundType);
+		switch ( backgroundType ) {
 			case 0:
 				backgroundCave.render(delta);
 				break;
@@ -315,9 +339,12 @@ public class WorldRenderer {
 			case 3:
 				backgroundSpace3.render(delta);
 				break;
+				
+			/** DOESN'T WORK ON ANDROID - WHITE BG
 			case 4:
 				backgroundCity.render(delta);
 				break;
+			*/
 		}
 		
 		// Draw everything to the screen
@@ -366,7 +393,7 @@ public class WorldRenderer {
 			// draw help message in beginning
 			if (HELP_MESSAGE_TIME > 0) {
 				font_fipps.drawMultiLine(spriteBatch, HELP_MESSAGE, 
-						cam.position.x - width/2, height/2 );
+						cam.position.x - width/3, height/2 );
 				HELP_MESSAGE_TIME -= delta;
 			}
 			

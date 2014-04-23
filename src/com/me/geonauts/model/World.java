@@ -70,8 +70,6 @@ public class World {
 	
 	private boolean changed_spawn = false;
 	
-	private int backgroundType = 0;
-	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
 		
@@ -85,8 +83,7 @@ public class World {
 		enemyMissiles = new ArrayList<EnemyMissileController> ();
 		
 		resetChunks();
-		
-		backgroundType = randomGen.nextInt(5 - 0) + 0;
+
 		
 		// Get preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
@@ -213,10 +210,7 @@ public class World {
 			return chunks.getFirst().getBlock(col, row);
 		
 	}
-	
-	public int getBackgroundType() {
-		return backgroundType;
-	}
+
 
 	public int getDistance() {
 		return distance;

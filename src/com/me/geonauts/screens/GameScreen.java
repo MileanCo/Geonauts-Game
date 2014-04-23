@@ -31,6 +31,8 @@ public class GameScreen implements Screen, InputProcessor {
 	// Screens 
 	private Geonauts game;
 	
+	// Used to show help message
+	
 	private int width, height;
 
 	/**
@@ -55,7 +57,9 @@ public class GameScreen implements Screen, InputProcessor {
 		// Create new game objects
 		world = new World(this);
 		renderer.setWorld(world); // Tell the renderer about the new World.
+		renderer.show();
 		heroController = new HeroController(world);
+			
 	}
 
 	/**
@@ -66,9 +70,12 @@ public class GameScreen implements Screen, InputProcessor {
 		//Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		// Update the world, hero controller, and render the screen
-		heroController.update(delta); // updates model Hero as well.
-		world.update(delta);
+		// Only control the game if help message isn't displayed
+		if (renderer.HELP_MESSAGE_TIME < 0) {
+			// Update the world, hero controller, and render the screen
+			heroController.update(delta); // updates model Hero as well.
+			world.update(delta);
+		}
 		renderer.render(delta);
 	}
 	
