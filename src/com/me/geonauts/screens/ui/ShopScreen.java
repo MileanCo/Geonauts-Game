@@ -24,14 +24,14 @@ public class ShopScreen extends AbstractScreen{
 	private static final int VALUE_RELOAD = 200;
 	private static final int VALUE_ATTACK = 100;
 	private static final int VALUE_HEALTH = 100;
-	private static final int VALUE_MULTITARGET = 300;
+	private static final int VALUE_MULTITARGET = 250;
 	
 	//calculate item costs
-	private int costR = VALUE_RELOAD * (prefs.getInteger("Reload"));
-	private int costA = VALUE_ATTACK * (prefs.getInteger("Attack"));
-	private int costH = VALUE_HEALTH * (prefs.getInteger("Health"));
+	private int costR;
+	private int costA;
+	private int costH;
 	//private int costM = 100 * (prefs.getInteger("Money"));
-	private int costMT = VALUE_MULTITARGET * (prefs.getInteger("max targets"));
+	private int costMT;
 	
 	//buttons
 	private TextButton btnReload;
@@ -67,12 +67,12 @@ public class ShopScreen extends AbstractScreen{
 	private Skin fancySkin;
 	
 	//player values
-	int reload = prefs.getInteger("Reload");
-	int attack = prefs.getInteger("Attack");
-	int health = prefs.getInteger("Health");
-	int moneyx = prefs.getInteger("Moneyx");
-	int multitarget = prefs.getInteger("max targets");
-	int money = prefs.getInteger("Money");
+	int reload;
+	int attack;
+	int health;
+	int moneyx;
+	int multitarget;
+	int money;
 	
 	
 	public ShopScreen(Geonauts game) {
@@ -130,7 +130,9 @@ public class ShopScreen extends AbstractScreen{
 		styleQ.up = new TextureRegionDrawable(down);
 		styleQ.down = new TextureRegionDrawable(down);
 		styleQ.font = new BitmapFont();
-	
+		
+		// Get preferences. Updates cost, attributes (attack, damage, health, etc).
+		getPreferences();
 		
 		// GUI SHIT
 		lblRinfo = new Label("Current reload time: " + reload, skin);
@@ -146,10 +148,8 @@ public class ShopScreen extends AbstractScreen{
 					reload++;
 					money = money - costR;
 					costR = reload * VALUE_RELOAD;
+					updateLabels();
 				}
-				lblRinfo.setText("Current reload time: " + Math.pow(reload, -1));
-				lblRcost.setText("Cost: " + String.valueOf(costR));
-				lblMoney.setText("Money: " + money);
 			}
 		});
 		lblAinfo = new Label("Current damage: " + attack, skin);
@@ -165,10 +165,8 @@ public class ShopScreen extends AbstractScreen{
 					attack++;
 					money = money - costA;
 					costA = VALUE_ATTACK * costA;
+					updateLabels();
 				}
-				lblAinfo.setText("Current damage: " + attack);
-				lblAcost.setText("Cost: " + String.valueOf(costA));
-				lblMoney.setText("Money: " + money);
 			}
 		});
 		
@@ -185,10 +183,8 @@ public class ShopScreen extends AbstractScreen{
 					health++;
 					money = money - costH;
 					costH = VALUE_HEALTH * health;
+					updateLabels();
 				}
-				lblHinfo.setText("Current health: " + health);
-				lblHcost.setText("Cost: " + String.valueOf(costH));
-				lblMoney.setText("Money: " + money);
 			}
 		});
 		/**
@@ -221,11 +217,8 @@ public class ShopScreen extends AbstractScreen{
 					multitarget++;
 					money = money - costMT;
 					costMT = VALUE_MULTITARGET * multitarget;
+					updateLabels();
 				}
-				lblMTinfo.setText("Max Number of Targets: " + multitarget);
-				lblMTcost.setText("Cost: " + String.valueOf(costMT));
-				lblMoney.setText("Money: " + money);
-				
 			}
 		});
 		btnQuit = new TextButton("Leave Shop", styleQ);
@@ -280,17 +273,53 @@ public class ShopScreen extends AbstractScreen{
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
 	}
-
-	public void show() {
-		Gdx.input.setInputProcessor(stage);
-		// Update stage with content from GameScreen
+	
+	/**
+	 * Updates cost, attributes (attack, damage, health, etc.) with values from preferences
+	 */
+	private void getPreferences() {
+		// Get current attributes
+		reload = prefs.getInteger("Reload");
+		attack = prefs.getInteger("Attack");
+		health = prefs.getInteger("Health");
+		moneyx = prefs.getInteger("Moneyx");
+		multitarget = prefs.getInteger("max targets");
+		money = prefs.getInteger("Money");
+		
+		// Recalculate costs
+		costR = VALUE_RELOAD * (prefs.getInteger("Reload"));
+		costA = VALUE_ATTACK * (prefs.getInteger("Attack"));
+		costH = VALUE_HEALTH * (prefs.getInteger("Health"));
+		//private int costM = 100 * (prefs.getInteger("Money"));
+		costMT = VALUE_MULTITARGET * (prefs.getInteger("max targets"));
+	}
+	
+	private void updateLabels() {		
+		lblHinfo.setText("Current health: " + health);
+		lblHcost.setText("Cost: " + costH);
+		
+		lblAinfo.setText("Current damage: " + attack);
+		lblAcost.setText("Cost: " + costA);
+		
+		lblRinfo.setText("Current reload time: " + (double) Math.pow(reload, -1));
+		lblRcost.setText("Cost: " + costR);
+		
+		lblMTinfo.setText("Max Number of Targets: " + multitarget);
+		lblMTcost.setText("Cost: " + costMT);
+		
 		lblMoney.setText("Money $" + money);
 		lblDistance.setText("You travelled " + game.getGameScreen().getWorld().getDistance() + "m");
 		lblScore.setText("Your score was " + game.getGameScreen().getWorld().getScore());
+	}
+
+	public void show() {
+		Gdx.input.setInputProcessor(stage);
 		
+		getPreferences();
+		updateLabels();
 	}
 	
-	public void quit(){
+	public void quit() {
 		prefs.putInteger("Reload", reload);
 		prefs.putInteger("Attack", attack);
 		prefs.putInteger("Health", health);

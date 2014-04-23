@@ -45,6 +45,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Create new Renderer and load graphic. Aim is to only load graphics once.
 		renderer = new WorldRenderer(); // Renderer updates and draws enemies.
+		
 	}
 	
 	/**
@@ -71,7 +72,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Only control the game if help message isn't displayed
-		if (renderer.HELP_MESSAGE_TIME < 0) {
+		if (renderer.HELP_MESSAGE_TIME <= 0) {
 			// Update the world, hero controller, and render the screen
 			heroController.update(delta); // updates model Hero as well.
 			world.update(delta);
@@ -155,6 +156,11 @@ public class GameScreen implements Screen, InputProcessor {
 		if (world.score > highscore) {
 			// save new highscore
 			prefs.putInteger("highscore", world.score);
+		}
+		// Check if new distance is bigger than highdistance
+		int longestDist = prefs.getInteger("highdistance");
+		if (world.getDistance() > longestDist) {
+			prefs.putInteger("highdistance", world.getDistance());
 		}
 		
 		// Increase # of games played

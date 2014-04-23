@@ -43,10 +43,12 @@ public class MainMenuScreen extends AbstractScreen {
 	// Labels
 	private Label lblTitle;
 	private Label lblScore;
+	private Label lblDistance;
 	
 	private Table table;
 	
 	private int highscore  = 0;
+	private int highdistance;
 	
 	// Load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
@@ -81,7 +83,8 @@ public class MainMenuScreen extends AbstractScreen {
 
 		// Labels
 		lblTitle = new Label(TITLE, fancySkin, "gold");
-		lblScore = new Label("High score: " + highscore, fancySkin);
+		lblScore = new Label("High Score: " + highscore, skin);
+		lblDistance = new Label("Furhtest Distance: " + highdistance + " m", skin);
 		
 		if(prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
@@ -151,6 +154,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(btnQuit);
 		table.row();
 		table.add(lblScore);
+		table.row();
+		table.add(lblDistance);
 	}
 
 	public void render(float delta) {
@@ -175,6 +180,11 @@ public class MainMenuScreen extends AbstractScreen {
 		// Load preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		highscore = prefs.getInteger("highscore");
+		highdistance = prefs.getInteger("highdistance");
+		
+		// update menu labels
+		lblDistance.setText("Furthest Distance: " + highdistance + " m");
+		lblScore.setText("High Score: " + highscore);
 
 	}
 
@@ -190,7 +200,6 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	private void resetPrefs() {
 		//prefs.clear();
-		prefs.putInteger("games_played", 0);
 		prefs.putInteger("Reload", 1);
 		prefs.putInteger("Attack", 1);
 		prefs.putInteger("Health", 1);
