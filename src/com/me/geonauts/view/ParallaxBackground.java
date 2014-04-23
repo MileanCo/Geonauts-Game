@@ -56,14 +56,36 @@ public class ParallaxBackground {
 				currentX += -(layer.region.getRegionWidth() + layer.padding.x);
 			do {
 				float currentY = 0;//-camera.position.y * layer.parallaxRatio.y % (layer.region.getRegionHeight() + layer.padding.y);
+
+				layer.update(delta);
+				
 				//if (velocity.y < 0)
 				//	currentY += -(layer.region.getRegionHeight() + layer.padding.y);
-				batch.draw(layer.region,
-							-this.camera.viewportWidth / 2 + currentX + layer.startPosition.x,
-							-this.camera.viewportHeight / 2 + currentY + layer.startPosition.y,
-							layer.region.getRegionWidth() * layer.scale,
-							layer.region.getRegionHeight() * layer.scale);
+				if (layer.rotate) {
+					batch.draw(layer.region, // region
+								-this.camera.viewportWidth / 2 + currentX + layer.startPosition.x, // x
+								-this.camera.viewportHeight / 2 + currentY + layer.startPosition.y, // y
+								layer.region.getRegionWidth() / 2, //originX
+								layer.region.getRegionHeight() / 2, //originX
+								layer.region.getRegionWidth(), // width
+								layer.region.getRegionHeight(), // height
+								layer.scale, //scaleX
+								layer.scale, //scaleY
+								layer.angle); //rotation
+				} else {
+					batch.draw(layer.region, // region
+							-this.camera.viewportWidth / 2 + currentX + layer.startPosition.x, // x
+							-this.camera.viewportHeight / 2 + currentY + layer.startPosition.y, // y
+							0, //layer.region.getRegionWidth() / 2, //originX
+							0, //layer.region.getRegionHeight() / 2, //originX
+							layer.region.getRegionWidth(), // width
+							layer.region.getRegionHeight(), // height
+							layer.scale, //scaleX
+							layer.scale, //scaleY
+							layer.angle); //rotation
+				}
 				
+			
 				//System.out.println(layer.region.getRegionHeight() * layer.scale);
 				currentX += (layer.region.getRegionWidth() + layer.padding.x);
 

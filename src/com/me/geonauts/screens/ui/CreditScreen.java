@@ -15,14 +15,14 @@ import com.me.geonauts.Geonauts;
 
 public class CreditScreen extends AbstractScreen{
 	private TextButton btnCredit;
-	
+	private Table table;
 	public CreditScreen(Geonauts game) {
 		super(game);
 		
 		
 		
 		//Table
-		Table table = new Table();
+		 table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
 		
@@ -51,7 +51,7 @@ public class CreditScreen extends AbstractScreen{
 			}
 		});
 		
-		table.add(btnCredit);
+
 	}
 	
 	public void render(float delta) {
@@ -64,6 +64,7 @@ public class CreditScreen extends AbstractScreen{
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+		table.add(btnCredit);
 	}
 
 	private void menu() {

@@ -2,6 +2,7 @@ package com.me.geonauts;
 
 import com.badlogic.gdx.Game;
 import com.me.geonauts.screens.GameScreen;
+import com.me.geonauts.screens.ui.CreditScreen;
 import com.me.geonauts.screens.ui.MainMenuScreen;
 import com.me.geonauts.screens.ui.ShopScreen;
 
@@ -10,6 +11,7 @@ public class Geonauts extends Game {
 	private GameScreen gameScreen;
 	private MainMenuScreen mainMenu;
 	private ShopScreen shop;
+	private CreditScreen credits;
 	
 	@Override
 	public void create() {
@@ -30,5 +32,8 @@ public class Geonauts extends Game {
 	}
 	public GameScreen getGameScreen() {
 		return gameScreen;
+	}
+	public CreditScreen getCreditScreen() {
+		return credits;
 	}
 }

@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.geonauts.Geonauts;
-import com.me.geonauts.screens.GameScreen;
 
 /**
  * Resources used: -
@@ -25,8 +24,6 @@ import com.me.geonauts.screens.GameScreen;
  */
 
 public class MainMenuScreen extends AbstractScreen {
-	/** GameScreen object where main gameplay takes place */
-	private Screen gameScreen;
 	//private Screen shopScreen;
 	private Screen creditScreen;
 	//private Screen optionsScreen;
@@ -70,7 +67,8 @@ public class MainMenuScreen extends AbstractScreen {
 		stage.addActor(table);
 
 		// Skins
-		Skin skin = new Skin(Gdx.files.internal("images/ui/uiskin.json"));
+		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
+		Skin fancySkin = new Skin(Gdx.files.internal("images/ui/fancy-skin.json"));
 		
 		// Load textures
 		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
@@ -85,8 +83,8 @@ public class MainMenuScreen extends AbstractScreen {
 		style.font = new BitmapFont();
 
 		// Labels
-		lblTitle = new Label(TITLE, skin);
-		lblScore = new Label("High score: " + highscore, skin);
+		lblTitle = new Label(TITLE, fancySkin);
+		lblScore = new Label("High score: " + highscore, fancySkin);
 		
 		if(prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
@@ -184,7 +182,7 @@ public class MainMenuScreen extends AbstractScreen {
 
 	private void newGame() {
 		//prefs.putInteger("games_played", 0);
-		if(prefs.getInteger("games_played") == 0) {
+		if (prefs.getInteger("games_played") == 0) {
 			prefs.putInteger("Reload", 1);
 			prefs.putInteger("Attack", 1);
 			prefs.putInteger("Health", 1);
@@ -197,18 +195,8 @@ public class MainMenuScreen extends AbstractScreen {
 		game.setScreen(game.getGameScreen());
 	}
 	
-	/*private void shop(){
-		shopScreen = new ShopScreen(game);
-		game.setScreen(shopScreen);
-	}*/
-	
+
 	private void credit(){
-		creditScreen = new CreditScreen(game);
-		game.setScreen(creditScreen);
+		game.setScreen(game.getCreditScreen());
 	}
-	
-	/*private void options(){
-		optionsScreen = new OptionsScreen(game);
-		game.setScreen(optionsScreen);;
-	}*/
 }

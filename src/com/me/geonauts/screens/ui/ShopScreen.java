@@ -76,7 +76,7 @@ public class ShopScreen extends AbstractScreen{
 		table.setFillParent(true);
 		stage.addActor(table);
 		
-		Skin skin = new Skin(Gdx.files.internal("images/ui/uiskin.json"));
+		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		
 		// TextureRegions
 		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
