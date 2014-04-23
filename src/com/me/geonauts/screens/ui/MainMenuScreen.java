@@ -1,6 +1,5 @@
 package com.me.geonauts.screens.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.me.geonauts.Geonauts;
 import com.me.geonauts.screens.GameScreen;
 
 /**
@@ -43,13 +43,19 @@ public class MainMenuScreen extends AbstractScreen {
 	private TextButton btnCredits;
 	private TextButton btnQuit;
 	
+	// Labels
+	private Label lblTitle;
+	private Label lblScore;
+	
+	private Table table;
+	
 	private int highscore  = 0;
 	
 	// Load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 			
 
-	public MainMenuScreen(Game game) {
+	public MainMenuScreen(Geonauts game) {
 		super(game);
 		
 		highscore = prefs.getInteger("highscore");
@@ -59,7 +65,7 @@ public class MainMenuScreen extends AbstractScreen {
 				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
 
 		// Table
-		Table table = new Table();
+		table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
 
@@ -79,8 +85,8 @@ public class MainMenuScreen extends AbstractScreen {
 		style.font = new BitmapFont();
 
 		// Labels
-		Label lblTitle = new Label(TITLE, skin);
-		Label lblScore = new Label("High score: " + highscore, skin);
+		lblTitle = new Label(TITLE, skin);
+		lblScore = new Label("High score: " + highscore, skin);
 		
 		if(prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
@@ -136,22 +142,6 @@ public class MainMenuScreen extends AbstractScreen {
 				System.exit(0);
 			}
 		});	
-		table.add(lblTitle);
-		table.row();
-		table.add(btnNewGame);
-		//table.row();
-		//table.add(btnShop);
-		//table.row();
-		//table.add(btnOptions);
-		table.row();
-		table.add(btnCredits);
-		table.row();
-		table.add(btnQuit);
-		table.row();
-		table.add(lblScore);
-		
-		// Create the game screen once
-		gameScreen = new GameScreen(game);
 	}
 
 	public void render(float delta) {
@@ -176,6 +166,20 @@ public class MainMenuScreen extends AbstractScreen {
 		// Load preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		highscore = prefs.getInteger("highscore");
+		
+		table.add(lblTitle);
+		table.row();
+		table.add(btnNewGame);
+		//table.row();
+		//table.add(btnShop);
+		//table.row();
+		//table.add(btnOptions);
+		table.row();
+		table.add(btnCredits);
+		table.row();
+		table.add(btnQuit);
+		table.row();
+		table.add(lblScore);
 	}
 
 	private void newGame() {
@@ -190,7 +194,7 @@ public class MainMenuScreen extends AbstractScreen {
 			prefs.flush();
 		}
 		
-		game.setScreen(gameScreen);
+		game.setScreen(game.getGameScreen());
 	}
 	
 	/*private void shop(){

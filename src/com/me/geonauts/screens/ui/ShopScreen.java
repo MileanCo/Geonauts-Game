@@ -1,6 +1,5 @@
 package com.me.geonauts.screens.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.me.geonauts.Geonauts;
 
 
 public class ShopScreen extends AbstractScreen{
@@ -67,7 +67,7 @@ public class ShopScreen extends AbstractScreen{
 	int money = prefs.getInteger("Money");
 	
 	
-	public ShopScreen(Game game){
+	public ShopScreen(Geonauts game) {
 		super(game);
 		
 		
@@ -258,9 +258,8 @@ public class ShopScreen extends AbstractScreen{
 		prefs.putInteger("max targets", multitarget);
 		prefs.putInteger("Money", money);
 		prefs.flush();
-		
-		MainMenuScreen = new MainMenuScreen(game);
-		game.setScreen(MainMenuScreen);
+	
+		game.setScreen(game.getMainMenuScreen());
 	}
 
 }

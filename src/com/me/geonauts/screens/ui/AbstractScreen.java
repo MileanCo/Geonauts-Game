@@ -7,18 +7,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.geonauts.Geonauts;
 
 /**
  * The base class for all game screens.
  */
 public abstract class AbstractScreen implements Screen {
-    protected final Game game;
+    protected final Geonauts game;
     protected BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
     
 
-    public AbstractScreen(Game game ) {
+    public AbstractScreen(Geonauts game ) {
         this.game = game;
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();

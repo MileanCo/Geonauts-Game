@@ -1,9 +1,7 @@
 package com.me.geonauts.screens.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,14 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.me.geonauts.Geonauts;
 
 public class CreditScreen extends AbstractScreen{
-	
-	private Screen menuScreen;
-
 	private TextButton btnCredit;
 	
-	public CreditScreen(Game game) {
+	public CreditScreen(Geonauts game) {
 		super(game);
 		
 		
@@ -70,8 +66,7 @@ public class CreditScreen extends AbstractScreen{
 		Gdx.input.setInputProcessor(stage);
 	}
 
-	private void menu(){
-		menuScreen = new MainMenuScreen(game);
-		game.setScreen(menuScreen);
+	private void menu() {
+		game.setScreen(game.getMainMenuScreen());
 	}
 }
