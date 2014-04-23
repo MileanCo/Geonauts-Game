@@ -69,6 +69,7 @@ public class WorldRenderer {
 	private ParallaxBackground backgroundCave;
 	private ParallaxBackground backgroundSpace1;
 	private ParallaxBackground backgroundSpace2;
+	private ParallaxBackground backgroundSpace3;
 	private ParallaxBackground backgroundCity;
 	
 	/** Animations **/
@@ -141,7 +142,7 @@ public class WorldRenderer {
 		return randomGen.nextInt((2048 - 0) + 0);
 	}
 	private int getRandPosY() {
-		return randomGen.nextInt((700 - 0) + 0);
+		return randomGen.nextInt((512 - 0) + 0);
 	}
 	
 	
@@ -188,6 +189,14 @@ public class WorldRenderer {
 		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),
 		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
 		      }, width, height, 0.5f, this);
+		
+		backgroundSpace3 = new ParallaxBackground(new ParallaxLayer[] {
+		           new ParallaxLayer(new TextureRegion(starsYellowBG), new Vector2(0.22f, 0), new Vector2(0, 0), true),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_yellow"), new Vector2(0.5f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1600, 0), false, true),
+		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),
+		           // new ParallaxLayer(backgroundAtlas.findRegion("bg3"),new Vector2(0.1f,0),new Vector2(0, Constants.HEIGHT-200), new Vector2(0, 0)),
+		      }, width, height, 0.5f, this);
+		
 		
 		backgroundCity = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(cityBG), new Vector2(0.8f, 0), new Vector2(0, 0), true),
@@ -304,6 +313,9 @@ public class WorldRenderer {
 				backgroundSpace2.render(delta);
 				break;
 			case 3:
+				backgroundSpace3.render(delta);
+				break;
+			case 4:
 				backgroundCity.render(delta);
 				break;
 		}

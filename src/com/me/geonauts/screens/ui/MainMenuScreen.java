@@ -57,10 +57,6 @@ public class MainMenuScreen extends AbstractScreen {
 		
 		highscore = prefs.getInteger("highscore");
 
-		font = new BitmapFont(
-				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
-				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
-
 		// Table
 		table = new Table();
 		table.setFillParent(true);
@@ -81,9 +77,10 @@ public class MainMenuScreen extends AbstractScreen {
 		style.up = new TextureRegionDrawable(upRegion);
 		style.down = new TextureRegionDrawable(downRegion);
 		style.font = new BitmapFont();
+		style.font.setScale(2);
 
 		// Labels
-		lblTitle = new Label(TITLE, fancySkin);
+		lblTitle = new Label(TITLE, fancySkin, "gold");
 		lblScore = new Label("High score: " + highscore, fancySkin);
 		
 		if(prefs.getInteger("games_played") == 0){
@@ -140,6 +137,20 @@ public class MainMenuScreen extends AbstractScreen {
 				System.exit(0);
 			}
 		});	
+		
+		table.add(lblTitle);
+		table.row();
+		table.add(btnNewGame);
+		//table.row();
+		//table.add(btnShop);
+		//table.row();
+		//table.add(btnOptions);
+		table.row();
+		table.add(btnCredits);
+		table.row();
+		table.add(btnQuit);
+		table.row();
+		table.add(lblScore);
 	}
 
 	public void render(float delta) {
@@ -164,33 +175,20 @@ public class MainMenuScreen extends AbstractScreen {
 		// Load preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		highscore = prefs.getInteger("highscore");
-		
-		table.add(lblTitle);
-		table.row();
-		table.add(btnNewGame);
-		//table.row();
-		//table.add(btnShop);
-		//table.row();
-		//table.add(btnOptions);
-		table.row();
-		table.add(btnCredits);
-		table.row();
-		table.add(btnQuit);
-		table.row();
-		table.add(lblScore);
+
 	}
 
 	private void newGame() {
 		//prefs.putInteger("games_played", 0);
-		if (prefs.getInteger("games_played") == 0) {
+		if ( prefs.getInteger("games_played") == 0 || prefs.getInteger("Attack") == 0) {
 			prefs.putInteger("Reload", 1);
 			prefs.putInteger("Attack", 1);
 			prefs.putInteger("Health", 1);
 			prefs.putInteger("Moneyx", 1);
 			prefs.putInteger("max targets", 1);
-			prefs.putInteger("Money", 100);
+			prefs.putInteger("Money", 200);
 			prefs.flush();
-		}
+		} 
 		
 		game.setScreen(game.getGameScreen());
 	}

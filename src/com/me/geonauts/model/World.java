@@ -86,11 +86,12 @@ public class World {
 		
 		resetChunks();
 		
-		backgroundType = randomGen.nextInt(4 - 0) + 0;
+		backgroundType = randomGen.nextInt(5 - 0) + 0;
 		
 		// Get preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		money = prefs.getInteger("Money");
+		System.out.println("money: " + money);
 	}
 	
 	/**
@@ -215,5 +216,13 @@ public class World {
 	
 	public int getBackgroundType() {
 		return backgroundType;
+	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public int getScore() {
+		return score;
 	}
 }

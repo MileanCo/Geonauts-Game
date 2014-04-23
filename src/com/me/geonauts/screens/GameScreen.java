@@ -244,4 +244,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public HeroController getHeroController() {
 		return heroController;
 	}
+	public World getWorld(){
+		return world;
+	}
 }

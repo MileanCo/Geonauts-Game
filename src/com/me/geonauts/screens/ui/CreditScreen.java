@@ -16,13 +16,15 @@ import com.me.geonauts.Geonauts;
 public class CreditScreen extends AbstractScreen{
 	private TextButton btnCredit;
 	private Table table;
+	
+	
 	public CreditScreen(Geonauts game) {
 		super(game);
 		
 		
 		
 		//Table
-		 table = new Table();
+		table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
 		
@@ -38,18 +40,22 @@ public class CreditScreen extends AbstractScreen{
 		styleC.up = new TextureRegionDrawable(upCredits);
 		styleC.down = new TextureRegionDrawable(downCredits);
 		styleC.font = new BitmapFont();
+		styleC.font.setScale(2);
 		
 		//Button
-		btnCredit = new TextButton("Joel Stenkvist & William Jamar\nArt by: OpenGameArt.org", styleC);
+		btnCredit = new TextButton("Game development: Joel Stenkvist \n"
+				+ "Menu development: William Jamar\n"
+				+ "Art from OpenGameArt.org", styleC);
 		btnCredit.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("my app", "Released");
-				menu();
+				goToMenu();
 			}
 		});
+		
+		table.add(btnCredit);
 		
 
 	}
@@ -64,10 +70,10 @@ public class CreditScreen extends AbstractScreen{
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		table.add(btnCredit);
+		
 	}
 
-	private void menu() {
+	private void goToMenu() {
 		game.setScreen(game.getMainMenuScreen());
 	}
 }
