@@ -77,6 +77,20 @@ public class Chunk {
 	
 	private String[] floor = {"CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTc"};
 	
+	private String[] ceiling =  {"tttttttttttttttttttttttttttttttttttttttt", 
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            "......",
+            };
+	
 	private String[] wall_floor41 = {"E",
 								   "W",
 								   "W",
@@ -120,7 +134,7 @@ public class Chunk {
 	 * Determines which build to make
 	 */
 	public void newBuild() {
-		int build = random.nextInt(4 - 1) + 1;
+		int build = random.nextInt(5 - 1) + 1;
 		
 		switch (build) {
 			case 1: 
@@ -131,6 +145,9 @@ public class Chunk {
 				break;
 			case 3:
 				build3();
+				break;
+			case 4:
+				build4();
 				break;
 		}
 	}
@@ -156,6 +173,16 @@ public class Chunk {
 		addStructure(box44, random.nextInt(35 - 15) + 15);
 		
 		addStructure(wall_ceiling51, random.nextInt(WIDTH/2-2 - 0) + 0);
+	}
+	
+	private void build4() {
+		reset();
+		
+		addStructure(ceiling, 0);
+		
+		addStructure(box33, random.nextInt(20 - 0) + 0);
+		
+		addStructure(wall_floor41, random.nextInt(WIDTH - 15) + 15);
 	}
 	
 	/**

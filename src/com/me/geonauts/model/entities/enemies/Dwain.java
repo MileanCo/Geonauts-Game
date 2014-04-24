@@ -16,8 +16,8 @@ public class Dwain extends AbstractEnemy {
 	public static final float SPEED = 0.5f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((74/64f), (71/60f));
-	private static int health = 50;
-	private static int damage = 15;
+	public static int health = 50;
+	public static int damage = 20;
 	private static int value = 20;
 	
 	private float lastStateTime = 0;
@@ -33,8 +33,8 @@ public class Dwain extends AbstractEnemy {
 	 */
 	public Dwain(Vector2 pos) {
 		super(pos, SIZE, SPEED, health, damage);
-		PITCH = rand.nextInt(20-12) + 12;
-		reloadTime = 1.0f;
+		PITCH = rand.nextInt(25-16) + 16;
+		reloadTime = (rand.nextInt(10 - 7) + 7) / 10f;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 		//System.out.println(ROTATION_SPEED);
@@ -61,13 +61,14 @@ public class Dwain extends AbstractEnemy {
 	
 			
 		// Make sure angle isn't too big.
-		if (angle > PITCH) { 
-			angle = PITCH;
+		int r = rand.nextInt(10 - 0) + 0;
+		if (angle > (PITCH - r)) { 
+			angle = PITCH - r;
 			if (state == State.FLYING) state = State.FALLING;
 			else if (state == State.FALLING) state = State.FLYING;
 		}
-		else if (angle < -PITCH) {
-			angle = -PITCH;
+		else if (angle < (-PITCH + r)) {
+			angle = -PITCH + r;
 			if (state == State.FLYING) state = State.FALLING;
 			else if (state == State.FALLING) state = State.FLYING;
 		}

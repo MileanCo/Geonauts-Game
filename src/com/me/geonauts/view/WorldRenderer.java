@@ -3,9 +3,9 @@ package com.me.geonauts.view;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +33,7 @@ import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
+import com.me.geonauts.model.entities.enemies.BlueMob;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
@@ -251,6 +252,10 @@ public class WorldRenderer {
 		FireMob.enemyFrames = new TextureRegion[frames];
 		for (int i = 0; i < frames; i++) {
 			FireMob.enemyFrames[i] = enemiesAtlas.findRegion("fire_mob0" + i);
+		}
+		BlueMob.enemyFrames = new TextureRegion[frames];
+		for (int i = 0; i < frames; i++) {
+			BlueMob.enemyFrames[i] = enemiesAtlas.findRegion("blue_mob0" + i);
 		}
 		Fiend.enemyFrames = new TextureRegion[frames];
 		for (int i = 0; i < frames; i++) {

@@ -3,6 +3,7 @@ package com.me.geonauts.screens.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -52,10 +53,15 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	// Load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
+	
+	// Sound
+	Sound oggIntro;
 			
 
 	public MainMenuScreen(Geonauts game) {
 		super(game);
+		
+		oggIntro = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Intro.ogg"));
 		
 		highscore = prefs.getInteger("highscore");
 
@@ -172,6 +178,8 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
+		
+		oggIntro.stop();
 	}
 
 	public void show() {
@@ -185,6 +193,8 @@ public class MainMenuScreen extends AbstractScreen {
 		// update menu labels
 		lblDistance.setText("Furthest Distance: " + highdistance + " m");
 		lblScore.setText("High Score: " + highscore);
+		
+		oggIntro.loop();
 
 	}
 
@@ -206,6 +216,7 @@ public class MainMenuScreen extends AbstractScreen {
 		prefs.putInteger("Moneyx", 1);
 		prefs.putInteger("max targets", 1);
 		prefs.putInteger("Money", 200);
+		prefs.putInteger("total upgrades", 5);
 		prefs.flush();
 	}
 	

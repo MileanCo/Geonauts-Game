@@ -2,6 +2,7 @@ package com.me.geonauts.screens.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,10 +22,10 @@ public class ShopScreen extends AbstractScreen{
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
 	//
-	private static final int VALUE_RELOAD = 200;
-	private static final int VALUE_ATTACK = 100;
-	private static final int VALUE_HEALTH = 100;
-	private static final int VALUE_MULTITARGET = 250;
+	private static final int VALUE_RELOAD = 150;
+	private static final int VALUE_ATTACK = 50;
+	private static final int VALUE_HEALTH = 50;
+	private static final int VALUE_MULTITARGET = 200;
 	
 	//calculate item costs
 	private int costR;
@@ -74,9 +75,14 @@ public class ShopScreen extends AbstractScreen{
 	int multitarget;
 	int money;
 	
+	// Sound
+	Sound oggShop;
+	
 	
 	public ShopScreen(Geonauts game) {
 		super(game);
+		
+		oggShop = Gdx.audio.newSound(Gdx.files.internal("audio/shop_music.ogg"));
 		
 		
 		//Table
@@ -93,12 +99,12 @@ public class ShopScreen extends AbstractScreen{
 		
 		// TextureRegions
 		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
-		TextureRegion upR = uiAtlas.findRegion("red"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/red.png")));
-		TextureRegion upB = uiAtlas.findRegion("blue"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/blue.png")));
-		TextureRegion down = uiAtlas.findRegion("black"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/black.png")));
-		TextureRegion upG = uiAtlas.findRegion("green"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/green.png")));
-		TextureRegion upP = uiAtlas.findRegion("purple"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/purple.png")));
-		TextureRegion upY = uiAtlas.findRegion("yellow"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/yellow.png")));
+		TextureRegion upR = uiAtlas.findRegion("red"); 
+		TextureRegion upB = uiAtlas.findRegion("blue");  
+		TextureRegion down = uiAtlas.findRegion("black"); 
+		TextureRegion upG = uiAtlas.findRegion("green");  
+		TextureRegion upP = uiAtlas.findRegion("purple");  
+		TextureRegion upY = uiAtlas.findRegion("yellow");  
 
 		// Styles
 		TextButtonStyle styleR = new TextButtonStyle();
@@ -135,8 +141,8 @@ public class ShopScreen extends AbstractScreen{
 		getPreferences();
 		
 		// GUI SHIT
-		lblRinfo = new Label("Current reload time: " + reload, skin);
-		lblRcost = new Label("Cost: " + String.valueOf(costR), skin);
+		lblRinfo = new Label("", skin);
+		lblRcost = new Label("", skin);
 		btnReload = new TextButton("Upgrade Reload", styleG);
 		btnReload.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -152,8 +158,8 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		lblAinfo = new Label("Current damage: " + attack, skin);
-		lblAcost = new Label("Cost: " + String.valueOf(costA), skin);
+		lblAinfo = new Label("", skin);
+		lblAcost = new Label("", skin);
 		btnAttack = new TextButton("Upgrade Damage", styleR);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -164,14 +170,14 @@ public class ShopScreen extends AbstractScreen{
 				if(money >= costA){
 					attack++;
 					money = money - costA;
-					costA = VALUE_ATTACK * costA;
+					costA = VALUE_ATTACK * attack;
 					updateLabels();
 				}
 			}
 		});
 		
-		lblHinfo = new Label("Current health: " + health, skin);
-		lblHcost = new Label("Cost: " + String.valueOf(costH), skin);
+		lblHinfo = new Label("", skin);
+		lblHcost = new Label("", skin);
 		btnHealth = new TextButton("Upgrade health", styleB);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -204,8 +210,8 @@ public class ShopScreen extends AbstractScreen{
 			}
 		});
 		*/
-		lblMTinfo = new Label("Max Number of Targets: " + multitarget, skin);
-		lblMTcost = new Label("Cost: " + String.valueOf(costMT), skin);
+		lblMTinfo = new Label("", skin);
+		lblMTcost = new Label("", skin);
 		btnMultiTarget = new TextButton("Upgrade Targetting", styleP);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -230,9 +236,9 @@ public class ShopScreen extends AbstractScreen{
 				quit();
 			}
 		});
-		lblMoney = new Label("Money $" + money, fancySkin, "gold");
-		lblDistance = new Label("You travelled: ", skin);
-		lblScore = new Label("Your score: ", skin);
+		lblMoney = new Label("", fancySkin, "gold");
+		lblDistance = new Label("", skin);
+		lblScore = new Label("", skin);
 		
 		tableShop.add(lblMoney);
 		tableShop.row();
@@ -272,6 +278,8 @@ public class ShopScreen extends AbstractScreen{
 
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
+		
+		oggShop.stop();
 	}
 	
 	/**
@@ -304,7 +312,7 @@ public class ShopScreen extends AbstractScreen{
 		lblRinfo.setText("Current reload time: " + (double) Math.pow(reload, -1));
 		lblRcost.setText("Cost: " + costR);
 		
-		lblMTinfo.setText("Max Number of Targets: " + multitarget);
+		lblMTinfo.setText("Max Targets: " + multitarget);
 		lblMTcost.setText("Cost: " + costMT);
 		
 		lblMoney.setText("Money $" + money);
@@ -317,6 +325,8 @@ public class ShopScreen extends AbstractScreen{
 		
 		getPreferences();
 		updateLabels();
+		
+		oggShop.loop();
 	}
 	
 	public void quit() {
@@ -326,6 +336,10 @@ public class ShopScreen extends AbstractScreen{
 		prefs.putInteger("Moneyx", moneyx);
 		prefs.putInteger("max targets", multitarget);
 		prefs.putInteger("Money", money);
+		
+		int total = reload + attack + health + multitarget;
+		prefs.putInteger("total upgrades", total);
+		
 		prefs.flush();
 	
 		game.setScreen(game.getMainMenuScreen());

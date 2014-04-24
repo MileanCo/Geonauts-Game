@@ -151,7 +151,7 @@ public class EnemyController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (enemyRect.overlaps(block.getBounds())) {
-				System.out.println("Enemy Collision @ " + block.position.toString());
+				//System.out.println("Enemy Collision @ " + block.position.toString());
 				die(false);
 				world.getCollisionRects().add(block.getBounds()); // for debug
 				break;
@@ -179,7 +179,7 @@ public class EnemyController {
 		for (Block block : collidable) {
 			if (block == null) 	continue;
 			if (enemyRect.overlaps(block.getBounds())) {
-				System.out.println("Enemy Collision @ " + block.position.toString());
+				//System.out.println("Enemy Collision @ " + block.position.toString());
 				die(false);
 				world.getCollisionRects().add(block.getBounds());
 				break;

@@ -12,7 +12,7 @@ public class Fiend extends AbstractEnemy {
 	private float PITCH;
 	
 
-	public static final float SPEED = 0.5f;	// unit per second
+	public static final float SPEED = 3f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((100/64f), (45/60f));
 	private static int health = 50;

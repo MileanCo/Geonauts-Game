@@ -204,9 +204,8 @@ public class HeroController {
 		// If he's below the screen, wrap to top if there arent any blocks there.
 		} else if (hero.position.y < -hero.SIZE.y/2f && hero.state != State.DYING) {
 			// Now check if there are blocks above the hero
-			if (world.getBlock((int)(hero.position.x + hero.velocity.x), (int)Chunk.HEIGHT) == null) {
+			if (world.getBlock((int)(hero.position.x), (int)Chunk.HEIGHT) == null) {
 				hero.position.y = Chunk.HEIGHT;
-				
 			} else {
 				// Bounce the hero
 				hero.state = State.FLYING;
@@ -319,8 +318,11 @@ public class HeroController {
 		hero.state = Hero.State.DYING;
 		hero.velocity.x = 0;
 		hero.velocity.y = 0;
+		if (! hero.grounded) {
+			world.getAnimations().add(new Explosion06(hero.position, hero.SIZE.x));
+		}
 		hero.grounded = true;
-		world.getAnimations().add(new Explosion06(hero.position, hero.SIZE.x));
+		
 	}
 
 	/** Change Hero's state and parameters based on input controls **/

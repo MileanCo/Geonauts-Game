@@ -9,7 +9,7 @@ import com.me.geonauts.model.entities.missiles.Missile.State;
 public class GreenEnemyLaser extends EnemyMissile {	
 	
 	public static Vector2 SIZE = new Vector2((18f/64f), (24/60f));
-	private static float SPEED = 8f;
+	private static float SPEED = 5f;
 
 	public static TextureRegion[] frames;
 	
