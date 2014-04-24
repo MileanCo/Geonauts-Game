@@ -153,8 +153,14 @@ public class WorldRenderer {
 	private int getRandPosX() {
 		return randomGen.nextInt((2048 - 0) + 0);
 	}
+	private int getRandPosXLowRange() {
+		return randomGen.nextInt((1024 - 0) + 0);
+	}
+	private int getRandPosXHiRange() {
+		return randomGen.nextInt((2048 - 900) + 900);
+	}
 	private int getRandPosY() {
-		return randomGen.nextInt((512 - 0) + 0);
+		return randomGen.nextInt((512 - -60) + -60);
 	}
 	
 	
@@ -191,8 +197,8 @@ public class WorldRenderer {
 		
 		backgroundSpace1 = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(backgroundTextures.get("stars_white")), new Vector2(0.2f, 0), new Vector2(0, 0), true),
-		           new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(2048, 0), false, true),
-		           new ParallaxLayer(planetAtlas.findRegion("planet_green"), new Vector2(0.3f,0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosXHiRange(), getRandPosY()), new Vector2(2048, 0), false, true),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_green"), new Vector2(0.3f,0), new Vector2(getRandPosXLowRange(), getRandPosY()), new Vector2(1024, 0), false, true),
 		      }, width, height, 0.5f, this);
 		
 		backgroundSpace2 = new ParallaxBackground(new ParallaxLayer[] {

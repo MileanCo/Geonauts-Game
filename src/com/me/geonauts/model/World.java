@@ -71,6 +71,8 @@ public class World {
 	
 	private boolean changed_spawn = false;
 	
+	private int total_upgrades;
+	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
 		
@@ -90,15 +92,17 @@ public class World {
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		money = prefs.getInteger("Money");
 		
-		int total_upgrades = prefs.getInteger("total upgrades");
+		total_upgrades = prefs.getInteger("total upgrades");
 		
 		// Make game harder based on total upgrades
 		Dwain.health += total_upgrades * 5;
-		Dwain.damage += total_upgrades * 5;
+		Dwain.damage += total_upgrades * 2;
 		FireMob.health += total_upgrades * 5;
 		FireMob.damage += total_upgrades * 2;
 		BlueMob.health += total_upgrades * 2;
 		BlueMob.damage += total_upgrades * 2;
+		
+		System.out.println(total_upgrades);
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {
@@ -135,12 +139,13 @@ public class World {
 		// Spawn some enemies!
 		int spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
-		if (spawn == 50) {
+
+		if (spawn == 50 && total_upgrades >= 7) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
 			
-		} else if (spawn == 51 || spawn == 52) {
+		} else if (spawn == 51 || (spawn == 50 && total_upgrades < 7)) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);

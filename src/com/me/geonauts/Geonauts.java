@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.screens.ui.CreditScreen;
 import com.me.geonauts.screens.ui.MainMenuScreen;
+import com.me.geonauts.screens.ui.OptionsScreen;
 import com.me.geonauts.screens.ui.ShopScreen;
 
 public class Geonauts extends Game {
@@ -12,7 +13,9 @@ public class Geonauts extends Game {
 	private MainMenuScreen mainMenu;
 	private ShopScreen shop;
 	private CreditScreen credits;
-	
+	private OptionsScreen options;
+
+
 	@Override
 	public void create() {
 		// Create all the screens
@@ -20,6 +23,7 @@ public class Geonauts extends Game {
 		mainMenu = new MainMenuScreen(this);
 		shop = new ShopScreen(this);
 		credits = new CreditScreen(this);
+		options = new OptionsScreen(this);
 		
 		setScreen(mainMenu);	
 	}
@@ -36,5 +40,8 @@ public class Geonauts extends Game {
 	}
 	public CreditScreen getCreditScreen() {
 		return credits;
+	}
+	public OptionsScreen getOptions() {
+		return options;
 	}
 }

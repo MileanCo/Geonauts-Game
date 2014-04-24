@@ -2,7 +2,7 @@ package com.me.geonauts.screens.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -76,14 +76,15 @@ public class ShopScreen extends AbstractScreen{
 	int money;
 	
 	// Sound
-	Sound oggShop;
+	private Music shopMusicOgg;
 	
 	
 	public ShopScreen(Geonauts game) {
 		super(game);
 		
-		oggShop = Gdx.audio.newSound(Gdx.files.internal("audio/shop_music.ogg"));
-		
+		//oggShop = Gdx.audio.newSound(Gdx.files.internal("audio/shop_music.ogg"));
+		shopMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/shop_music.ogg"));
+		shopMusicOgg.setLooping(true);
 		
 		//Table
 		Table tableShop = new Table();
@@ -279,7 +280,7 @@ public class ShopScreen extends AbstractScreen{
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
 		
-		oggShop.stop();
+		shopMusicOgg.stop();
 	}
 	
 	/**
@@ -303,13 +304,13 @@ public class ShopScreen extends AbstractScreen{
 	}
 	
 	private void updateLabels() {		
-		lblHinfo.setText("Current health: " + health);
+		lblHinfo.setText("Current health: " + (health * 50 + 200));
 		lblHcost.setText("Cost: " + costH);
 		
-		lblAinfo.setText("Current damage: " + attack);
+		lblAinfo.setText("Current damage: " + (30 + attack * 10));
 		lblAcost.setText("Cost: " + costA);
 		
-		lblRinfo.setText("Current reload time: " + (double) Math.pow(reload, -1));
+		lblRinfo.setText("Current reload time: " + (double) Math.pow(reload, -1) + "s ");
 		lblRcost.setText("Cost: " + costR);
 		
 		lblMTinfo.setText("Max Targets: " + multitarget);
@@ -326,7 +327,7 @@ public class ShopScreen extends AbstractScreen{
 		getPreferences();
 		updateLabels();
 		
-		oggShop.loop();
+		shopMusicOgg.play();
 	}
 	
 	public void quit() {

@@ -79,7 +79,7 @@ public abstract class Hero extends Entity {
 		MAX_TARGETS = prefs.getInteger("max targets");
 		reloadTime = Math.pow(prefs.getInteger("Reload"), -1);
 		this.health = health + prefs.getInteger("Health") * 50;
-		damage = 25 + prefs.getInteger("Attack") * 5;
+		damage = 30 + prefs.getInteger("Attack") * 10;
 		
 		/**
 		System.out.println(MAX_TARGETS);

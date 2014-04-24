@@ -16,8 +16,8 @@ public class Dwain extends AbstractEnemy {
 	public static final float SPEED = 0.5f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((74/64f), (71/60f));
-	public static int health = 50;
-	public static int damage = 20;
+	public static int health = 55;
+	public static int damage = 15;
 	private static int value = 20;
 	
 	private float lastStateTime = 0;

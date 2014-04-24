@@ -3,7 +3,7 @@ package com.me.geonauts.screens.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -37,7 +37,7 @@ public class MainMenuScreen extends AbstractScreen {
 	// Buttons
 	private TextButton btnNewGame;
 	//private TextButton btnShop;
-	//private TextButton btnOptions;
+	private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
 	
@@ -55,13 +55,15 @@ public class MainMenuScreen extends AbstractScreen {
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
 	// Sound
-	Sound oggIntro;
+	private Music menuMusicOgg;
 			
 
 	public MainMenuScreen(Geonauts game) {
 		super(game);
 		
-		oggIntro = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Intro.ogg"));
+		//oggIntro = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Intro.ogg"));
+		menuMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/main_menu.ogg"));
+		menuMusicOgg.setLooping(true);
 		
 		highscore = prefs.getInteger("highscore");
 
@@ -116,7 +118,7 @@ public class MainMenuScreen extends AbstractScreen {
 				shop();
 			}
 		});*/
-		/*btnOptions = new TextButton("Options", style);
+		btnOptions = new TextButton("Options", style);
 		btnOptions.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -125,7 +127,7 @@ public class MainMenuScreen extends AbstractScreen {
 				Gdx.app.log("my app", "Released");
 				options();
 			}
-		});*/
+		});
 		btnCredits = new TextButton("Credits", style);
 		btnCredits.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -157,6 +159,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.row();
 		table.add(btnCredits);
 		table.row();
+		table.add(btnOptions);
+		table.row();
 		table.add(btnQuit);
 		table.row();
 		table.add(lblScore);
@@ -179,7 +183,8 @@ public class MainMenuScreen extends AbstractScreen {
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
 		
-		oggIntro.stop();
+		//oggIntro.stop();
+
 	}
 
 	public void show() {
@@ -191,10 +196,12 @@ public class MainMenuScreen extends AbstractScreen {
 		highdistance = prefs.getInteger("highdistance");
 		
 		// update menu labels
-		lblDistance.setText("Furthest Distance: " + highdistance + " m");
+		lblDistance.setText("Best Distance: " + highdistance + " m");
 		lblScore.setText("High Score: " + highscore);
 		
-		oggIntro.loop();
+		//oggIntro.loop();
+		if (!menuMusicOgg.isPlaying())
+			menuMusicOgg.play();
 
 	}
 
@@ -204,7 +211,7 @@ public class MainMenuScreen extends AbstractScreen {
 			resetPrefs();
 			
 		} 
-		
+		menuMusicOgg.stop();
 		game.setScreen(game.getGameScreen());
 	}
 	
@@ -221,7 +228,11 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 	
 
-	private void credit(){
+	private void credit() {
 		game.setScreen(game.getCreditScreen());
+	}
+	
+	private void options() {
+		game.setScreen(game.getOptions());
 	}
 }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
@@ -32,7 +32,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private Geonauts game;
 	
 	// Sound
-	private Sound oggDrop;
+	private Music gameMusicOgg;
 	
 	private int width, height;
 
@@ -47,8 +47,10 @@ public class GameScreen implements Screen, InputProcessor {
 		// Create new Renderer and load graphic. Aim is to only load graphics once.
 		renderer = new WorldRenderer(); // Renderer updates and draws enemies.
 		
-		oggDrop = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Drop.ogg"));
+		//oggDrop = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Drop.ogg"));
 		
+		gameMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/game_music.ogg"));
+		gameMusicOgg.setLooping(true);
 	}
 	
 	/**
@@ -64,8 +66,7 @@ public class GameScreen implements Screen, InputProcessor {
 		renderer.show();
 		heroController = new HeroController(world);
 			
-		//oggDrop.play();
-		oggDrop.loop();
+		gameMusicOgg.play();
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
-		oggDrop.stop();
+		gameMusicOgg.stop();
 	}
 
 	@Override

@@ -118,7 +118,7 @@ public class EnemyController {
 				world.getHero().getBounds().width, world.getHero().getBounds().height);
 		// Does it collide? 
 		if (enemyRect.overlaps(heroRect)) {
-			world.getHero().health -= enemy.getDamage() * 5;
+			world.getHero().health -= enemy.getDamage() * 2;
 			die(false);
 			return;
 		} 
@@ -222,7 +222,7 @@ public class EnemyController {
 		if (! shotDown) r = 10;
 		else {
 			// Increase the score
-			world.score += enemy.getValue();
+			world.score += enemy.getValue() * 10;
 			world.money += enemy.getValue();
 		}
 		
