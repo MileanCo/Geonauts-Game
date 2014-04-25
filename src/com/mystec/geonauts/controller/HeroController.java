@@ -40,7 +40,7 @@ public class HeroController {
 	
 	// Shooting fields
 	private float lastShootTime;
-	private int MAX_TARGET_RADIUS = 3;
+	private int MAX_TARGET_RADIUS = 4;
 
 
 	// Keys
@@ -197,17 +197,23 @@ public class HeroController {
 			hero.velocity.y = -hero.MAX_VEL.y;
 		
 		// Make sure hero doesn't go above or below screen.
-		if (hero.position.y > Chunk.HEIGHT - hero.SIZE.y && hero.state != State.DYING) {
-			hero.state = State.FALLING;
-			hero.angle -= hero.ROTATION_SPEED;
+		if (hero.position.y > Chunk.HEIGHT && hero.state != State.DYING) {
+			// Check if there's a block on the bottom
+			if (world.getBlock((int)(hero.position.x), 0) == null) {
+				hero.position.y = -hero.SIZE.y/2f ;
+			// yes, bounce hero
+			} else {
+				hero.state = State.FALLING;
+				hero.angle -= hero.ROTATION_SPEED;
+			}
 			
 		// If he's below the screen, wrap to top if there arent any blocks there.
 		} else if (hero.position.y < -hero.SIZE.y/2f && hero.state != State.DYING) {
-			// Now check if there are blocks above the hero
+			// Now check if there are blocks on the top
 			if (world.getBlock((int)(hero.position.x), (int)Chunk.HEIGHT) == null) {
 				hero.position.y = Chunk.HEIGHT;
+			// yes, bounce hero
 			} else {
-				// Bounce the hero
 				hero.state = State.FLYING;
 				hero.angle += hero.ROTATION_SPEED;
 			}

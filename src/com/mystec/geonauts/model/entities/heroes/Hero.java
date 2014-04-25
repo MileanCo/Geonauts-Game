@@ -117,7 +117,7 @@ public abstract class Hero extends Entity {
 				if (state == State.FLYING) 
 					angle += ROTATION_SPEED;
 				else if ( state == State.FALLING || state == State.DYING)
-					angle -= ROTATION_SPEED / 3;
+					angle -= ROTATION_SPEED / 2.5f;
 			}
 				
 			// Make sure angle isn't too big.

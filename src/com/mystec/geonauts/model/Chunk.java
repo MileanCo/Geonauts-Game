@@ -130,11 +130,18 @@ public class Chunk {
 							            ".",
 							            };
 	
+	private String[] stairFloor1 = {"E....",
+									"Sc...",
+									"SBc..",
+									"SBBc.",
+									"SBBBc" };
+	
+	
 	/**
 	 * Determines which build to make
 	 */
 	public void newBuild() {
-		int build = random.nextInt(5 - 1) + 1;
+		int build = random.nextInt(6 - 1) + 1;
 		
 		switch (build) {
 			case 1: 
@@ -148,6 +155,9 @@ public class Chunk {
 				break;
 			case 4:
 				build4();
+				break;
+			case 5:
+				build5();
 				break;
 		}
 	}
@@ -244,6 +254,20 @@ public class Chunk {
 		Vector2 block_pos = new Vector2(position.x + col, row); 
 		blocks[col][row] = new Block(block_pos, BlockType.FLOATING);
 			
+	}
+	
+	private void build5() {
+		reset();
+		
+		addStructure(stairFloor1, random.nextInt(15 - 5) + 5);
+		
+		addStructure(wall_ceiling41, random.nextInt(20 - 0) + 0);
+		
+		addStructure(box44, random.nextInt(30 - 15) + 15);
+		
+		addStructure(wall_floor51, random.nextInt(WIDTH-wall_floor51[0].length()  - 25) + 25);
+		
+		addStructure(ceilingPyramid, random.nextInt(WIDTH-ceilingPyramid[0].length() - 20) + 20);
 	}
 	
 	/**

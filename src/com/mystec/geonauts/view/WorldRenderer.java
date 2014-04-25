@@ -62,6 +62,10 @@ public class WorldRenderer {
 	private Random randomGen = new Random();
 	private World world;
 	private OrthographicCamera cam;
+	
+	private final float CAM_SWAY_MAX = 1;
+	private float CAM_SWAY = 0;
+	private int CAM_SWAY_DIR = -1;
 
 	/** for debug rendering **/
 	ShapeRenderer debugRenderer;
@@ -334,9 +338,17 @@ public class WorldRenderer {
 	 */
 	public void render(float delta) {
 		// Update the camera's position to hero
-		cam.position.x = (world.getHero().position.cpy().x + CAM_OFFSET) * ppuX;
+		cam.position.x = (world.getHero().position.cpy().x + CAM_OFFSET + CAM_SWAY) * ppuX;
 		cam.position.y = (CAMERA_HEIGHT / 2f) * ppuY;
 		cam.update();
+		
+		// change cam sway
+		/**
+		CAM_SWAY += delta * CAM_SWAY_DIR/2f;
+		if (Math.abs(CAM_SWAY) > CAM_SWAY_MAX) {
+			CAM_SWAY_DIR *= -1;
+		}
+		*/
 		
 		// Set the projection matrix to the new camera matrix in the spriteBatch
 		spriteBatch.setProjectionMatrix(cam.combined);

@@ -95,24 +95,25 @@ public class World {
 		total_upgrades = prefs.getInteger("total upgrades");
 		
 		// Make game harder based on total upgrades
-		Dwain.health += total_upgrades * 5;
-		Dwain.damage += total_upgrades * 2;
-		FireMob.health += total_upgrades * 5;
-		FireMob.damage += total_upgrades * 2;
-		BlueMob.health += total_upgrades * 2;
-		BlueMob.damage += total_upgrades * 2;
+		Dwain.health = 55 + total_upgrades * 5;
+		Dwain.damage = 15 + total_upgrades * 2;
+		FireMob.health = 45 + total_upgrades * 5;
+		FireMob.damage = 10 + total_upgrades * 2;
+		BlueMob.health = 35 + total_upgrades * 2;
+		BlueMob.damage = 15 + total_upgrades * 2;
 		
-		System.out.println(total_upgrades);
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {
 			SPAWN_THRESHOLD = 250;
 		}
+		
 		System.out.println(Dwain.health);
 		System.out.println(Dwain.damage);
 		System.out.println(FireMob.health);
 		System.out.println(FireMob.damage);
 		System.out.println(SPAWN_THRESHOLD);
+		
 	}
 	
 	/**

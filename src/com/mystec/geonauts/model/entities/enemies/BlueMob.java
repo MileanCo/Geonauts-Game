@@ -16,8 +16,8 @@ public class BlueMob extends AbstractEnemy {
 	public static final float SPEED = 2f;	// unit per second
 	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((39/64f), (39/60f));
-	public static int health = 35;
-	public static int damage = 15;
+	public static int health;
+	public static int damage;
 	private static int value = 15;
 	
 	private float lastStateTime = 0;
