@@ -125,29 +125,7 @@ public class WorldRenderer {
 			android = true;
 		}
 	}
-	
-	/**
-	 * Sets the size of the world, or screen
-	 * @param w width (int)
-	 * @param h height (int)
-	 */
-	public void setSize (int w, int h) {
-		this.width = w;
-		this.height = h;
-		ppuX = (float)width / CAMERA_WIDTH;
-		ppuY = (float)height / CAMERA_HEIGHT;
-		cam = new OrthographicCamera((float)w, (float)h);
-		
-		// Set background stuff
-		backgroundCave.setSize((float)w, (float)h);
-		backgroundSpace1.setSize((float)w, (float)h);
-		backgroundSpace2.setSize((float)w, (float)h);
-		backgroundSpace3.setSize((float)w, (float)h);
-		//backgroundCity.setSize((float)w, (float)h);
-		
-		System.out.println(w + " " + h);
-		
-	}
+
 	public boolean isDebug() {
 		return debug;
 	}
@@ -331,6 +309,32 @@ public class WorldRenderer {
 		*/
 		
 		backgroundType = randomGen.nextInt(4 - 0) + 0;
+	}
+	
+	public void resize(int w, int h) {
+		this.width = w;
+		this.height = h;
+		ppuX = (float)width / CAMERA_WIDTH;
+		ppuY = (float)height / CAMERA_HEIGHT;
+		cam = new OrthographicCamera((float)w, (float)h);
+		
+		// Set background stuff
+		backgroundCave.setSize((float)w, (float)h);
+		backgroundSpace1.setSize((float)w, (float)h);
+		backgroundSpace2.setSize((float)w, (float)h);
+		backgroundSpace3.setSize((float)w, (float)h);
+		//backgroundCity.setSize((float)w, (float)h);
+		
+		if (h < 420) {
+			font_fipps_small.setScale(0.5f);
+			font_fipps.setScale(0.5f);
+			System.out.println("RESIZE");
+		} else {
+			font_fipps_small.setScale(1f);
+			font_fipps.setScale(1f);
+		}
+	
+		
 	}
 
 	/**

@@ -7,16 +7,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mystec.geonauts.Geonauts;
 
 /**
  * The base class for all game screens.
  */
-public abstract class AbstractScreen implements Screen {
+public abstract class AbstractScreen implements Screen {	
+    protected int ppuX;
+    protected int ppuY;
+	
     protected final Geonauts game;
     protected BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
+    
+    protected Table table;
+    
     
 
     public AbstractScreen(Geonauts game ) {
@@ -24,6 +31,15 @@ public abstract class AbstractScreen implements Screen {
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();
         this.stage = new Stage( 0, 0, true );
+        
+		// Table
+		table = new Table();
+		table.setFillParent(true);
+		stage.addActor(table);
+		
+		//table.debug(); // turn on all debug lines (table, cell, and widget)
+	    //table.debugTable(); // turn on only table lines
+	    
     }
 
     protected String getName() {
@@ -32,18 +48,14 @@ public abstract class AbstractScreen implements Screen {
 
     // Screen implementation
 
-    @Override
-    public void show() {
-      //  Gdx.app.log( Tyrian.LOG, "Showing screen: " + getName() );
-    }
-
-    @Override
-    public void resize( int width, int height )  {
-      //  Gdx.app.log( Tyrian.LOG, "Resizing screen: " + getName() + " to: " + width + " x " + height );
-
-        // resize the stage
-        stage.setViewport( width, height, true );
-    }
+	@Override
+	public void resize(int width, int height) {
+		stage.setViewport( width, height, false );
+		
+    	table.setSize(width, height);
+    	table.clear();
+   
+	}
 
     @Override
     public void render(float delta ) {
@@ -54,11 +66,7 @@ public abstract class AbstractScreen implements Screen {
         // update and draw the stage actors
         stage.act( delta );
         stage.draw();
-    }
-
-    @Override
-    public void hide() {
-       // Gdx.app.log( Game.LOG, "Hiding screen: " + getName() );
+        //Table.drawDebug(stage);
     }
 
     @Override

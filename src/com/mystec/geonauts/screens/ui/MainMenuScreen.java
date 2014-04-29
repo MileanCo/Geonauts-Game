@@ -7,11 +7,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -35,18 +35,20 @@ public class MainMenuScreen extends AbstractScreen {
 
 	
 	// Buttons
+	private Vector2 BTN_SIZE = new Vector2(3, 1);
 	private TextButton btnNewGame;
 	//private TextButton btnShop;
 	private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnQuit;
+	private TextButtonStyle style;
+	
+	private TextureAtlas uiAtlas;
 	
 	// Labels
 	private Label lblTitle;
 	private Label lblScore;
 	private Label lblDistance;
-	
-	private Table table;
 	
 	private int highscore  = 0;
 	private int highdistance;
@@ -67,34 +69,28 @@ public class MainMenuScreen extends AbstractScreen {
 		
 		highscore = prefs.getInteger("highscore");
 
-		// Table
-		table = new Table();
-		table.setFillParent(true);
-		stage.addActor(table);
-
 		// Skins
 		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		Skin fancySkin = new Skin(Gdx.files.internal("images/ui/fancy-skin.json"));
 		
 		// Load textures
-		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
 		// TextureRegions
 		TextureRegion upRegion = uiAtlas.findRegion("buttonNormal");
 		TextureRegion downRegion = uiAtlas.findRegion("buttonPressed");
 
 		// Styles
-		TextButtonStyle style = new TextButtonStyle();
+		style = new TextButtonStyle();
 		style.up = new TextureRegionDrawable(upRegion);
 		style.down = new TextureRegionDrawable(downRegion);
 		style.font = new BitmapFont();
-		style.font.setScale(2);
 
 		// Labels
 		lblTitle = new Label(TITLE, fancySkin, "gold");
 		lblScore = new Label("High Score: " + highscore, skin);
 		lblDistance = new Label("Furhtest Distance: " + highdistance + " m", skin);
 		
-		if(prefs.getInteger("games_played") == 0){
+		if (prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
 		} else{
 			btnNewGame = new TextButton("Continue", style);
@@ -149,23 +145,9 @@ public class MainMenuScreen extends AbstractScreen {
 			}
 		});	
 		
-		table.add(lblTitle);
-		table.row();
-		table.add(btnNewGame);
-		//table.row();
-		//table.add(btnShop);
-		//table.row();
-		//table.add(btnOptions);
-		table.row();
-		table.add(btnCredits);
-		table.row();
-		table.add(btnOptions);
-		table.row();
-		table.add(btnQuit);
-		table.row();
-		table.add(lblScore);
-		table.row();
-		table.add(lblDistance);
+
+		
+		//stage.setViewport(table.getWidth(), table.getHeight());
 	}
 
 	public void render(float delta) {
@@ -186,7 +168,44 @@ public class MainMenuScreen extends AbstractScreen {
 		//oggIntro.stop();
 
 	}
+	
+	
+    @Override
+    public void resize( int width, int height )  {
+    	super.resize(width, height);
+         	
+    	int btnWidth = uiAtlas.findRegion("buttonNormal").getRegionWidth();
+    	int btnHeight = uiAtlas.findRegion("buttonNormal").getRegionHeight();
+    	
 
+    	if (height < 512) {    	
+    		btnWidth /= 2f;
+    		btnHeight /= 2f;
+    		style.font.setScale(1);
+    	} else {
+    		style.font.setScale(2);
+    	}
+    	table.add(lblTitle);
+		table.row();
+		table.add(btnNewGame).width(btnWidth).height(btnHeight);
+		table.row();
+		table.add(btnCredits).width(btnWidth).height(btnHeight);
+		table.row();
+		table.add(btnOptions).width(btnWidth).height(btnHeight);
+		table.row();
+		table.add(btnQuit).width(btnWidth).height(btnHeight);
+		table.row();
+		table.add(lblScore);//.maxWidth(width/2).height(maxHeight);
+		table.row();
+		table.add(lblDistance);//.maxWidth(width/2).maxHeight(maxHeight);
+  
+		
+		table.invalidate();   
+    }
+    
+	
+
+	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 		

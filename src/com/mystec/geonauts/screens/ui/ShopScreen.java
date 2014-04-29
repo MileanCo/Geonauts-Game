@@ -67,6 +67,8 @@ public class ShopScreen extends AbstractScreen{
 	private Skin skin;
 	private Skin fancySkin;
 	
+	private TextureAtlas uiAtlas;
+	
 	//player values
 	int reload;
 	int attack;
@@ -86,57 +88,43 @@ public class ShopScreen extends AbstractScreen{
 		shopMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/shop_music.ogg"));
 		shopMusicOgg.setLooping(true);
 		
-		//Table
-		Table tableShop = new Table();
-		Table tableOther = new Table();
-		tableShop.setFillParent(true);
-		//tableOther.setFillParent(true);
-		
-		stage.addActor(tableShop);
-		//stage.addActor(tableOther);
 		
 		skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		fancySkin = new Skin(Gdx.files.internal("images/ui/fancy-skin.json"));
 		
 		// TextureRegions
-		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
-		TextureRegion upR = uiAtlas.findRegion("red"); 
-		TextureRegion upB = uiAtlas.findRegion("blue");  
-		TextureRegion down = uiAtlas.findRegion("black"); 
-		TextureRegion upG = uiAtlas.findRegion("green");  
-		TextureRegion upP = uiAtlas.findRegion("purple");  
-		TextureRegion upY = uiAtlas.findRegion("yellow");  
+		uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		TextureRegion upDam = uiAtlas.findRegion("damage"); 
+		TextureRegion upHealth = uiAtlas.findRegion("health");  
+		TextureRegion down = uiAtlas.findRegion("down"); 
+		TextureRegion upMultitarget = uiAtlas.findRegion("multitarget");
+		TextureRegion upReload = uiAtlas.findRegion("reload");  
 
 		// Styles
-		TextButtonStyle styleR = new TextButtonStyle();
-		styleR.up = new TextureRegionDrawable(upR);
-		styleR.down = new TextureRegionDrawable(down);
-		styleR.font = new BitmapFont();
+		TextButtonStyle styleDam = new TextButtonStyle();
+		styleDam.up = new TextureRegionDrawable(upDam);
+		styleDam.down = new TextureRegionDrawable(down);
+		styleDam.font = new BitmapFont();
 		
-		TextButtonStyle styleB = new TextButtonStyle();
-		styleB.up = new TextureRegionDrawable(upB);
-		styleB.down = new TextureRegionDrawable(down);
-		styleB.font = new BitmapFont();
+		TextButtonStyle styleHealth = new TextButtonStyle();
+		styleHealth.up = new TextureRegionDrawable(upHealth);
+		styleHealth.down = new TextureRegionDrawable(down);
+		styleHealth.font = new BitmapFont();
 		
-		TextButtonStyle styleG = new TextButtonStyle();
-		styleG.up = new TextureRegionDrawable(upG);
-		styleG.down = new TextureRegionDrawable(down);
-		styleG.font = new BitmapFont();
+		TextButtonStyle styleReload = new TextButtonStyle();
+		styleReload.up = new TextureRegionDrawable(upReload);
+		styleReload.down = new TextureRegionDrawable(down);
+		styleReload.font = new BitmapFont();
 		
-		TextButtonStyle styleP = new TextButtonStyle();
-		styleP.up = new TextureRegionDrawable(upP);
-		styleP.down = new TextureRegionDrawable(down);
-		styleP.font = new BitmapFont();
+		TextButtonStyle styleMT = new TextButtonStyle();
+		styleMT.up = new TextureRegionDrawable(upMultitarget);
+		styleMT.down = new TextureRegionDrawable(down);
+		styleMT.font = new BitmapFont();
 		
-		TextButtonStyle styleY = new TextButtonStyle();
-		styleY.up = new TextureRegionDrawable(upY);
-		styleY.down = new TextureRegionDrawable(down);
-		styleY.font = new BitmapFont();
-		
-		TextButtonStyle styleQ = new TextButtonStyle();
-		styleQ.up = new TextureRegionDrawable(down);
-		styleQ.down = new TextureRegionDrawable(down);
-		styleQ.font = new BitmapFont();
+		TextButtonStyle styleDown = new TextButtonStyle();
+		styleDown.up = new TextureRegionDrawable(down);
+		styleDown.down = new TextureRegionDrawable(down);
+		styleDown.font = new BitmapFont();
 		
 		// Get preferences. Updates cost, attributes (attack, damage, health, etc).
 		getPreferences();
@@ -144,7 +132,7 @@ public class ShopScreen extends AbstractScreen{
 		// GUI SHIT
 		lblRinfo = new Label("", skin);
 		lblRcost = new Label("", skin);
-		btnReload = new TextButton("Upgrade Reload", styleG);
+		btnReload = new TextButton("Upgrade Reload", styleReload);
 		btnReload.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -161,7 +149,7 @@ public class ShopScreen extends AbstractScreen{
 		});
 		lblAinfo = new Label("", skin);
 		lblAcost = new Label("", skin);
-		btnAttack = new TextButton("Upgrade Damage", styleR);
+		btnAttack = new TextButton("Upgrade Damage", styleDam);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -179,7 +167,7 @@ public class ShopScreen extends AbstractScreen{
 		
 		lblHinfo = new Label("", skin);
 		lblHcost = new Label("", skin);
-		btnHealth = new TextButton("Upgrade health", styleB);
+		btnHealth = new TextButton("Upgrade health", styleHealth);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -213,7 +201,7 @@ public class ShopScreen extends AbstractScreen{
 		*/
 		lblMTinfo = new Label("", skin);
 		lblMTcost = new Label("", skin);
-		btnMultiTarget = new TextButton("Upgrade Targetting", styleP);
+		btnMultiTarget = new TextButton("Upgrade Targetting", styleMT);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -228,7 +216,7 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		btnQuit = new TextButton("Leave Shop", styleQ);
+		btnQuit = new TextButton("Leave Shop", styleDown);
 		btnQuit.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -240,37 +228,6 @@ public class ShopScreen extends AbstractScreen{
 		lblMoney = new Label("", fancySkin, "gold");
 		lblDistance = new Label("", skin);
 		lblScore = new Label("", skin);
-		
-		tableShop.add(lblMoney);
-		tableShop.row();
-		tableShop.add(lblDistance);
-		tableShop.row();
-		tableShop.add(lblScore);
-		tableShop.row();
-		
-		tableShop.add(btnReload);
-		tableShop.add(lblRinfo);
-		tableShop.add(lblRcost);
-		tableShop.row();
-		tableShop.add(btnAttack);
-		tableShop.add(lblAinfo);
-		tableShop.add(lblAcost);
-		tableShop.row();
-		tableShop.add(btnHealth);
-		tableShop.add(lblHinfo);
-		tableShop.add(lblHcost);
-		tableShop.row();
-		/**
-		table.add(btnMoney);
-		table.add(lblMinfo);
-		table.add(btnMcost);
-		table.row();
-		*/
-		tableShop.add(btnMultiTarget);
-		tableShop.add(lblMTinfo);
-		tableShop.add(lblMTcost);
-		tableShop.row();
-		tableShop.add(btnQuit);
 	}
 	
 	public void render(float delta) {
@@ -282,6 +239,59 @@ public class ShopScreen extends AbstractScreen{
 		
 		shopMusicOgg.stop();
 	}
+	
+    @Override
+    public void resize( int width, int height )  {
+    	super.resize(width, height);
+     
+    	// UI Buttons for upgrade should all be same size
+    	int btnWidth = uiAtlas.findRegion("damage").getRegionWidth();
+    	int btnHeight = uiAtlas.findRegion("damage").getRegionHeight();
+    	
+    	if (height < 570) {    	
+    		btnWidth /= 2f;
+    		btnHeight /= 2f;
+    		lblMoney = new Label("", skin);
+    	} else {
+    		lblMoney = new Label("", fancySkin, "gold");
+    	}
+    	updateLabels();
+
+    		
+    	
+    	table.add(lblMoney);//.height(btnHeight).center();
+    	table.row();
+    	table.add(lblDistance);
+    	table.row();
+		table.add(lblScore);
+		table.row();
+		
+		table.add(btnReload).width(btnWidth).height(btnHeight);;
+		table.add(lblRinfo);
+		table.add(lblRcost);
+		table.row();
+		table.add(btnAttack).width(btnWidth).height(btnHeight);;
+		table.add(lblAinfo);
+		table.add(lblAcost);
+		table.row();
+		table.add(btnHealth).width(btnWidth).height(btnHeight);;
+		table.add(lblHinfo);
+		table.add(lblHcost);
+		table.row();
+		/**
+		table.add(btnMoney);
+		table.add(lblMinfo);
+		table.add(btnMcost);
+		table.row();
+		*/
+		table.add(btnMultiTarget).width(btnWidth).height(btnHeight);;
+		table.add(lblMTinfo);
+		table.add(lblMTcost);
+		table.row();
+		table.add(btnQuit).width(btnWidth).height(btnHeight);;
+		
+		table.invalidate();
+    }
 	
 	/**
 	 * Updates cost, attributes (attack, damage, health, etc.) with values from preferences

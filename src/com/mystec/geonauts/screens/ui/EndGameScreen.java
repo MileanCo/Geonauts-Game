@@ -9,4 +9,16 @@ public class EndGameScreen extends AbstractScreen {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

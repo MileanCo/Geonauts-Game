@@ -20,37 +20,32 @@ public class OptionsScreen extends AbstractScreen{
 	private TextButton btnDisableMusic;
 	private TextButton btnGoBack;
 	
-	private Table table;
+	private TextureAtlas uiAtlas;
+	private TextButtonStyle style;
+	
 	private Label lblReset;
 	
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
 	
 	public OptionsScreen(Geonauts game) {
-		super(game);
-		
-		//Table
-		table = new Table();
-		table.setFillParent(true);
-		stage.addActor(table);
-		
+		super(game);		
 		
 		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		
 		//Texture
 		// Load textures
 		// Load textures
-		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
 		// TextureRegions
 		TextureRegion upRegion = uiAtlas.findRegion("buttonNormal");
 		TextureRegion downRegion = uiAtlas.findRegion("buttonPressed");
 
 		// Styles
-		TextButtonStyle style = new TextButtonStyle();
+		 style = new TextButtonStyle();
 		style.up = new TextureRegionDrawable(upRegion);
 		style.down = new TextureRegionDrawable(downRegion);
 		style.font = new BitmapFont();
-		style.font.setScale(2);
 		
 		//Button
 		btnReset = new TextButton("Reset Game", style);
@@ -97,19 +92,35 @@ public class OptionsScreen extends AbstractScreen{
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				goToMenu();			
 			}
-		});
-		
-		table.add(lblReset);
-		table.row();
-		table.add(btnReset);
-		table.row();
-		//table.add(btnDisableMusic);
-		table.row();
-		table.add(btnGoBack);
-		
+		});		
 		
 	}
 		
+
+    @Override
+    public void resize( int width, int height )  {
+    	super.resize(width, height);
+     
+    	
+    	int btnWidth = uiAtlas.findRegion("buttonNormal").getRegionWidth();
+    	int btnHeight = uiAtlas.findRegion("buttonNormal").getRegionHeight();
+    	
+    	if (height < 512) {    	
+    		btnWidth /= 2f;
+    		btnHeight /= 2f;
+    		style.font.setScale(1);
+    	} else {
+    		style.font.setScale(2);
+    	}
+    	
+		table.add(lblReset);
+		table.row();
+		table.add(btnReset).width(btnWidth).height(btnHeight);//.uniform().fill();
+		table.row();
+		//table.add(btnDisableMusic);
+		table.add(btnGoBack).width(btnWidth).height(btnHeight);//.uniform().fill();
+		table.invalidate();
+    }
 		
 	
 	

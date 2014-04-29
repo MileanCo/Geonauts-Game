@@ -22,8 +22,8 @@ public class Geonauts extends Game {
 		gameScreen = new GameScreen(this);
 		mainMenu = new MainMenuScreen(this);
 		shop = new ShopScreen(this);
-		credits = new CreditScreen(this);
 		options = new OptionsScreen(this);
+		credits = new CreditScreen(this);
 		
 		setScreen(mainMenu);	
 	}
