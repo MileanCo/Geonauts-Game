@@ -15,6 +15,7 @@ import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
+import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.enemies.BlueMob;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
@@ -55,14 +56,6 @@ public class World {
 	public static int NUM_CHUNKS = 2;
 	
 	
-	/** Score of the game */
-	public int score;
-	/** Money of the game */
-	public int money;
-	
-	/** How far the Hero went in this world */
-	private int distance = 0;
-	
 	/** Spawning variables */
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -90,30 +83,22 @@ public class World {
 		
 		// Get preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
-		money = prefs.getInteger("Money");
-		
 		total_upgrades = prefs.getInteger("total upgrades");
 		
 		// Make game harder based on total upgrades
-		Dwain.health = 55 + total_upgrades * 5;
+		Dwain.health = 55 + total_upgrades * 7;
+		FireMob.health = 45 + total_upgrades * 7;
+		BlueMob.health = 35 + total_upgrades * 5;
+		
 		Dwain.damage = 15 + total_upgrades * 2;
-		FireMob.health = 45 + total_upgrades * 5;
 		FireMob.damage = 10 + total_upgrades * 2;
-		BlueMob.health = 35 + total_upgrades * 2;
 		BlueMob.damage = 15 + total_upgrades * 2;
 		
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {
 			SPAWN_THRESHOLD = 250;
-		}
-		
-		System.out.println(Dwain.health);
-		System.out.println(Dwain.damage);
-		System.out.println(FireMob.health);
-		System.out.println(FireMob.damage);
-		System.out.println(SPAWN_THRESHOLD);
-		
+		}		
 	}
 	
 	/**
@@ -141,29 +126,38 @@ public class World {
 		int spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
 
+		// Dwain
 		if (spawn == 50 && total_upgrades >= 7) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
-			
+		
+		// Fire Mob
 		} else if (spawn == 51 || (spawn == 50 && total_upgrades < 7)) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);
+
+		// Blue Mob
 		} else if (spawn == 53) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new BlueMob(pos, hero));
 			enemies.add(ec);
+			
+		// Coins!
+		} else if (spawn == 54 || spawn == 55) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			anims.add(new Coin(pos, 1, hero));
 		}
 		
-		distance = (int) hero.position.x;
+		
 		
 		// Check if we need to increase spawn rate
-		if (distance % INCREASE_SPAWN_EVERY == 0 && SPAWN_THRESHOLD >= MIN_SPAWN && !changed_spawn) {
+		if (hero.getDistance() % INCREASE_SPAWN_EVERY == 0 && SPAWN_THRESHOLD >= MIN_SPAWN && !changed_spawn) {
 			SPAWN_THRESHOLD -= SPAWN_INCREASE_RATE;
 			System.out.println("increased spawn: " + SPAWN_THRESHOLD);
 			changed_spawn = true;
-		} else if (distance % INCREASE_SPAWN_EVERY != 0)
+		} else if (hero.getDistance() % INCREASE_SPAWN_EVERY != 0)
 			changed_spawn = false;
 		
 		
@@ -239,14 +233,5 @@ public class World {
 		else
 			return chunks.getFirst().getBlock(col, row);
 		
-	}
-
-
-	public int getDistance() {
-		return distance;
-	}
-
-	public int getScore() {
-		return score;
 	}
 }

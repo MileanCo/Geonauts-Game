@@ -162,14 +162,14 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Check if new score is bigger than highscore
 		int highscore = prefs.getInteger("highscore");
-		if (world.score > highscore) {
+		if (world.getHero().score > highscore) {
 			// save new highscore
-			prefs.putInteger("highscore", world.score);
+			prefs.putInteger("highscore", world.getHero().score);
 		}
 		// Check if new distance is bigger than highdistance
 		int longestDist = prefs.getInteger("highdistance");
-		if (world.getDistance() > longestDist) {
-			prefs.putInteger("highdistance", world.getDistance());
+		if (world.getHero().getDistance() > longestDist) {
+			prefs.putInteger("highdistance", world.getHero().getDistance());
 		}
 		
 		// Increase # of games played
@@ -178,20 +178,20 @@ public class GameScreen implements Screen, InputProcessor {
 		prefs.putInteger("games_played", games_played);
 		
 		// Save money
-		world.money += (world.getDistance()/2); // add distance traveled to money
-		prefs.putInteger("Money", world.money);
+		world.getHero().money += (world.getHero().getDistance()/2); // add distance traveled to money
+		prefs.putInteger("Money", world.getHero().money);
 		
 		prefs.flush();
 		
 		// Google Play Services stuff & achievements
-		game.getActionResolver().submitScore(world.score);
+		game.getActionResolver().submitScore(world.getHero().score);
 		// DISTANCE
-		if (world.getDistance() >= 200) {
+		if (world.getHero().getDistance() >= 200 && world.getHero().getDistance() < 400) {
 			game.getActionResolver().unlockAchievement(Achievement.DIST_200);
-		} else if (world.getDistance() >= 400) 
+		} else if (world.getHero().getDistance() >= 400) 
 			game.getActionResolver().unlockAchievement(Achievement.DIST_400);
 		// SCORE MORE
-		if (world.score >= (15000)) {
+		if (world.getHero().score >= (15000)) {
 			game.getActionResolver().unlockAchievement(Achievement.SCORE_MORE);
 		}
 		

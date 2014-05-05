@@ -137,6 +137,14 @@ public class Chunk {
 									"SBBBc" };
 	
 	
+	private String[] path1 = {".......CTc.......",
+							  "......CBBs.......",
+							  ".....CBBBs.......",
+							  ".CTTTBBBBs......E",
+							  "...............Cs",
+							  "..............SBs" };
+	
+	
 	/**
 	 * Determines which build to make
 	 */

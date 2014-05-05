@@ -335,8 +335,8 @@ public class ShopScreen extends AbstractScreen{
 		lblMTcost.setText("Cost: " + costMT);
 		
 		lblMoney.setText("Money $" + money);
-		lblDistance.setText("You travelled " + game.getGameScreen().getWorld().getDistance() + "m");
-		lblScore.setText("Your score was " + game.getGameScreen().getWorld().getScore());
+		lblDistance.setText("You travelled " + game.getGameScreen().getWorld().getHero().getDistance() + "m");
+		lblScore.setText("Your score was " + game.getGameScreen().getWorld().getHero().getScore());
 	}
 
 	public void show() {

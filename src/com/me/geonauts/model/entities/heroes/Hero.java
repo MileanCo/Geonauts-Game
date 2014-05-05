@@ -52,6 +52,13 @@ public abstract class Hero extends Entity {
 	// Targetting stuff
 	protected LinkedList<Target> targets;
 	private int MAX_TARGETS;
+	
+	/** Money of the game */
+	public int money;
+	/** Score of the game */
+	public int score;
+	/** How far the Hero went in this world */
+	private int distance = 0;
 
 	
 	/**
@@ -77,6 +84,7 @@ public abstract class Hero extends Entity {
 		// Load preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		MAX_TARGETS = prefs.getInteger("max targets");
+		money = prefs.getInteger("Money");
 		
 		// Calculate reload
 		int reloads = prefs.getInteger("Reload");
@@ -135,6 +143,9 @@ public abstract class Hero extends Entity {
 			acceleration.x = SPEED;
 			acceleration.y = (float) (SPEED * angle);
 		}
+		
+		// Set distance
+		distance = (int) position.x;
 		
 		// Increase speed over time
 		MAX_VEL.x += delta * World.SPEED_INCREMENT;
@@ -198,6 +209,14 @@ public abstract class Hero extends Entity {
 
 	public int getDamage() {
 		return damage;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public int getDistance() {
+		return distance;
 	}
 	
 }

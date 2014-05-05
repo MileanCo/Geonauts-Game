@@ -1,12 +1,15 @@
 package com.me.geonauts.model.entities.anims;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.Entity;
 
 public abstract class AbstractAnimation extends Entity {
 
-	private float		stateTime = 0;
+	protected float		stateTime = 0;
+	
+	protected boolean alive = true;
 	
 	public AbstractAnimation(Vector2 pos, Vector2 SIZE) {
 		super(pos, SIZE);
@@ -15,6 +18,10 @@ public abstract class AbstractAnimation extends Entity {
 	
 	public void update(float delta) {
 		stateTime += delta;
+		
+		if (getAnimation().isAnimationFinished(stateTime))
+			alive = false;
+		
 	}
 	
 	
@@ -24,8 +31,9 @@ public abstract class AbstractAnimation extends Entity {
 	
 	public abstract Animation getAnimation();
 	
-	public boolean isAnimationFinished() {
-		return getAnimation().isAnimationFinished(stateTime);
+	public boolean isAlive() {
+		return alive;
 	}
 
+	public abstract TextureRegion getKeyFrame();
 }

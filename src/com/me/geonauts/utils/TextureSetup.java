@@ -28,6 +28,7 @@ public class TextureSetup {
 		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_10", ROOT_DIR + "textures/explosions", "explosion_10.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_11", ROOT_DIR + "textures/explosions", "explosion_11.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/hit", ROOT_DIR + "textures/explosions", "hit.pack");
+		TexturePacker2.process(ASSET_FOLDER + "animations/coins", ROOT_DIR + "textures/misc", "coins.pack");
 		
 		// enemies
 		TexturePacker2.process(ASSET_FOLDER + "enemies", ROOT_DIR + "textures/enemies", "enemies.pack");

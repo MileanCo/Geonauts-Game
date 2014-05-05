@@ -29,6 +29,7 @@ import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
+import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
@@ -57,7 +58,8 @@ public class WorldRenderer {
 	public static final int WIDTH = (int) CAMERA_WIDTH;
 	public static final int HEIGHT = (int) CAMERA_HEIGHT;
 	
-	private static final float EXPLOSION_DURATION = 0.03f; //seconds
+	private static final float EXPLOSION_DURATION = 0.03f; //seconds b/t frames
+	private static final float COIN_SPIN_DURATION = 0.10f;
 	
 	private Random randomGen = new Random();
 	private World world;
@@ -167,6 +169,7 @@ public class WorldRenderer {
 		TextureAtlas explosion_10Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_10.pack"));
 		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_11.pack"));
 		TextureAtlas explosionHitAtlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/hit.pack"));
+		TextureAtlas coinsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/coins.pack"));
 		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
 		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
 		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
@@ -271,32 +274,39 @@ public class WorldRenderer {
 		// Load animations
 		//hit
 		TextureRegion[] explosionHitFrames = new TextureRegion[8];
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < explosionHitFrames.length; i++) {
 			explosionHitFrames[i] = explosionHitAtlas.findRegion("hit", i);
 		}
 		ExplosionHit.anim =  new Animation(EXPLOSION_DURATION, explosionHitFrames);
 		
 		// Explosion 06
 		TextureRegion[] explosion_06Frames = new TextureRegion[31];
-		for (int i = 0; i < 31; i++) {
+		for (int i = 0; i < explosion_06Frames.length; i++) {
 			explosion_06Frames[i] = explosion_06Atlas.findRegion("expl_06", i);
 		}
 		Explosion06.anim =  new Animation(EXPLOSION_DURATION, explosion_06Frames);
 		
 		// Explosion 10
 		TextureRegion[] explosion_10Frames = new TextureRegion[38];
-		for (int i = 0; i < 38; i++) {
+		for (int i = 0; i < explosion_10Frames.length; i++) {
 			explosion_10Frames[i] = explosion_10Atlas.findRegion("expl", i);
 		}
 		Explosion10.anim =  new Animation(EXPLOSION_DURATION, explosion_10Frames);
 		
 		// explosion 11
 		TextureRegion[] explosion_11Frames = new TextureRegion[30];
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < explosion_11Frames.length; i++) {
 			explosion_11Frames[i] = explosion_11Atlas.findRegion("expl_11", i);
 		}
 		Explosion11.anim =  new Animation(EXPLOSION_DURATION, explosion_11Frames);
 
+		//hit
+		TextureRegion[] coinFrames = new TextureRegion[9];
+		for (int i = 0; i < coinFrames.length; i++) {
+			coinFrames[i] = coinsAtlas.findRegion("goldCoin", i+1);
+		}
+		Coin.anim =  new Animation(COIN_SPIN_DURATION, coinFrames);
+		//Coin.anim.setPlayMode(Animation.LOOP);
 	}
 	
 	public void show() {
@@ -422,7 +432,7 @@ public class WorldRenderer {
 			
 			// Draw texts
 			font_fipps_small.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-			font_fipps_small.draw(spriteBatch, "Score: " + world.score, 
+			font_fipps_small.draw(spriteBatch, "Score: " + world.getHero().score, 
 					cam.position.x - width/2, height);
 			font_fipps_small.setColor(1.0f, 0f, 0f, 1.0f);
 			font_fipps_small.draw(spriteBatch, "Health: " + world.getHero().health, 
@@ -576,13 +586,15 @@ public class WorldRenderer {
 	 */
 	private void drawUpdateAnimation(int i, float delta) {
 		AbstractAnimation a = world.getAnimations().get(i);
-		if (a.isAnimationFinished()) {
+		
+		// Check if animation is finished, or not alive.
+		if (! a.isAlive()) {
 			world.getAnimations().remove(i);
+		
+		// Animation still going, update
 		} else {
 			a.update(delta);
-			
-			TextureRegion frame = a.getAnimation().getKeyFrame(a.getStateTime(), false);
-			drawEntity(a, frame);
+			drawEntity(a, a.getKeyFrame());
 		}
 	}
 	

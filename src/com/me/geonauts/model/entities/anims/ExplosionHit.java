@@ -1,6 +1,7 @@
 package com.me.geonauts.model.entities.anims;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class ExplosionHit extends AbstractAnimation {
@@ -21,6 +22,9 @@ public class ExplosionHit extends AbstractAnimation {
 	}
 	
 	
-	
+	@Override
+	public TextureRegion getKeyFrame() {
+		return anim.getKeyFrame(stateTime, false);
+	}
 
 }
