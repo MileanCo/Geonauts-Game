@@ -77,7 +77,14 @@ public abstract class Hero extends Entity {
 		// Load preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		MAX_TARGETS = prefs.getInteger("max targets");
-		reloadTime = Math.pow(prefs.getInteger("Reload"), -1);
+		
+		// Calculate reload
+		int reloads = prefs.getInteger("Reload");
+		if (reloads <= 4) 
+			reloadTime = (1.2f - reloads * 0.2f);
+		else 
+			reloadTime = (1f / reloads);
+		
 		this.health = health + prefs.getInteger("Health") * 50;
 		damage = 30 + prefs.getInteger("Attack") * 10;
 		

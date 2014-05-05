@@ -1,6 +1,6 @@
 package com.me.geonauts.model;
 
-public class DesktopInterface implements GoogleInterface {
+public class DesktopInterface implements ActionResolver {
 
 	@Override
 	public void Login() {
@@ -13,7 +13,7 @@ public class DesktopInterface implements GoogleInterface {
 	}
 
 	@Override
-	public boolean getSignedIn() {
+	public boolean isSignedIn() {
 		System.out.println("Desktop: getSignIn()");
 		return false;
 	}
@@ -23,13 +23,31 @@ public class DesktopInterface implements GoogleInterface {
 	}
 
 	@Override
-	public void getScores() {
+	public void showLeaderboard() {
 		System.out.println("Desktop: getScores()");
 	}
 
 	@Override
 	public void getScoresData() {
 		System.out.println("Desktop: getScoresData()");
+	}
+
+	@Override
+	public void unlockAchievement(Achievement a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showAchievements() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void incrementAchievement(Achievement a, int value) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

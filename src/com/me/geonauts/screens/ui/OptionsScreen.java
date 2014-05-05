@@ -45,7 +45,9 @@ public class OptionsScreen extends AbstractScreen{
 		 style = new TextButtonStyle();
 		style.up = new TextureRegionDrawable(upRegion);
 		style.down = new TextureRegionDrawable(downRegion);
-		style.font = new BitmapFont();
+		style.font = new BitmapFont(
+				Gdx.files.internal("fonts/regular.fnt"),
+				Gdx.files.internal("fonts/regular.png"), false);
 		
 		//Button
 		btnReset = new TextButton("Reset Game", style);
@@ -108,9 +110,9 @@ public class OptionsScreen extends AbstractScreen{
     	if (height < 512) {    	
     		btnWidth /= 2f;
     		btnHeight /= 2f;
-    		style.font.setScale(1);
+    		style.font.setScale(0.5f);
     	} else {
-    		style.font.setScale(2);
+    		style.font.setScale(1);
     	}
     	
 		table.add(lblReset);

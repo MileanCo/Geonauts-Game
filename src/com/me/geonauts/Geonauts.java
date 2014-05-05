@@ -1,7 +1,7 @@
 package com.me.geonauts;
 
 import com.badlogic.gdx.Game;
-import com.me.geonauts.model.GoogleInterface;
+import com.me.geonauts.model.ActionResolver;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.screens.ui.CreditScreen;
 import com.me.geonauts.screens.ui.MainMenuScreen;
@@ -16,13 +16,12 @@ public class Geonauts extends Game {
 	private CreditScreen credits;
 	private OptionsScreen options;
 	
-	private GoogleInterface platformInterface;
-
-
-	public Geonauts (GoogleInterface aInterface){
-		platformInterface = aInterface;
+	private ActionResolver actionResolver;
+	
+	public Geonauts (ActionResolver aResolver){
+		actionResolver = aResolver;
 		
-		platformInterface.Login();
+		actionResolver.Login();
 	}
 
 
@@ -38,6 +37,11 @@ public class Geonauts extends Game {
 		setScreen(mainMenu);	
 	}
 	// SET SCREEN METHOD IS EXTENDED BY GAME
+	
+
+	public ActionResolver getActionResolver() {
+		return actionResolver;
+	}
 	
 	public MainMenuScreen getMainMenuScreen() {
 		return mainMenu;

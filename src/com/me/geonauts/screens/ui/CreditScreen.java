@@ -39,8 +39,9 @@ public class CreditScreen extends AbstractScreen{
 		TextButtonStyle styleC = new TextButtonStyle();
 		styleC.up = new TextureRegionDrawable(upCredits);
 		styleC.down = new TextureRegionDrawable(downCredits);
-		styleC.font = new BitmapFont();
-		styleC.font.setScale(2);
+		styleC.font = new BitmapFont(
+				Gdx.files.internal("fonts/regular.fnt"),
+				Gdx.files.internal("fonts/regular.png"), false);
 		
 		//Button
 		btnCredit = new TextButton("Game development: Joel Stenkvist \n"

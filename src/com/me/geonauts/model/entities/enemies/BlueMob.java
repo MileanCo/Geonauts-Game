@@ -9,7 +9,7 @@ public class BlueMob extends AbstractEnemy {
 
 	
 	// Rotation stuff
-	public float ROTATION_SPEED = 0.4f; // angles per second??
+	public float ROTATION_SPEED = 0.6f; // angles per second??
 	private float PITCH;
 	
 
@@ -18,7 +18,7 @@ public class BlueMob extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((39/64f), (39/60f));
 	public static int health;
 	public static int damage;
-	private static int value = 15;
+	private static int value = 20;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 1;

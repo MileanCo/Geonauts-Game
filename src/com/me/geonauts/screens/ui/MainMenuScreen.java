@@ -25,27 +25,25 @@ import com.me.geonauts.Geonauts;
  */
 
 public class MainMenuScreen extends AbstractScreen {
-	//private Screen shopScreen;
-	private Screen creditScreen;
-	//private Screen optionsScreen;
-
 	// Strings for mainmenu
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 	private static final String TITLE = "G E O N A U T S";
 
 	
 	// Buttons
-	private Vector2 BTN_SIZE = new Vector2(3, 1);
 	private TextButton btnNewGame;
 	//private TextButton btnShop;
 	private TextButton btnOptions;
 	private TextButton btnCredits;
+	private TextButton btnLeaderboards;
+	private TextButton btnAchievements;
 	private TextButton btnQuit;
 	private TextButtonStyle style;
 	
 	private TextureAtlas uiAtlas;
 	
 	// Labels
+	private Label lblInfo;
 	private Label lblTitle;
 	private Label lblScore;
 	private Label lblDistance;
@@ -83,12 +81,15 @@ public class MainMenuScreen extends AbstractScreen {
 		style = new TextButtonStyle();
 		style.up = new TextureRegionDrawable(upRegion);
 		style.down = new TextureRegionDrawable(downRegion);
-		style.font = new BitmapFont();
+		style.font = new BitmapFont(
+				Gdx.files.internal("fonts/regular.fnt"),
+				Gdx.files.internal("fonts/regular.png"), false);
 
 		// Labels
 		lblTitle = new Label(TITLE, fancySkin, "gold");
 		lblScore = new Label("High Score: " + highscore, skin);
-		lblDistance = new Label("Furhtest Distance: " + highdistance + " m", skin);
+		lblDistance = new Label("Furthest Distance: " + highdistance + " m", skin);
+		lblInfo = new Label("Google Play - ", skin);
 		
 		if (prefs.getInteger("games_played") == 0){
 			btnNewGame = new TextButton("New Game", style);
@@ -134,6 +135,29 @@ public class MainMenuScreen extends AbstractScreen {
 				credit();
 			}
 		});
+		
+		btnLeaderboards = new TextButton("Leaderboards", style);
+		btnLeaderboards.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.log("my app", "Released");
+				showLeaderboards();
+			}
+		});
+		
+		btnAchievements = new TextButton("Achievements", style);
+		btnAchievements.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.log("my app", "Released");
+				showAchievements();
+			}
+		});
+		
 		btnQuit = new TextButton("Quit", style);
 		btnQuit.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -181,17 +205,21 @@ public class MainMenuScreen extends AbstractScreen {
     	if (height < 512) {    	
     		btnWidth /= 2f;
     		btnHeight /= 2f;
-    		style.font.setScale(1);
+    		style.font.setScale(0.5f);
     	} else {
-    		style.font.setScale(2);
+    		style.font.setScale(1);
     	}
+    	table.center();
     	table.add(lblTitle);
 		table.row();
 		table.add(btnNewGame).width(btnWidth).height(btnHeight);
+		table.add(lblInfo);
 		table.row();
 		table.add(btnCredits).width(btnWidth).height(btnHeight);
+		table.add(btnLeaderboards).width(btnWidth).height(btnHeight);
 		table.row();
 		table.add(btnOptions).width(btnWidth).height(btnHeight);
+		table.add(btnAchievements).width(btnWidth).height(btnHeight);
 		table.row();
 		table.add(btnQuit).width(btnWidth).height(btnHeight);
 		table.row();
@@ -202,6 +230,7 @@ public class MainMenuScreen extends AbstractScreen {
 		
 		table.invalidate();   
     }
+    
     
 	
 
@@ -253,5 +282,12 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	private void options() {
 		game.setScreen(game.getOptions());
+	}
+	
+	private void showLeaderboards() {
+		game.getActionResolver().showLeaderboard();
+	}
+	private void showAchievements() {
+		game.getActionResolver().showAchievements();
 	}
 }

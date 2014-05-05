@@ -64,7 +64,7 @@ public class World {
 	private int distance = 0;
 	
 	/** Spawning variables */
-	private int SPAWN_THRESHOLD = 500;
+	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
 	private int INCREASE_SPAWN_EVERY = 30; //units
 	private int SPAWN_INCREASE_RATE = 25;

@@ -96,9 +96,12 @@ public class WorldRenderer {
 	// Fonts
 	protected BitmapFont font_fipps_small;
 	protected BitmapFont font_fipps;
-	public float HELP_MESSAGE_TIME = 4; //seconds
-	private String HELP_MESSAGE_ANDROID = "<-- Tap on left to fly\n\nTap on enemies to shoot -- > \n";
-	private String HELP_MESSAGE_DESKTOP = "Pres Z to fly\n\n Click on enemies to shoot\n";
+	protected BitmapFont font_reg;
+	
+	private static final int NUM_GAMES_HELP = 3;
+	public float HELP_MESSAGE_TIME = 6; //seconds
+	private String HELP_MESSAGE_ANDROID = "<-- TAP on LEFT to FLY\n\nTAP on ENEMIES ONCE to TARGET -- > \n\n \n\n It's a '2-thumb' game";
+	private String HELP_MESSAGE_DESKTOP = "Press Z to fly\n\n Click on enemies to shoot\n";
 	
 	public WorldRenderer() {
 		this(null);
@@ -119,6 +122,10 @@ public class WorldRenderer {
 		this.font_fipps = new BitmapFont(
 				Gdx.files.internal("fonts/fipps/fipps_big.fnt"),
 				Gdx.files.internal("fonts/fipps/fipps_big.png"), false);
+		
+		this.font_reg = new BitmapFont(
+				Gdx.files.internal("fonts/regular.fnt"),
+				Gdx.files.internal("fonts/regular.png"), false);
 		//this.font_fipps.setScale(0.75f);
 		
 		if (Gdx.app.getType().equals(ApplicationType.Android)) {
@@ -179,8 +186,8 @@ public class WorldRenderer {
 		
 		backgroundSpace1 = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(backgroundTextures.get("stars_white")), new Vector2(0.2f, 0), new Vector2(0, 0), true),
-		           new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosXHiRange(), getRandPosY()), new Vector2(2048, 0), false, true),
-		           new ParallaxLayer(planetAtlas.findRegion("planet_green"), new Vector2(0.3f,0), new Vector2(getRandPosXLowRange(), getRandPosY()), new Vector2(1024, 0), false, true),
+		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosXHiRange(), getRandPosY()), new Vector2(2048, 0), false, true),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_green"), new Vector2(0.3f,0), new Vector2(getRandPosXLowRange(), getRandPosY()), new Vector2(2048, 0), false, true),
 		      }, width, height, 0.5f, this);
 		
 		backgroundSpace2 = new ParallaxBackground(new ParallaxLayer[] {
@@ -191,7 +198,7 @@ public class WorldRenderer {
 		
 		backgroundSpace3 = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(backgroundTextures.get("stars_yellow")), new Vector2(0.25f, 0), new Vector2(0, 0), true),
-		           new ParallaxLayer(planetAtlas.findRegion("planet_yellow"), new Vector2(0.5f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1600, 0), false, true),
+		           new ParallaxLayer(planetAtlas.findRegion("planet_yellow"), new Vector2(0.5f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1800, 0), false, true),
 		           //new ParallaxLayer(planetAtlas.findRegion("planet_blue"), new Vector2(0.4f, 0), new Vector2(getRandPosX(), getRandPosY()), new Vector2(1024, 0), false, true),		          
 		      }, width, height, 0.5f, this);
 		
@@ -296,7 +303,7 @@ public class WorldRenderer {
 		// Check preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		
-		if (prefs.getInteger("games_played") <= 3) {
+		if (prefs.getInteger("games_played") <= NUM_GAMES_HELP) {
 			HELP_MESSAGE_TIME = 4f; // seconds
 		} else {
 			HELP_MESSAGE_TIME = -1f; //-1 means off
@@ -425,11 +432,11 @@ public class WorldRenderer {
 			// draw help message in beginning
 			if (HELP_MESSAGE_TIME > 0) {
 				if (android) {
-					font_fipps.drawMultiLine(spriteBatch, HELP_MESSAGE_ANDROID, 
-							cam.position.x - width/3, height/2 );
+					font_reg.drawMultiLine(spriteBatch, HELP_MESSAGE_ANDROID, 
+							cam.position.x - width/3, height/1.5f );
 				} else 
-					font_fipps.drawMultiLine(spriteBatch, HELP_MESSAGE_DESKTOP, 
-							cam.position.x - width/3, height/2 );
+					font_reg.drawMultiLine(spriteBatch, HELP_MESSAGE_DESKTOP, 
+							cam.position.x - width/3, height/1.5f );
 				
 				HELP_MESSAGE_TIME -= delta;
 			}

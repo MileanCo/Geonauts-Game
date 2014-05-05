@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.geonauts.Geonauts;
+import com.me.geonauts.model.Achievement;
 
 
 public class ShopScreen extends AbstractScreen{	
@@ -222,7 +223,7 @@ public class ShopScreen extends AbstractScreen{
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				quit();
+				quitAndSave();
 			}
 		});
 		lblMoney = new Label("", fancySkin, "gold");
@@ -320,7 +321,14 @@ public class ShopScreen extends AbstractScreen{
 		lblAinfo.setText("Current damage: " + (30 + attack * 10));
 		lblAcost.setText("Cost: " + costA);
 		
-		lblRinfo.setText("Current reload time: " + (double) Math.pow(reload, -1) + "s ");
+		// Calculate reloadTime
+		float reloadTime;
+		if (reload <= 4) 
+			reloadTime = (1.2f - reload * 0.2f);
+		else 
+			reloadTime = (1f / reload);
+		
+		lblRinfo.setText("Current reload time: " + (Math.round(reloadTime*100.0)/100.0) + "s ");
 		lblRcost.setText("Cost: " + costR);
 		
 		lblMTinfo.setText("Max Targets: " + multitarget);
@@ -340,7 +348,8 @@ public class ShopScreen extends AbstractScreen{
 		shopMusicOgg.play();
 	}
 	
-	public void quit() {
+	public void quitAndSave() {
+		// Save prefs
 		prefs.putInteger("Reload", reload);
 		prefs.putInteger("Attack", attack);
 		prefs.putInteger("Health", health);
@@ -350,6 +359,14 @@ public class ShopScreen extends AbstractScreen{
 		
 		int total = reload + attack + health + multitarget;
 		prefs.putInteger("total upgrades", total);
+		
+		// Achievements
+		if (total-5 >= 15) {
+			game.getActionResolver().unlockAchievement(Achievement.UPGRADE_FRENZY);
+		}
+		if (multitarget >= 5) {
+			game.getActionResolver().unlockAchievement(Achievement.ALL_THE_TARGETS);
+		}
 		
 		prefs.flush();
 	

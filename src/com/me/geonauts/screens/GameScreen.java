@@ -15,6 +15,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
+import com.me.geonauts.model.Achievement;
 import com.me.geonauts.model.World;
 import com.me.geonauts.view.WorldRenderer;
 
@@ -177,10 +178,31 @@ public class GameScreen implements Screen, InputProcessor {
 		prefs.putInteger("games_played", games_played);
 		
 		// Save money
-		//int currMoney = prefs.getInteger("Money");
+		world.money += (world.getDistance()/2); // add distance traveled to money
 		prefs.putInteger("Money", world.money);
 		
 		prefs.flush();
+		
+		// Google Play Services stuff & achievements
+		game.getActionResolver().submitScore(world.score);
+		// DISTANCE
+		if (world.getDistance() >= 200) {
+			game.getActionResolver().unlockAchievement(Achievement.DIST_200);
+		} else if (world.getDistance() >= 400) 
+			game.getActionResolver().unlockAchievement(Achievement.DIST_400);
+		// SCORE MORE
+		if (world.score >= (15000)) {
+			game.getActionResolver().unlockAchievement(Achievement.SCORE_MORE);
+		}
+		
+		if (games_played <= 10) {
+			game.getActionResolver().incrementAchievement(Achievement.NEW_PILOT, 1);
+		}
+		
+		
+		
+		
+		
 		
 	}
 
