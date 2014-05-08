@@ -7,12 +7,12 @@ import com.me.geonauts.model.entities.heroes.Hero;
 
 public class Coin extends AbstractAnimation {
 
-	private static Vector2 SIZE = new Vector2((32/64f), (32/60f));
+	private static Vector2 SIZE = new Vector2(1.5f*(32/64f), 1.5f*(32/60f));
 	
 	public static Animation anim;
 	private Hero hero;
 	
-	private int value = 25;
+	public static final int value = 25;
 	
 	public Coin(Vector2 pos, float scl, Hero h) {
 		super(pos, SIZE.cpy().scl(scl));		
@@ -34,6 +34,7 @@ public class Coin extends AbstractAnimation {
 		if (this.getBounds().overlaps(hero.getBounds()) && isAlive() ) {
 			hero.money += value;
 			hero.score += value * 5;
+			hero.coinsCollected++;
 			alive = false;
 		}
 	}

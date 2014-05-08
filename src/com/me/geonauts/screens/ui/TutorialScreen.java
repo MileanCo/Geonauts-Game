@@ -7,40 +7,46 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.geonauts.Geonauts;
 
-public class OptionsScreen extends AbstractScreen{
+public class TutorialScreen  extends AbstractScreen {
 	private TextButton btnReset;
-	private TextButton btnDisableMusic;
 	private TextButton btnGoBack;
 	
 	private TextureAtlas uiAtlas;
 	private TextButtonStyle style;
 	
-	private Label lblReset;
+	private Image imgFly;
+	private Image imgTarget;
+	private Image imgWrap;
+	
+	private Label lblInfo;
 	
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
 	
-	public OptionsScreen(Geonauts game) {
+	public TutorialScreen(Geonauts game) {
 		super(game);		
 		
 		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		
 		//Texture
 		// Load textures
-		// Load textures
 		uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
 		// TextureRegions
 		TextureRegion upRegion = uiAtlas.findRegion("buttonNormal");
 		TextureRegion downRegion = uiAtlas.findRegion("buttonPressed");
-
+		
+		imgFly = new Image(uiAtlas.findRegion("fly"));
+		imgTarget = new Image(uiAtlas.findRegion("target"));
+		imgWrap = new Image(uiAtlas.findRegion("wrap"));
+		
 		// Styles
 		style = new TextButtonStyle();
 		style.up = new TextureRegionDrawable(upRegion);
@@ -49,49 +55,6 @@ public class OptionsScreen extends AbstractScreen{
 				Gdx.files.internal("fonts/regular.fnt"),
 				Gdx.files.internal("fonts/regular.png"), false);
 		
-		//Button
-		btnReset = new TextButton("Reset Game", style);
-		btnReset.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				prefs.putInteger("Reload", 1);
-				prefs.putInteger("Attack", 1);
-				prefs.putInteger("Health", 1);
-				prefs.putInteger("Moneyx", 1);
-				prefs.putInteger("max targets", 1);
-				prefs.putInteger("Money", 200);
-				prefs.putInteger("total upgrades", 5);
-				prefs.flush();
-				
-			}
-		});
-		lblReset = new Label("Reset all game upgrades", skin);
-		boolean music = prefs.getBoolean("play-music");
-		if (music) 
-			btnDisableMusic = new TextButton("Disable Sound", style);
-		else
-			btnDisableMusic = new TextButton("Enable Sound", style);
-		
-		btnDisableMusic.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				boolean music = prefs.getBoolean("play-music");
-				// If music enabled, disable.
-				if (music) {
-					prefs.putBoolean("play-music", false);
-					btnDisableMusic.setText("Enable Sound");
-				} else {
-					prefs.putBoolean("play-music", true);
-					btnDisableMusic.setText("Disable Sound");
-				}
-				prefs.flush();
-				
-			}
-		});
 
 		btnGoBack = new TextButton("Return", style);
 		btnGoBack.addListener(new InputListener() {
@@ -122,14 +85,15 @@ public class OptionsScreen extends AbstractScreen{
     		style.font.setScale(1);
     	}
     	
-		table.add(lblReset);
-		table.row();
-		table.add(btnReset).width(btnWidth).height(btnHeight);//.uniform().fill();
-		table.row();
-		table.add(btnDisableMusic);
-		table.row();
+		
+    	table.add(imgTarget);
+    	table.row();
+    	table.add(imgWrap);
+    	
+    	table.add(imgFly);
+    	table.row();
 		table.add(btnGoBack).width(btnWidth).height(btnHeight);//.uniform().fill();
-		table.invalidate();
+		//table.invalidate();
     }
 		
 	

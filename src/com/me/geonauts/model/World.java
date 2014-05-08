@@ -57,6 +57,7 @@ public class World {
 	
 	
 	/** Spawning variables */
+	private int COIN_SPAWN_THRESHOLD = 300;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
 	private int INCREASE_SPAWN_EVERY = 30; //units
@@ -118,7 +119,7 @@ public class World {
 		// If hero is dying, and time spent dead is long enough, go back to menu.
 		if (hero.state == Hero.State.DYING) {
 			if (System.currentTimeMillis() - hero.getTimeDied() >= DEAD_TIME ) {
-				screen.toShopMenu();
+				screen.toEndGame();
 			}
 		}
 				
@@ -143,13 +144,16 @@ public class World {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new BlueMob(pos, hero));
 			enemies.add(ec);
-			
-		// Coins!
-		} else if (spawn == 54 || spawn == 55) {
-			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
-			anims.add(new Coin(pos, 1, hero));
 		}
-		
+			
+		spawn = randomGen.nextInt(COIN_SPAWN_THRESHOLD - 0) + 0;
+		// Spawn some Coins!
+		if (spawn == 54) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			// Dont spawn coins on blocks.
+			if (getBlock((int)pos.x, (int)pos.y) == null )
+				anims.add(new Coin(pos, 1, hero));
+		}
 		
 		
 		// Check if we need to increase spawn rate

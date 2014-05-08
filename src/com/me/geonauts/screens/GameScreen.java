@@ -37,6 +37,8 @@ public class GameScreen implements Screen, InputProcessor {
 	private Music gameMusicOgg;
 	
 	private int width, height;
+	
+	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 
 	/**
 	 * Create a new game to play!
@@ -67,8 +69,10 @@ public class GameScreen implements Screen, InputProcessor {
 		renderer.setWorld(world); // Tell the renderer about the new World.
 		renderer.show();
 		heroController = new HeroController(world);
-			
-		gameMusicOgg.play();
+		
+		boolean music = prefs.getBoolean("play-music");
+		if (music) 
+			gameMusicOgg.play();
 	}
 
 	/**
@@ -149,9 +153,17 @@ public class GameScreen implements Screen, InputProcessor {
 		game.setScreen(game.getMainMenuScreen());
 	}
 	
-	public void toShopMenu() {
+	public void toEndGame() {
 		saveGame();
-		game.setScreen(game.getShopScreen());
+		
+		// Set attributes in end game screen
+		game.getEndScreen().setMoneyEarned(world.getHero().getMoneyEarned());
+		game.getEndScreen().setDistance(world.getHero().getDistance());
+		game.getEndScreen().setEnemiesKilled(world.getHero().enemiesKilled);
+		game.getEndScreen().setScore(world.getHero().score);
+		game.getEndScreen().setCoinsCollected(world.getHero().coinsCollected);
+		
+		game.setScreen(game.getEndScreen());
 	}
 	
 	/**
@@ -198,10 +210,6 @@ public class GameScreen implements Screen, InputProcessor {
 		if (games_played <= 10) {
 			game.getActionResolver().incrementAchievement(Achievement.NEW_PILOT, 1);
 		}
-		
-		
-		
-		
 		
 		
 	}

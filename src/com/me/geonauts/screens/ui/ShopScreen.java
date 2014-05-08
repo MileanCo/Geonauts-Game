@@ -59,9 +59,6 @@ public class ShopScreen extends AbstractScreen{
 	private TextButton btnMultiTarget;
 	private Label 		lblMTinfo;
 	private Label 		lblMTcost;
-
-	private Label lblDistance;
-	private Label lblScore;
 	
 	private TextButton btnQuit;
 	
@@ -227,8 +224,6 @@ public class ShopScreen extends AbstractScreen{
 			}
 		});
 		lblMoney = new Label("", fancySkin, "gold");
-		lblDistance = new Label("", skin);
-		lblScore = new Label("", skin);
 	}
 	
 	public void render(float delta) {
@@ -261,10 +256,6 @@ public class ShopScreen extends AbstractScreen{
     		
     	
     	table.add(lblMoney);//.height(btnHeight).center();
-    	table.row();
-    	table.add(lblDistance);
-    	table.row();
-		table.add(lblScore);
 		table.row();
 		
 		table.add(btnReload).width(btnWidth).height(btnHeight);;
@@ -335,8 +326,7 @@ public class ShopScreen extends AbstractScreen{
 		lblMTcost.setText("Cost: " + costMT);
 		
 		lblMoney.setText("Money $" + money);
-		lblDistance.setText("You travelled " + game.getGameScreen().getWorld().getHero().getDistance() + "m");
-		lblScore.setText("Your score was " + game.getGameScreen().getWorld().getHero().getScore());
+		//lblScore.setText("Your score was " + game.getGameScreen().getWorld().getHero().getScore());
 	}
 
 	public void show() {
@@ -345,7 +335,9 @@ public class ShopScreen extends AbstractScreen{
 		getPreferences();
 		updateLabels();
 		
-		shopMusicOgg.play();
+		boolean music = prefs.getBoolean("play-music");
+		if (music) 
+			shopMusicOgg.play();
 	}
 	
 	public void quitAndSave() {

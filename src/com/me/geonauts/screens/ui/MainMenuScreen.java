@@ -32,7 +32,7 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	// Buttons
 	private TextButton btnNewGame;
-	//private TextButton btnShop;
+	private TextButton btnHowToPlay;
 	private TextButton btnOptions;
 	private TextButton btnCredits;
 	private TextButton btnLeaderboards;
@@ -105,16 +105,16 @@ public class MainMenuScreen extends AbstractScreen {
 				newGame();
 			}
 		});
-		/*btnShop = new TextButton("Shop", style);
-		btnShop.addListener(new InputListener(){
+		btnHowToPlay = new TextButton("Tutorial", style);
+		btnHowToPlay.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				shop();
+				tutorial();
 			}
-		});*/
+		});
 		btnOptions = new TextButton("Options", style);
 		btnOptions.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -165,13 +165,9 @@ public class MainMenuScreen extends AbstractScreen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("my app", "Released");
-				System.exit(0);
+				quit();
 			}
 		});	
-		
-
-		
-		//stage.setViewport(table.getWidth(), table.getHeight());
 	}
 
 	public void render(float delta) {
@@ -221,6 +217,8 @@ public class MainMenuScreen extends AbstractScreen {
 		table.add(btnOptions).width(btnWidth).height(btnHeight);
 		table.add(btnAchievements).width(btnWidth).height(btnHeight);
 		table.row();
+		table.add(btnHowToPlay).width(btnWidth).height(btnHeight);
+		table.row();
 		table.add(btnQuit).width(btnWidth).height(btnHeight);
 		table.row();
 		table.add(lblScore);//.maxWidth(width/2).height(maxHeight);
@@ -246,10 +244,14 @@ public class MainMenuScreen extends AbstractScreen {
 		// update menu labels
 		lblDistance.setText("Best Distance: " + highdistance + " m");
 		lblScore.setText("High Score: " + highscore);
-		
-		//oggIntro.loop();
-		if (!menuMusicOgg.isPlaying())
-			menuMusicOgg.play();
+
+		boolean music = prefs.getBoolean("play-music");
+		if (music) {
+			if (!menuMusicOgg.isPlaying())
+				menuMusicOgg.play();
+		} else {
+			menuMusicOgg.stop();
+		}
 
 	}
 
@@ -279,9 +281,19 @@ public class MainMenuScreen extends AbstractScreen {
 	private void credit() {
 		game.setScreen(game.getCreditScreen());
 	}
-	
 	private void options() {
 		game.setScreen(game.getOptions());
+	}
+	private void tutorial() {
+		game.setScreen(game.getTutorial());
+	}
+	private void quit() {
+		game.getGameScreen().dispose();
+		game.getCreditScreen().dispose();
+		game.getOptions().dispose();
+		game.getTutorial().dispose();
+		this.dispose();
+		System.exit(0);
 	}
 	
 	private void showLeaderboards() {

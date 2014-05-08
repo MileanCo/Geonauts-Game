@@ -224,6 +224,7 @@ public class EnemyController {
 			// Increase the score
 			world.getHero().score += enemy.getValue() * 10;
 			world.getHero().money += enemy.getValue();
+			world.getHero().enemiesKilled++;
 		}
 		
 		// Center explosion position to middle of enemy

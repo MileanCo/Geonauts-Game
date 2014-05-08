@@ -4,9 +4,11 @@ import com.badlogic.gdx.Game;
 import com.me.geonauts.model.ActionResolver;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.screens.ui.CreditScreen;
+import com.me.geonauts.screens.ui.EndGameScreen;
 import com.me.geonauts.screens.ui.MainMenuScreen;
 import com.me.geonauts.screens.ui.OptionsScreen;
 import com.me.geonauts.screens.ui.ShopScreen;
+import com.me.geonauts.screens.ui.TutorialScreen;
 
 public class Geonauts extends Game {
 
@@ -15,6 +17,8 @@ public class Geonauts extends Game {
 	private ShopScreen shop;
 	private CreditScreen credits;
 	private OptionsScreen options;
+	private TutorialScreen tutorial;
+	private EndGameScreen endGame;
 	
 	private ActionResolver actionResolver;
 	
@@ -33,6 +37,8 @@ public class Geonauts extends Game {
 		shop = new ShopScreen(this);
 		options = new OptionsScreen(this);
 		credits = new CreditScreen(this);
+		tutorial = new TutorialScreen(this);
+		endGame = new EndGameScreen(this);
 		
 		setScreen(mainMenu);	
 	}
@@ -57,5 +63,11 @@ public class Geonauts extends Game {
 	}
 	public OptionsScreen getOptions() {
 		return options;
+	}
+	public TutorialScreen getTutorial() {
+		return tutorial;
+	}
+	public EndGameScreen getEndScreen() {
+		return endGame;
 	}
 }

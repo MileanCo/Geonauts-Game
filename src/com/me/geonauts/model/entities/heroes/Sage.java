@@ -8,7 +8,7 @@ public class Sage extends Hero {
 	public static final float SPEED = 3.0f;	// unit per second
 	
 	// Rotation stuff
-	public static final float ROTATION_SPEED = 0.85f; // angles per second??
+	public static final float ROTATION_SPEED = 0.725f; // angles per second??
 	private static final float PITCH = 20f; 
 	
 	// Other Attributes

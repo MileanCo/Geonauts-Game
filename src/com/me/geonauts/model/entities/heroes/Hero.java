@@ -55,10 +55,17 @@ public abstract class Hero extends Entity {
 	
 	/** Money of the game */
 	public int money;
+	/** Money at the start of game */
+	private int startMoney;
+	
 	/** Score of the game */
 	public int score;
+	
 	/** How far the Hero went in this world */
 	private int distance = 0;
+	
+	public int enemiesKilled = 0;
+	public int coinsCollected = 0;
 
 	
 	/**
@@ -85,6 +92,7 @@ public abstract class Hero extends Entity {
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		MAX_TARGETS = prefs.getInteger("max targets");
 		money = prefs.getInteger("Money");
+		startMoney = money;
 		
 		// Calculate reload
 		int reloads = prefs.getInteger("Reload");
@@ -132,7 +140,7 @@ public abstract class Hero extends Entity {
 				if (state == State.FLYING) 
 					angle += ROTATION_SPEED;
 				else if ( state == State.FALLING || state == State.DYING)
-					angle -= ROTATION_SPEED / 2.25f;
+					angle -= ROTATION_SPEED / 2.0f;
 			}
 				
 			// Make sure angle isn't too big.
@@ -219,5 +227,8 @@ public abstract class Hero extends Entity {
 		return distance;
 	}
 	
+	public int getMoneyEarned() {
+		return money - startMoney;
+	}
 }
 	
