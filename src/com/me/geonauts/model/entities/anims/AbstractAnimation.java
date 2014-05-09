@@ -11,6 +11,8 @@ public abstract class AbstractAnimation extends Entity {
 	
 	protected boolean alive = true;
 	
+	protected boolean coin = false;
+	
 	public AbstractAnimation(Vector2 pos, Vector2 SIZE) {
 		super(pos, SIZE);
 	}
@@ -36,4 +38,10 @@ public abstract class AbstractAnimation extends Entity {
 	}
 
 	public abstract TextureRegion getKeyFrame();
+
+
+	public boolean isCoin() {
+		return coin;
+	}
+	
 }

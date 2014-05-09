@@ -42,11 +42,14 @@ public abstract class Hero extends Entity {
 	protected float 	PITCH;
 
 	// Other attributes
+	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	public boolean grounded;
 	public int health;
 	protected double reloadTime;
 	protected int damage;
 	
+	protected int DAMAGE_MULTIPLIER = 10 - prefs.getInteger("Reload"); // Decrease damage by # of reload upgrades
+	protected int HEALTH_MULTIPLIER = 50;
 
 	
 	// Targetting stuff
@@ -89,7 +92,6 @@ public abstract class Hero extends Entity {
 		velocity = new Vector2();
 		
 		// Load preferences
-		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		MAX_TARGETS = prefs.getInteger("max targets");
 		money = prefs.getInteger("Money");
 		startMoney = money;
@@ -101,8 +103,11 @@ public abstract class Hero extends Entity {
 		else 
 			reloadTime = (1f / reloads);
 		
-		this.health = health + prefs.getInteger("Health") * 50;
-		damage = 30 + prefs.getInteger("Attack") * 10;
+		// Make sure DAMAGE_MULTI doesnt go below 0.
+		if (DAMAGE_MULTIPLIER <= 0) DAMAGE_MULTIPLIER = 1;
+		
+		this.health = health + prefs.getInteger("Health") * HEALTH_MULTIPLIER;
+		damage = 35 + prefs.getInteger("Attack") * DAMAGE_MULTIPLIER;
 		
 		/**
 		System.out.println(MAX_TARGETS);

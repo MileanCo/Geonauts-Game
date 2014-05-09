@@ -75,16 +75,10 @@ public class ShopScreen extends AbstractScreen{
 	int multitarget;
 	int money;
 	
-	// Sound
-	private Music shopMusicOgg;
 	
 	
 	public ShopScreen(Geonauts game) {
 		super(game);
-		
-		//oggShop = Gdx.audio.newSound(Gdx.files.internal("audio/shop_music.ogg"));
-		shopMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/shop_music.ogg"));
-		shopMusicOgg.setLooping(true);
 		
 		
 		skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
@@ -233,7 +227,7 @@ public class ShopScreen extends AbstractScreen{
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
 		
-		shopMusicOgg.stop();
+		game.shopMusicOgg.stop();
 	}
 	
     @Override
@@ -334,10 +328,6 @@ public class ShopScreen extends AbstractScreen{
 		
 		getPreferences();
 		updateLabels();
-		
-		boolean music = prefs.getBoolean("play-music");
-		if (music) 
-			shopMusicOgg.play();
 	}
 	
 	public void quitAndSave() {

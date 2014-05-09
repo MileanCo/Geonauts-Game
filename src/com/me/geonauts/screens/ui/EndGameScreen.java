@@ -2,6 +2,7 @@ package com.me.geonauts.screens.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,9 +35,12 @@ public class EndGameScreen  extends AbstractScreen {
 	
 	private int moneyEarned;
 	
+
+		
+		
 	
 	public EndGameScreen(Geonauts game) {
-		super(game);		
+		super(game);	
 		
 		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
 		Skin fancySkin = new Skin(Gdx.files.internal("images/ui/fancy-skin.json"));
@@ -64,8 +68,8 @@ public class EndGameScreen  extends AbstractScreen {
 		
 		lblMoney = new Label("Money earned: ", fancySkin, "gold");
 		lblMoneyBreakdown = new Label("Money from enemies: \n money from coins: ", skin);
-		lblScore = new Label("Score: ", skin);
-		lblDistance = new Label("Distance travelled: ", skin);
+		lblScore = new Label("Score: ", fancySkin);
+		lblDistance = new Label("Distance travelled: ", fancySkin, "purple");
 		lblEnemiesKilled = new Label("Enemies killed: ", fancySkin, "red");
 		
 
@@ -98,18 +102,25 @@ public class EndGameScreen  extends AbstractScreen {
     		style.font.setScale(1);
     	}
     	
+    	
+    	
+    	//stage.addActor(imgPlanetGreen);
+    	//imgPlanetGreen.toBack();
+    	
 		table.add(lblMoney);
 		table.row();
 		table.add(lblMoneyBreakdown);
 		table.row();
 		table.add(lblEnemiesKilled); 
-		table.add(imgPlanetGreen);//.width(imgPlanetGreen.getWidth()).height(imgPlanetGreen.getHeight());
+		//table.add(imgPlanetGreen);//.width(imgPlanetGreen.getWidth()).height(imgPlanetGreen.getHeight());
 		table.row();
 		table.add(lblDistance);
 		table.row();
 		table.add(lblScore);
     	table.row();
 		table.add(btnGoBack).width(btnWidth).height(btnHeight);//.uniform().fill();
+		//table.setBackground(imgPlanetGreen);
+		
 		//table.invalidate();
     }
 		
@@ -126,6 +137,9 @@ public class EndGameScreen  extends AbstractScreen {
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 		
+		boolean music = prefs.getBoolean("play-music");
+		if (music) 
+			game.shopMusicOgg.play();
 	}
 
 	private void goToShop() {

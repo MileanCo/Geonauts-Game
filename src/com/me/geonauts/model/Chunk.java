@@ -38,6 +38,7 @@ public class Chunk {
 	
 		// System.out.println("cpos: " + pos);
 		//loadChunkFile("chunk1");
+		//();
 		newBuild();
 	}
 	
@@ -136,20 +137,38 @@ public class Chunk {
 									"SBBc.",
 									"SBBBc" };
 	
+	private String[] stairFloor2 = {"....E",
+									"...Cs",
+									"..CBs",
+									".CBBs",
+									"CBBBs" };
+
+	
 	
 	private String[] path1 = {".......CTc.......",
 							  "......CBBs.......",
 							  ".....CBBBs.......",
-							  ".CTTTBBBBs......E",
+							  ".FwwwttttF......E",
 							  "...............Cs",
-							  "..............SBs" };
+							  "...............Ss",
+							  "..............CBs" ,
+							  ".CTTTTTTTTTTTTBBs"};
+	
+	private String[] divider1 = {".......CTc.......",
+							  	"......CBBs.......",
+							  	".....CBBBs.......",
+							  	"FwwwwtttBtwwwwwwF",
+							  	"........e........",
+							  	".................",
+							  	"................." ,
+							  	"................."};
 	
 	
 	/**
 	 * Determines which build to make
 	 */
 	public void newBuild() {
-		int build = random.nextInt(6 - 1) + 1;
+		int build = random.nextInt(7 - 1) + 1;
 		
 		switch (build) {
 			case 1: 
@@ -166,6 +185,9 @@ public class Chunk {
 				break;
 			case 5:
 				build5();
+				break;
+			case 6:
+				build6();
 				break;
 		}
 	}
@@ -278,6 +300,20 @@ public class Chunk {
 		addStructure(ceilingPyramid, random.nextInt(WIDTH-ceilingPyramid[0].length() - 20) + 20);
 	}
 	
+	private void build6() {
+		reset();
+		
+		addStructure(stairFloor2, random.nextInt(10 - 0) + 0);
+		
+		addStructure(wall_ceiling51, random.nextInt(15 - 2) + 2);
+		
+		//addStructure(box33, random.nextInt(20 - 12) + 12);
+		
+		//addStructure(r51, random.nextInt(WIDTH-wall_floor51[0].length()  - 25) + 25);
+		
+		addStructure(divider1, random.nextInt(WIDTH-divider1[0].length() - 20) + 20);
+	}
+	
 	/**
 	 * Adds a new "structure", or set of Blocks, to the chunk. 
 	 * @param structure
@@ -377,6 +413,9 @@ public class Chunk {
 		// Wall
 		} else if (tile == 'W') {
 			blocks[col][row] =  new Block(new Vector2(position.x + col, row), BlockType.WALL);
+		// Wall
+		} else if (tile == 'w') {
+			blocks[col][row] =  new Block(new Vector2(position.x + col, row), BlockType.WALL_HORIZ);
 		// End Wall Top
 		} else if (tile == 'E') {
 			blocks[col][row] =  new Block(new Vector2(position.x + col, row), BlockType.WALL_END_TOP);

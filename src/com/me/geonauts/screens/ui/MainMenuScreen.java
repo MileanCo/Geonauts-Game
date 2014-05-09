@@ -91,11 +91,8 @@ public class MainMenuScreen extends AbstractScreen {
 		lblDistance = new Label("Furthest Distance: " + highdistance + " m", skin);
 		lblInfo = new Label("Google Play - ", skin);
 		
-		if (prefs.getInteger("games_played") == 0){
-			btnNewGame = new TextButton("New Game", style);
-		} else{
-			btnNewGame = new TextButton("Continue", style);
-		}
+		
+		btnNewGame = new TextButton("New Game", style);
 		btnNewGame.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -245,7 +242,12 @@ public class MainMenuScreen extends AbstractScreen {
 		lblDistance.setText("Best Distance: " + highdistance + " m");
 		lblScore.setText("High Score: " + highscore);
 
+		// Enable music if 1st time
+		if (prefs.getInteger("games_played") == 0)
+			prefs.putBoolean("play-music", true);
+		
 		boolean music = prefs.getBoolean("play-music");
+		
 		if (music) {
 			if (!menuMusicOgg.isPlaying())
 				menuMusicOgg.play();

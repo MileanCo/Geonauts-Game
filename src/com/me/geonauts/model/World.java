@@ -14,6 +14,8 @@ import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.entities.Particle;
+import com.me.geonauts.model.entities.ParticleLite;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.enemies.BlueMob;
@@ -44,6 +46,7 @@ public class World {
 	private List<MissileController> missiles;
 	private List<EnemyController> enemies;
 	private List<AbstractAnimation> anims;
+	private List<Particle> particles;
 	
 	public Random randomGen = new Random();
 	
@@ -57,7 +60,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int COIN_SPAWN_THRESHOLD = 300;
+	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
 	private int INCREASE_SPAWN_EVERY = 30; //units
@@ -78,6 +81,7 @@ public class World {
 		missiles = new ArrayList<MissileController> ();
 		anims = new ArrayList<AbstractAnimation> ();
 		enemyMissiles = new ArrayList<EnemyMissileController> ();
+		particles = new ArrayList<Particle> ();
 		
 		resetChunks();
 
@@ -164,7 +168,6 @@ public class World {
 		} else if (hero.getDistance() % INCREASE_SPAWN_EVERY != 0)
 			changed_spawn = false;
 		
-		
 
 		// WORLD RENDERER HANDLES DRAWING AND UPDATING OF ALL ENTITIES
 		
@@ -215,6 +218,10 @@ public class World {
 		return anims;
 	}
 	
+	public List<Particle> getParticles() {
+		return particles;
+	}
+
 	public Block[][] getBlocks() {
 		return chunks.getFirst().getBlocks();
 	}

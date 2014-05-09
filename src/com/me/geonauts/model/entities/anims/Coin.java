@@ -12,11 +12,12 @@ public class Coin extends AbstractAnimation {
 	public static Animation anim;
 	private Hero hero;
 	
-	public static final int value = 25;
+	public static final int value = 20;
 	
 	public Coin(Vector2 pos, float scl, Hero h) {
 		super(pos, SIZE.cpy().scl(scl));		
 		this.hero = h;
+		coin = true;
 	}
 
 

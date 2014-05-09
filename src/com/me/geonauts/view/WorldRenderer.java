@@ -27,6 +27,9 @@ import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
+import com.me.geonauts.model.entities.Particle;
+import com.me.geonauts.model.entities.ParticleLite;
+import com.me.geonauts.model.entities.ParticleYellow;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Coin;
@@ -92,6 +95,12 @@ public class WorldRenderer {
 	private float ppuX;	// pixels per unit on the X axis
 	private float ppuY;	// pixels per unit on the Y axis
 
+	private int fps;
+	private  boolean drawParticles = true;
+	private int HERO_PARTICLE_SPAWN_THRESHOLD = 10;
+	private int COIN_PARTICLE_SPAWN_THRESHOLD = 30;
+	private int HERO_PARTICLE_SPAWN = 0;
+	
 	private int backgroundType;
 	private boolean android;
 	
@@ -227,6 +236,7 @@ public class WorldRenderer {
 		
 		
 		blockTextures.put(BlockType.WALL, tilesAtlas.findRegion("yellow_tile_wall"));
+		blockTextures.put(BlockType.WALL_HORIZ, tilesAtlas.findRegion("yellow_tile_wall_horiz"));
 		blockTextures.put(BlockType.WALL_END_BOT, tilesAtlas.findRegion("yellow_tile_wall_bot"));
 		blockTextures.put(BlockType.WALL_END_TOP, new TextureRegion(blockTextures.get(BlockType.WALL_END_BOT)));
 		blockTextures.get(BlockType.WALL_END_TOP).flip(false, true); //flip to get bot tile
@@ -270,7 +280,9 @@ public class WorldRenderer {
 		// Load target frames
 		Target.frames = new TextureRegion[1];
 		Target.frames[0] =   miscAtlas.findRegion("target2");
-
+		ParticleLite.frame = miscAtlas.findRegion("particle_lite");
+		ParticleYellow.frame = miscAtlas.findRegion("particle_yellow");
+		
 		// Load animations
 		//hit
 		TextureRegion[] explosionHitFrames = new TextureRegion[8];
@@ -363,6 +375,22 @@ public class WorldRenderer {
 		cam.position.y = (CAMERA_HEIGHT / 2f) * ppuY;
 		cam.update();
 		
+		fps = Gdx.graphics.getFramesPerSecond();
+		
+		// Enhance performance if fps drops
+		// FPS above 45
+		if (fps > 45) {
+			drawParticles = true;
+			HERO_PARTICLE_SPAWN_THRESHOLD = 8;
+			COIN_PARTICLE_SPAWN_THRESHOLD = 28;
+		// FPS below 45
+		} else if (fps > 25  && fps < 45) {
+			HERO_PARTICLE_SPAWN_THRESHOLD = 20;
+			COIN_PARTICLE_SPAWN_THRESHOLD = 40;
+		// FPS below 20
+		} else if (fps < 25 && fps != 0) {
+			drawParticles = false;
+		} 
 		// change cam sway
 		/**
 		CAM_SWAY += delta * CAM_SWAY_DIR/2f;
@@ -429,6 +457,14 @@ public class WorldRenderer {
 			for (int i = 0; i < world.getAnimations().size(); i++) {
 				drawUpdateAnimation(i, delta);
 			}
+			
+			// DRAW and UPDATE PARTICLES
+			if (drawParticles) {
+				for (int i = 0; i < world.getParticles().size(); i++) {
+					drawUpdateParticle(i, delta);
+				}
+			}
+			
 			
 			// Draw texts
 			font_fipps_small.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -499,6 +535,17 @@ public class WorldRenderer {
 			// Draw hero's frame in the proper position
 			TextureRegion[] frames = hero.getFrames();
 			drawEntity(hero, frames[0]);
+		}
+		
+		// Create some particles for Hero
+		//int spawn = //randomGen.nextInt(HERO_PARTICLE_SPAWN_THRESHOLD - 0) + 0;
+		HERO_PARTICLE_SPAWN--;
+		if (HERO_PARTICLE_SPAWN <= 0 && ! hero.grounded) {
+			Vector2 pos = new Vector2(hero.position.x, hero.position.y + randomGen.nextFloat()/1.5f);
+			Vector2 vel = new Vector2((randomGen.nextFloat() - 0.5f), (randomGen.nextFloat() - 0.5f));
+			Particle p = new ParticleLite(pos, vel);
+			world.getParticles().add(p);
+			HERO_PARTICLE_SPAWN = HERO_PARTICLE_SPAWN_THRESHOLD;
 		}
 	}
 	
@@ -595,9 +642,33 @@ public class WorldRenderer {
 		} else {
 			a.update(delta);
 			drawEntity(a, a.getKeyFrame());
+			
+			if (a.isCoin() && false) {
+				// Create some particles for the coin
+				int spawn = randomGen.nextInt(COIN_PARTICLE_SPAWN_THRESHOLD - 0) + 0;
+				if (spawn == 5) {
+					Vector2 pos = new Vector2(a.position.x + a.SIZE.x/2f, a.position.y + randomGen.nextFloat()/1.5f);
+					Vector2 vel = new Vector2((randomGen.nextFloat() - 0.5f)/3f, (randomGen.nextFloat() - 0.5f)/3f);
+					Particle p = new ParticleYellow(pos, vel);
+					world.getParticles().add(p);
+				}
+			}
 		}
 	}
 	
+	private void drawUpdateParticle(int i, float delta) {
+		Particle p = world.getParticles().get(i);
+		
+		// Check if animation is finished, or not alive.
+		if (p.position.x < world.getHero().getCamOffsetPosX() - Particle.SIZE.x || ! p.isAlive()) {
+			world.getParticles().remove(i);
+		
+		// Animation still going, update
+		} else {
+			p.update(delta);
+			drawEntity(p, p.getKeyFrame());
+		}
+	}
 
 	private void drawDebug() {
 		// render blocks

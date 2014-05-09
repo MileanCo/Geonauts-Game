@@ -2,6 +2,7 @@ package com.me.geonauts.model;
 
 public enum BlockType {
 	WALL, // W
+	WALL_HORIZ, // w
 	WALL_END_BOT, //e
 	WALL_END_TOP, // E
 	TILE_TOP, // T
@@ -11,5 +12,6 @@ public enum BlockType {
 	BLANK, // B
 	FLOATING, // F
 	CORNER_RIGHT, // C
-	CORNER_LEFT // c
+	CORNER_LEFT, // c
+
 }

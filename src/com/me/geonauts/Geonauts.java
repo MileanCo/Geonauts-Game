@@ -1,6 +1,8 @@
 package com.me.geonauts;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.me.geonauts.model.ActionResolver;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.screens.ui.CreditScreen;
@@ -19,6 +21,8 @@ public class Geonauts extends Game {
 	private OptionsScreen options;
 	private TutorialScreen tutorial;
 	private EndGameScreen endGame;
+	
+	public Music shopMusicOgg;
 	
 	private ActionResolver actionResolver;
 	
@@ -40,7 +44,14 @@ public class Geonauts extends Game {
 		tutorial = new TutorialScreen(this);
 		endGame = new EndGameScreen(this);
 		
+		// AUDIO
+		//oggShop = Gdx.audio.newSound(Gdx.files.internal("audio/shop_music.ogg"));
+		shopMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/shop_music.ogg"));
+		shopMusicOgg.setLooping(true);
+		
 		setScreen(mainMenu);	
+		
+		
 	}
 	// SET SCREEN METHOD IS EXTENDED BY GAME
 	
