@@ -177,26 +177,26 @@ public class MissileController {
 	}
 	
 	
-	private boolean collisionWithTarget() {
-		// First check if target is alive
-		if (! missile.getTarget().alive) 
-			return false;
-		
-		// Get the Missile Rectangle 
-		Rectangle missileRect = rectPool.obtain();
-		missileRect.set(missile.getBounds().x, missile.getBounds().y,
-				missile.getBounds().width, missile.getBounds().height);
-		
-		// Get the enemy rectangle
-		// Obtain the rectangle from the pool instead of instantiating it
-		Rectangle targetRect = rectPool.obtain();
-		// set the rectangle to enemy's bounding box
-		targetRect.set(missile.getTarget().getBounds().x, missile.getTarget().getBounds().y,
-				missile.getTarget().getBounds().width, missile.getTarget().getBounds().height);
+	private boolean collisionWithTarget() {		
+		// Get the Missile and Enemy rectangle 
+		Rectangle missileRect = missile.getBounds();
+		Rectangle targetRect = missile.getTarget().getBounds();
 		
 		// Check for collision
-		if (missileRect.overlaps(targetRect)) return true;
-		else return false;
+		if (missileRect.overlaps(targetRect) && missile.getTarget().isAlive()) return true;
+		
+		// Check other enemies for collision ONLY if floating
+		else if (missile.state == Missile.State.FLOATING) {
+			// Go through all enemies and check for collision...
+			for (EnemyController e : world.getEnemyControllers()) {
+				// Collides with other enemies ??
+				if (missileRect.overlaps(e.getEnemy().getBounds()))
+					return true;
+				
+			}
+		}
+		return false;
+	
 	}
 	
 	/** populate the collidable array with the blocks found in the enclosing coordinates **/

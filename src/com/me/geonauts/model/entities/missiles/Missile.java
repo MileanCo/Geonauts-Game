@@ -9,10 +9,10 @@ import com.me.geonauts.model.entities.heroes.Hero;
 public abstract class Missile extends Entity {
 	// State stuff
 	public enum State {
-		DYING, ALIVE
+		DYING, SEEKING, FLOATING
 	}
 	
-	public State		state = State.ALIVE;
+	public State		state = State.SEEKING;
 	protected float		stateTime = 0;
 	
 	/** Movement attributes */

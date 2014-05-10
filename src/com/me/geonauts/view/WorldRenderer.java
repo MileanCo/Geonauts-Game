@@ -276,7 +276,7 @@ public class WorldRenderer {
 		}
 		
 		// Load powerups
-		HealthPack.frame = powerupsAtlas.findRegion("health");
+		HealthPack.frame = powerupsAtlas.findRegion("health-red");
 		
 		// Load missile frames
 		YellowLaser.frames = new TextureRegion[1];

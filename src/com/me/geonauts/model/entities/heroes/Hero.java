@@ -93,7 +93,7 @@ public abstract class Hero extends Entity {
 		
 		// Load preferences
 		MAX_TARGETS = prefs.getInteger("max targets");
-		money = prefs.getInteger("Money");
+		money = prefs.getInteger("Money") + 10000;
 		startMoney = money;
 		
 		// Calculate reload

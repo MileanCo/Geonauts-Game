@@ -79,4 +79,8 @@ public abstract class AbstractEnemy extends Entity {
 	public abstract TextureRegion[] getFrames ();
 	
 	public abstract int getValue();
+
+	public boolean isAlive() {
+		return alive;
+	}
 }

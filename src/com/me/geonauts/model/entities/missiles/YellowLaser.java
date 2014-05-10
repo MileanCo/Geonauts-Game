@@ -35,6 +35,11 @@ public class YellowLaser extends Missile {
 		float x_diff = target.position.cpy().x - position.x;
 		float y_diff = target.position.cpy().y - position.y;
 		
+		// If target is dead, Missile is considered 'floating'
+		if (! target.isAlive() ) {
+			state = State.FLOATING;
+		}
+		
 		// If the target is infront of the missile, update acceleration with unit vec
 		if (x_diff > 0) {
 			//if (x_diff < 1) 
