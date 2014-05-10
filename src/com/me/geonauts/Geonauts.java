@@ -23,6 +23,8 @@ public class Geonauts extends Game {
 	private EndGameScreen endGame;
 	
 	public Music shopMusicOgg;
+	public Music menuMusicOgg;
+	public Music gameMusicOgg;
 	
 	private ActionResolver actionResolver;
 	
@@ -49,6 +51,13 @@ public class Geonauts extends Game {
 		shopMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/shop_music.ogg"));
 		shopMusicOgg.setLooping(true);
 		
+		//oggIntro = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Intro.ogg"));
+		menuMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/main_menu.ogg"));
+		menuMusicOgg.setLooping(true);
+		
+		gameMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/game_music.ogg"));
+		gameMusicOgg.setLooping(true);
+		
 		setScreen(mainMenu);	
 		
 		
@@ -59,7 +68,7 @@ public class Geonauts extends Game {
 	public ActionResolver getActionResolver() {
 		return actionResolver;
 	}
-	
+
 	public MainMenuScreen getMainMenuScreen() {
 		return mainMenu;
 	}

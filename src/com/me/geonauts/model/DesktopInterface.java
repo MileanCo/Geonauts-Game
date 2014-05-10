@@ -1,5 +1,7 @@
 package com.me.geonauts.model;
 
+import com.me.geonauts.model.enums.Achievement;
+
 public class DesktopInterface implements ActionResolver {
 
 	@Override

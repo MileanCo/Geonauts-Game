@@ -60,7 +60,7 @@ public class HeroController {
 	public HeroController(World world) {
 		this.world = world;
 		this.hero = world.getHero();
-		BOUND_BOX_OFFSET = new Vector2(hero.SIZE.x/3, hero.SIZE.y / 3);
+		BOUND_BOX_OFFSET = new Vector2(hero.SIZE.x/3f, hero.SIZE.y / 3f);
 
 		// Change bounds to make colliding box smaller
 		hero.setBounds(hero.SIZE.x - BOUND_BOX_OFFSET.x, hero.SIZE.y - BOUND_BOX_OFFSET.y);
@@ -299,8 +299,8 @@ public class HeroController {
 
 		// update Hero's position
 		hero.position.add(hero.velocity);
-		hero.getBounds().x = hero.position.x + BOUND_BOX_OFFSET.x / 2;
-		hero.getBounds().y = hero.position.y + BOUND_BOX_OFFSET.y / 2;
+		hero.getBounds().x = hero.position.x + BOUND_BOX_OFFSET.x / 2.5f;
+		hero.getBounds().y = hero.position.y + BOUND_BOX_OFFSET.y / 2.5f;
 
 		// un-scale velocity (not in frame time)
 		hero.velocity.scl(1 / delta);

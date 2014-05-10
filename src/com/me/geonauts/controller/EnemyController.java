@@ -19,6 +19,8 @@ public class EnemyController {
 	// Collidable blocks.
 	private Array<Block> collidable = new Array<Block>();
 	
+	private Vector2 BOUND_BOX_OFFSET;
+	
 	// Model objects
 	private World world;
 	private AbstractEnemy enemy;
@@ -33,6 +35,7 @@ public class EnemyController {
 	public EnemyController(World world, AbstractEnemy e) {
 		this.world = world;
 		this.enemy = e;
+		BOUND_BOX_OFFSET = new Vector2(e.SIZE.x/3f, e.SIZE.y / 3f);
 	}
 	
 	// This is the rectangle pool used in collision detection
@@ -190,8 +193,8 @@ public class EnemyController {
 
 		// update enemy's position
 		enemy.position.add(enemy.velocity);
-		enemy.getBounds().x = enemy.position.x;
-		enemy.getBounds().y = enemy.position.y;
+		enemy.getBounds().x = enemy.position.x + BOUND_BOX_OFFSET.x / 1.5f;
+		enemy.getBounds().y = enemy.position.y + BOUND_BOX_OFFSET.y / 1.5f;
 
 		// un-scale velocity (not in frame time)
 		enemy.velocity.scl(1 / delta);

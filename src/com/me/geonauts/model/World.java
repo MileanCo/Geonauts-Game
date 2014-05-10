@@ -14,8 +14,6 @@ import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
 import com.me.geonauts.model.entities.Block;
-import com.me.geonauts.model.entities.Particle;
-import com.me.geonauts.model.entities.ParticleLite;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.enemies.BlueMob;
@@ -23,6 +21,9 @@ import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
+import com.me.geonauts.model.entities.particles.Particle;
+import com.me.geonauts.model.entities.powerups.HealthPack;
+import com.me.geonauts.model.entities.powerups.Powerup;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.view.WorldRenderer;
 
@@ -47,6 +48,7 @@ public class World {
 	private List<EnemyController> enemies;
 	private List<AbstractAnimation> anims;
 	private List<Particle> particles;
+	private List<Powerup> powerups;
 	
 	public Random randomGen = new Random();
 	
@@ -60,6 +62,7 @@ public class World {
 	
 	
 	/** Spawning variables */
+	private int POWERUP_SPAWN_THRESHOLD = 100;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -82,6 +85,7 @@ public class World {
 		anims = new ArrayList<AbstractAnimation> ();
 		enemyMissiles = new ArrayList<EnemyMissileController> ();
 		particles = new ArrayList<Particle> ();
+		powerups = new ArrayList<Powerup> ();
 		
 		resetChunks();
 
@@ -159,6 +163,16 @@ public class World {
 				anims.add(new Coin(pos, 1, hero));
 		}
 		
+		// Spawn some powerups!
+		spawn = randomGen.nextInt(POWERUP_SPAWN_THRESHOLD - 0) + 0;
+		if (spawn == 50) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			Vector2 vel = new Vector2(randomGen.nextFloat() - 0.5f, randomGen.nextFloat() - 0.5f);
+			// Dont spawn coins on blocks.
+			if (getBlock((int)pos.x, (int)pos.y) == null )
+				powerups.add(new HealthPack(pos, vel, hero));
+		}
+		
 		
 		// Check if we need to increase spawn rate
 		if (hero.getDistance() % INCREASE_SPAWN_EVERY == 0 && SPAWN_THRESHOLD >= MIN_SPAWN && !changed_spawn) {
@@ -217,9 +231,11 @@ public class World {
 	public List<AbstractAnimation> getAnimations() {
 		return anims;
 	}
-	
 	public List<Particle> getParticles() {
 		return particles;
+	}
+	public List<Powerup> getPowerups() {
+		return powerups;
 	}
 
 	public Block[][] getBlocks() {

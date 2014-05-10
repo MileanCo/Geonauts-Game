@@ -1,5 +1,7 @@
 package com.me.geonauts.model;
 
+import com.me.geonauts.model.enums.Achievement;
+
 public interface ActionResolver {
 	public void Login();
 	public void LogOut();

@@ -1,4 +1,4 @@
-package com.me.geonauts.model.entities;
+package com.me.geonauts.model.entities.particles;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

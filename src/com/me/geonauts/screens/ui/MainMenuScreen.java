@@ -53,17 +53,12 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	// Load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
-	
-	// Sound
-	private Music menuMusicOgg;
 			
 
 	public MainMenuScreen(Geonauts game) {
 		super(game);
 		
-		//oggIntro = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Intro.ogg"));
-		menuMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/main_menu.ogg"));
-		menuMusicOgg.setLooping(true);
+
 		
 		highscore = prefs.getInteger("highscore");
 
@@ -243,16 +238,18 @@ public class MainMenuScreen extends AbstractScreen {
 		lblScore.setText("High Score: " + highscore);
 
 		// Enable music if 1st time
-		if (prefs.getInteger("games_played") == 0)
+		if (prefs.getInteger("games_played") <= 1) {
 			prefs.putBoolean("play-music", true);
+			prefs.flush();
+		}
 		
 		boolean music = prefs.getBoolean("play-music");
 		
 		if (music) {
-			if (!menuMusicOgg.isPlaying())
-				menuMusicOgg.play();
+			if (!game.menuMusicOgg.isPlaying())
+				game.menuMusicOgg.play();
 		} else {
-			menuMusicOgg.stop();
+			game.menuMusicOgg.stop();
 		}
 
 	}
@@ -263,7 +260,7 @@ public class MainMenuScreen extends AbstractScreen {
 			resetPrefs();
 			
 		} 
-		menuMusicOgg.stop();
+		game.menuMusicOgg.stop();
 		game.setScreen(game.getGameScreen());
 	}
 	

@@ -1,4 +1,4 @@
-package com.me.geonauts.model;
+package com.me.geonauts.model.enums;
 
 public enum Achievement {
 	UPGRADE_FRENZY,

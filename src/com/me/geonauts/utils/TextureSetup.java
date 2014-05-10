@@ -48,6 +48,9 @@ public class TextureSetup {
 		// misc
 		TexturePacker2.process(ASSET_FOLDER + "misc", ROOT_DIR + "textures/misc", "misc.pack");
 		
+		// Powerups
+		TexturePacker2.process(ASSET_FOLDER + "powerups", ROOT_DIR + "textures/misc", "powerups.pack");
+		
 		// UI stuff
 		TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
 

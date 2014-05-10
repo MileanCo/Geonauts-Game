@@ -21,15 +21,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.EnemyController;
 import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
-import com.me.geonauts.model.BlockType;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.entities.Particle;
-import com.me.geonauts.model.entities.ParticleLite;
-import com.me.geonauts.model.entities.ParticleYellow;
 import com.me.geonauts.model.entities.Target;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Coin;
@@ -45,6 +41,12 @@ import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.model.entities.missiles.GreenEnemyLaser;
 import com.me.geonauts.model.entities.missiles.YellowLaser;
+import com.me.geonauts.model.entities.particles.Particle;
+import com.me.geonauts.model.entities.particles.ParticleLite;
+import com.me.geonauts.model.entities.particles.ParticleYellow;
+import com.me.geonauts.model.entities.powerups.HealthPack;
+import com.me.geonauts.model.entities.powerups.Powerup;
+import com.me.geonauts.model.enums.BlockType;
 
 
 /**
@@ -78,7 +80,8 @@ public class WorldRenderer {
 	/** Textures **/
 	public HashMap<BlockType, TextureRegion> blockTextures = new HashMap<BlockType, TextureRegion>();
 	public HashMap<String, Texture> backgroundTextures = new HashMap<String, Texture> ();
-	private ParallaxBackground backgroundCave;
+	private ParallaxBackground backgroundNebula1;
+	private ParallaxBackground backgroundNebula2;
 	private ParallaxBackground backgroundSpace1;
 	private ParallaxBackground backgroundSpace2;
 	private ParallaxBackground backgroundSpace3;
@@ -179,6 +182,7 @@ public class WorldRenderer {
 		TextureAtlas explosion_11Atlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/explosion_11.pack"));
 		TextureAtlas explosionHitAtlas = new TextureAtlas(Gdx.files.internal("images/textures/explosions/hit.pack"));
 		TextureAtlas coinsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/coins.pack"));
+		TextureAtlas powerupsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/powerups.pack"));
 		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
 		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
 		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
@@ -187,14 +191,15 @@ public class WorldRenderer {
 		
 		
 		// Load background images
-		backgroundTextures.put("cave", new Texture(Gdx.files.internal("images/backgrounds/background01_0.png")));
+		//backgroundTextures.put("darkblue_nebula1", new Texture(Gdx.files.internal("images/backgrounds/darkblue_nebula1.png")));
 		backgroundTextures.put("stars_white",  new Texture(Gdx.files.internal("images/backgrounds/stars.png")));	
 		backgroundTextures.put("stars_yellow",  new Texture(Gdx.files.internal("images/backgrounds/stars_yellow.png")));
 		//Texture cityBG = new Texture(Gdx.files.internal("images/backgrounds/city_background_night.png"));
 		
-		backgroundCave = new ParallaxBackground(new ParallaxLayer[] {
-	           new ParallaxLayer(new TextureRegion(backgroundTextures.get("cave")), new Vector2(0.2f, 0), new Vector2(0, 0), true),
-	      }, width, height, 0.5f, this);
+		
+		//backgroundNebula1 = new ParallaxBackground(new ParallaxLayer[] {
+	   //        new ParallaxLayer(new TextureRegion(backgroundTextures.get("darkblue_nebula1")), new Vector2(0.2f, 0), new Vector2(0, 0), true),
+	    //  }, width, height, 0.5f, this);
 		
 		backgroundSpace1 = new ParallaxBackground(new ParallaxLayer[] {
 		           new ParallaxLayer(new TextureRegion(backgroundTextures.get("stars_white")), new Vector2(0.2f, 0), new Vector2(0, 0), true),
@@ -269,6 +274,9 @@ public class WorldRenderer {
 		for (int i = 0; i < frames; i++) {
 			Fiend.enemyFrames[i] = enemiesAtlas.findRegion("fiend0" + i);
 		}
+		
+		// Load powerups
+		HealthPack.frame = powerupsAtlas.findRegion("health");
 		
 		// Load missile frames
 		YellowLaser.frames = new TextureRegion[1];
@@ -348,7 +356,7 @@ public class WorldRenderer {
 		cam = new OrthographicCamera((float)w, (float)h);
 		
 		// Set background stuff
-		backgroundCave.setSize((float)w, (float)h);
+		//backgroundNebula1.setSize((float)w, (float)h);
 		backgroundSpace1.setSize((float)w, (float)h);
 		backgroundSpace2.setSize((float)w, (float)h);
 		backgroundSpace3.setSize((float)w, (float)h);
@@ -405,17 +413,17 @@ public class WorldRenderer {
 		// Draw the parallax scrolling background
 		switch ( backgroundType ) {
 			case 0:
-				backgroundCave.render(delta);
-				break;
-			case 1:
 				backgroundSpace1.render(delta);
 				break;
-			case 2:
+			case 1:
 				backgroundSpace2.render(delta);
+				break;
+			case 2:
+				backgroundSpace3.render(delta);
 				break;
 			case 3:
 				backgroundSpace3.render(delta);
-				break;
+					break;
 				
 			/** DOESN'T WORK ON ANDROID - WHITE BG
 			case 4:
@@ -464,6 +472,13 @@ public class WorldRenderer {
 					drawUpdateParticle(i, delta);
 				}
 			}
+	
+			// DRAW and UPDATE POWERUPS
+			for (int i = 0; i < world.getPowerups().size(); i++) {
+				drawUpdatePowerup(i, delta);
+			}
+			
+			
 			
 			
 			// Draw texts
@@ -643,6 +658,7 @@ public class WorldRenderer {
 			a.update(delta);
 			drawEntity(a, a.getKeyFrame());
 			
+			// Dont spawn particles for coins
 			if (a.isCoin() && false) {
 				// Create some particles for the coin
 				int spawn = randomGen.nextInt(COIN_PARTICLE_SPAWN_THRESHOLD - 0) + 0;
@@ -662,6 +678,20 @@ public class WorldRenderer {
 		// Check if animation is finished, or not alive.
 		if (p.position.x < world.getHero().getCamOffsetPosX() - Particle.SIZE.x || ! p.isAlive()) {
 			world.getParticles().remove(i);
+		
+		// Animation still going, update
+		} else {
+			p.update(delta);
+			drawEntity(p, p.getKeyFrame());
+		}
+	}
+	
+	private void drawUpdatePowerup(int i, float delta) {
+		Powerup p = world.getPowerups().get(i);
+		
+		// Check if animation is finished, or not alive.
+		if (p.position.x < world.getHero().getCamOffsetPosX() - p.SIZE.x || ! p.isAlive()) {
+			world.getPowerups().remove(i);
 		
 		// Animation still going, update
 		} else {

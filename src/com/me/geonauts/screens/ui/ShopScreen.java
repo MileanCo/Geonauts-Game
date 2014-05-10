@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.geonauts.Geonauts;
-import com.me.geonauts.model.Achievement;
+import com.me.geonauts.model.enums.Achievement;
 
 
 public class ShopScreen extends AbstractScreen{	
@@ -96,7 +96,8 @@ public class ShopScreen extends AbstractScreen{
 		TextButtonStyle styleDam = new TextButtonStyle();
 		styleDam.up = new TextureRegionDrawable(upDam);
 		styleDam.down = new TextureRegionDrawable(down);
-		styleDam.font = new BitmapFont();
+		styleDam.font = skin.getFont("default-font");
+		styleDam.font.setColor(0.0f, 0.0f, 08f, 0f);
 		
 		TextButtonStyle styleHealth = new TextButtonStyle();
 		styleHealth.up = new TextureRegionDrawable(upHealth);
@@ -106,17 +107,17 @@ public class ShopScreen extends AbstractScreen{
 		TextButtonStyle styleReload = new TextButtonStyle();
 		styleReload.up = new TextureRegionDrawable(upReload);
 		styleReload.down = new TextureRegionDrawable(down);
-		styleReload.font = new BitmapFont();
+		styleReload.font = skin.getFont("default-font");
 		
 		TextButtonStyle styleMT = new TextButtonStyle();
 		styleMT.up = new TextureRegionDrawable(upMultitarget);
 		styleMT.down = new TextureRegionDrawable(down);
-		styleMT.font = new BitmapFont();
+		styleMT.font = skin.getFont("default-font");
 		
 		TextButtonStyle styleDown = new TextButtonStyle();
 		styleDown.up = new TextureRegionDrawable(down);
 		styleDown.down = new TextureRegionDrawable(down);
-		styleDown.font = new BitmapFont();
+		styleDown.font = skin.getFont("default-font");
 		
 		// Get preferences. Updates cost, attributes (attack, damage, health, etc).
 		getPreferences();
@@ -124,7 +125,7 @@ public class ShopScreen extends AbstractScreen{
 		// GUI SHIT
 		lblRinfo = new Label("", skin);
 		lblRcost = new Label("", skin);
-		btnReload = new TextButton("Upgrade Reload", styleReload);
+		btnReload = new TextButton("+", styleReload);
 		btnReload.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -141,7 +142,7 @@ public class ShopScreen extends AbstractScreen{
 		});
 		lblAinfo = new Label("", skin);
 		lblAcost = new Label("", skin);
-		btnAttack = new TextButton("Upgrade Damage", styleDam);
+		btnAttack = new TextButton("+ 1", styleDam);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -159,7 +160,7 @@ public class ShopScreen extends AbstractScreen{
 		
 		lblHinfo = new Label("", skin);
 		lblHcost = new Label("", skin);
-		btnHealth = new TextButton("Upgrade health", styleHealth);
+		btnHealth = new TextButton("+ 1", styleHealth);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -193,7 +194,7 @@ public class ShopScreen extends AbstractScreen{
 		*/
 		lblMTinfo = new Label("", skin);
 		lblMTcost = new Label("", skin);
-		btnMultiTarget = new TextButton("Upgrade Targetting", styleMT);
+		btnMultiTarget = new TextButton("+ 1", styleMT);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -208,7 +209,7 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		btnQuit = new TextButton("Leave Shop", styleDown);
+		btnQuit = new TextButton("Leave", styleDown);
 		btnQuit.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -238,12 +239,17 @@ public class ShopScreen extends AbstractScreen{
     	int btnWidth = uiAtlas.findRegion("damage").getRegionWidth();
     	int btnHeight = uiAtlas.findRegion("damage").getRegionHeight();
     	
-    	if (height < 570) {    	
+    	if (height <= 500) {    	
     		btnWidth /= 2f;
     		btnHeight /= 2f;
     		lblMoney = new Label("", skin);
-    	} else {
+    	} else if (height <= 720) {
+    		btnWidth /= 1.5f;
+    		btnHeight /= 1.5f;
     		lblMoney = new Label("", fancySkin, "gold");
+    	} else if (height <= 1080) {
+    		btnWidth /= 1f;
+    		btnHeight /= 1f;
     	}
     	updateLabels();
 

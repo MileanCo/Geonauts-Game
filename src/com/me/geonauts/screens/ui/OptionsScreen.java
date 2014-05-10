@@ -70,9 +70,9 @@ public class OptionsScreen extends AbstractScreen{
 		lblReset = new Label("Reset all game upgrades", skin);
 		boolean music = prefs.getBoolean("play-music");
 		if (music) 
-			btnDisableMusic = new TextButton("Disable Sound", style);
+			btnDisableMusic = new TextButton("Sound Enabled!", style);
 		else
-			btnDisableMusic = new TextButton("Enable Sound", style);
+			btnDisableMusic = new TextButton("Sound Disabled", style);
 		
 		btnDisableMusic.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -83,10 +83,11 @@ public class OptionsScreen extends AbstractScreen{
 				// If music enabled, disable.
 				if (music) {
 					prefs.putBoolean("play-music", false);
-					btnDisableMusic.setText("Enable Sound");
+					btnDisableMusic.setText("Sound Disabled");
+				// Sound is now enabled
 				} else {
 					prefs.putBoolean("play-music", true);
-					btnDisableMusic.setText("Disable Sound");
+					btnDisableMusic.setText("Sound Enabled!");
 				}
 				prefs.flush();
 				

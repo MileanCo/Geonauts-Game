@@ -15,8 +15,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
-import com.me.geonauts.model.Achievement;
 import com.me.geonauts.model.World;
+import com.me.geonauts.model.enums.Achievement;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
@@ -32,10 +32,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	// Screens 
 	private Geonauts game;
-	
-	// Sound
-	private Music gameMusicOgg;
-	
+		
 	private int width, height;
 	
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
@@ -50,11 +47,6 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Create new Renderer and load graphic. Aim is to only load graphics once.
 		renderer = new WorldRenderer(); // Renderer updates and draws enemies.
-		
-		//oggDrop = Gdx.audio.newSound(Gdx.files.internal("audio/40Ringz_Drop.ogg"));
-		
-		gameMusicOgg = Gdx.audio.newMusic(Gdx.files.internal("audio/game_music.ogg"));
-		gameMusicOgg.setLooping(true);
 	}
 	
 	/**
@@ -72,7 +64,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		boolean music = prefs.getBoolean("play-music");
 		if (music) 
-			gameMusicOgg.play();
+			game.gameMusicOgg.play();
 	}
 
 	/**
@@ -102,7 +94,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
-		gameMusicOgg.stop();
+		game.gameMusicOgg.stop();
 	}
 
 	@Override

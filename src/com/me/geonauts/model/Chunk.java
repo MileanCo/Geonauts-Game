@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.Block;
+import com.me.geonauts.model.enums.BlockType;
 import com.me.geonauts.view.WorldRenderer;
 
 /**
