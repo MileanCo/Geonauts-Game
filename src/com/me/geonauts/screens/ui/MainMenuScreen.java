@@ -238,14 +238,10 @@ public class MainMenuScreen extends AbstractScreen {
 		lblScore.setText("High Score: " + highscore);
 
 		// Enable music if 1st time
-		/**
-		if (prefs.getInteger("games_played") <= 1) {
-			prefs.putBoolean("play-music", true);
-			prefs.flush();
-		}
-		*/
-		
 		boolean music = prefs.getBoolean("play-music");
+		if (prefs.getInteger("games_played") == 0) {
+			music = true;
+		}
 		
 		if (music) {
 			if (!game.menuMusicOgg.isPlaying())

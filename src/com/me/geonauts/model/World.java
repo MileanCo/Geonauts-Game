@@ -63,7 +63,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int POWERUP_SPAWN_THRESHOLD = 1100;
+	private int POWERUP_SPAWN_THRESHOLD = 1600;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
