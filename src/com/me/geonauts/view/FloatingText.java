@@ -1,0 +1,38 @@
+package com.me.geonauts.view;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+
+public class FloatingText {
+	public Vector2 position;
+	public Vector2 velocity;
+	
+	public String text = "";
+	public Color color = new Color(1, 1, 1, 1);
+	
+	protected int FLOAT_TIME = 500;
+	protected boolean alive = true;
+	
+	public FloatingText(String text, Vector2 pos, Vector2 velocity) {
+		this.position = pos;
+		this.velocity = velocity;
+		this.text = text;
+	}
+	
+	
+	public void update(float delta) {
+		// Move the text
+		position.add(velocity.scl(delta));
+		velocity.scl(1f/delta);		
+		
+		// Only show text for a certain amount of time
+		FLOAT_TIME--;
+		if (FLOAT_TIME < 0) {
+			alive = false;
+		}
+	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+}

@@ -1,5 +1,6 @@
 package com.me.geonauts.model.entities.powerups;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.Entity;
@@ -10,6 +11,8 @@ public abstract class Powerup extends Entity {
 	public Vector2 velocity;
 	protected float ROTATION_SPEED = 0.5f;
 	
+	public int TEXT_FLOAT_VALUE = 0;
+	public Color TEXT_FLOAT_COLOR = null;
 	protected Hero hero;
 	protected boolean alive = true;
 	

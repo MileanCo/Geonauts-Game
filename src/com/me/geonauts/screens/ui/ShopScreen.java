@@ -129,7 +129,11 @@ public class ShopScreen extends AbstractScreen{
 				if ( money >= costR) {
 					reload++;
 					money = money - costR;
-					costR = reload * VALUE_RELOAD;
+					
+					if (reload >= 5) 
+						costR = reload * VALUE_RELOAD * 3; // make reload more expensive after 4 upgrades
+					else
+						costR = reload * VALUE_RELOAD;
 					updateLabels();
 				}
 			}
@@ -223,8 +227,8 @@ public class ShopScreen extends AbstractScreen{
     		btnHeight /= 1.5f;
     		lblMoney = new Label("", fancySkin, "gold");
     	} else if (height <= 1080) {
-    		btnWidth /= 1f;
-    		btnHeight /= 1f;
+    		btnWidth /= 1.25f;
+    		btnHeight /= 1.25f;
     	}
     	updateLabels();
 

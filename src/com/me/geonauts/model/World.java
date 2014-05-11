@@ -62,7 +62,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int POWERUP_SPAWN_THRESHOLD = 1200;
+	private int POWERUP_SPAWN_THRESHOLD = 200;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -168,7 +168,7 @@ public class World {
 		if (spawn == 50) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			Vector2 vel = new Vector2(randomGen.nextFloat() - 0.5f, randomGen.nextFloat() - 0.5f);
-			// Dont spawn coins on blocks.
+			// Dont spawn powerups on blocks.
 			if (getBlock((int)pos.x, (int)pos.y) == null )
 				powerups.add(new HealthPack(pos, vel, hero));
 		}

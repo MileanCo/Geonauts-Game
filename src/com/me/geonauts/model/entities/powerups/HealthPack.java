@@ -1,5 +1,6 @@
 package com.me.geonauts.model.entities.powerups;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.model.entities.heroes.Hero;
@@ -14,6 +15,8 @@ public class HealthPack extends Powerup {
 	
 	public HealthPack(Vector2 pos, Vector2 velocity, Hero h) {
 		super(pos, velocity, SIZE, h);
+		TEXT_FLOAT_VALUE = HEALTH;
+		TEXT_FLOAT_COLOR = new Color(1, 0, 0, 1);
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.me.geonauts.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -112,6 +114,10 @@ public class WorldRenderer {
 	protected BitmapFont font_fipps;
 	protected BitmapFont font_reg;
 	
+	// Floating Texts
+	private List<FloatingText> floatingTexts;
+	
+	
 	private static final int NUM_GAMES_HELP = 3;
 	public float HELP_MESSAGE_TIME = 6; //seconds
 	private String HELP_MESSAGE_ANDROID = "<-- TAP on LEFT to FLY\n\nTAP on ENEMIES ONCE to TARGET -- > \n\n \n\n It's a '2-thumb' game";
@@ -145,6 +151,8 @@ public class WorldRenderer {
 		if (Gdx.app.getType().equals(ApplicationType.Android)) {
 			android = true;
 		}
+		
+		floatingTexts = new ArrayList<FloatingText>();
 	}
 
 	public boolean isDebug() {
@@ -472,11 +480,18 @@ public class WorldRenderer {
 					drawUpdateParticle(i, delta);
 				}
 			}
+			
+			// DRAW and UPDATE floating texts
+			for (int i = 0; i < floatingTexts.size(); i++) {
+				drawUpdateFloatingText(i, delta);
+			}
 	
 			// DRAW and UPDATE POWERUPS
 			for (int i = 0; i < world.getPowerups().size(); i++) {
 				drawUpdatePowerup(i, delta);
 			}
+			
+
 			
 			
 			
@@ -649,9 +664,17 @@ public class WorldRenderer {
 	private void drawUpdateAnimation(int i, float delta) {
 		AbstractAnimation a = world.getAnimations().get(i);
 		
-		// Check if animation is finished, or not alive.
-		if (! a.isAlive()) {
+		// Check if animation is offscreen, or not alive.
+		if (a.position.x < world.getHero().getCamOffsetPosX()  || ! a.isAlive()) {
 			world.getAnimations().remove(i);
+			// If it was coin, make floating text
+			if (a.isCoin() && ! a.isAlive()) {
+				Vector2 pos = a.position.cpy();
+				pos.y +=  world.getHero().SIZE.y;
+				FloatingText ft = new FloatingText("+ $" + Coin.value, pos, new Vector2(0, 1));
+				ft.color = new Color(1, 0.843f, 0, 1);
+				floatingTexts.add(ft);
+			}
 		
 		// Animation still going, update
 		} else {
@@ -692,11 +715,37 @@ public class WorldRenderer {
 		// Check if animation is finished, or not alive.
 		if (p.position.x < world.getHero().getCamOffsetPosX() - p.SIZE.x || ! p.isAlive()) {
 			world.getPowerups().remove(i);
+			
+			// Check if there is text to display, & if Powerup isn't alive (it was picked up by hero)
+			if (p.TEXT_FLOAT_VALUE > 0 && !p.isAlive()) {
+				// create new floating text
+				Vector2 pos = p.position.cpy();
+				pos.y +=  world.getHero().SIZE.y;
+				FloatingText ft = new FloatingText("+" + p.TEXT_FLOAT_VALUE, pos, new Vector2(0, 1));
+				ft.color = p.TEXT_FLOAT_COLOR;
+				floatingTexts.add(ft);
+				
+			}
 		
-		// Animation still going, update
+		// powerup still alive, update
 		} else {
 			p.update(delta);
 			drawEntity(p, p.getKeyFrame());
+		}
+	}
+	
+	private void drawUpdateFloatingText(int i, float delta) {
+		FloatingText ft = floatingTexts.get(i);
+		
+		// Check if animation is finished, or not alive.
+		if (ft.position.x < world.getHero().getCamOffsetPosX()  || ! ft.isAlive()) {
+			floatingTexts.remove(i);
+		
+		// floating text still alive
+		} else {
+			ft.update(delta);
+			font_fipps_small.setColor(ft.color);
+			font_fipps_small.draw(spriteBatch, ft.text, ft.position.x*ppuX, ft.position.y * ppuY);
 		}
 	}
 

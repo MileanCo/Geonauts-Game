@@ -47,7 +47,7 @@ public class CreditScreen extends AbstractScreen{
 		btnCredit = new TextButton("Game development: Joel Stenkvist \n"
 				+ "Menu development: William Jamar\n"
 				+ "Art from OpenGameArt.org\nMusic by 40Ringz\n"
-				+ "\nPowered by LibGDX", styleC);
+				+ "\nPowered by libGDX", styleC);
 		btnCredit.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
