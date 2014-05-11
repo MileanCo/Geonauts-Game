@@ -11,11 +11,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
+import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.enums.Achievement;
 import com.me.geonauts.view.WorldRenderer;
 
@@ -289,5 +289,8 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 	public World getWorld(){
 		return world;
+	}
+	public Hero getHero() {
+		return world.getHero();
 	}
 }

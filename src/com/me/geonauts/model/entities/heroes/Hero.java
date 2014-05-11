@@ -45,7 +45,7 @@ public abstract class Hero extends Entity {
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	public boolean grounded;
 	public int health;
-	protected double reloadTime;
+	protected int reloads;
 	protected int damage;
 	
 	protected int DAMAGE_MULTIPLIER = 10 - prefs.getInteger("Reload"); // Decrease damage by # of reload upgrades
@@ -93,15 +93,11 @@ public abstract class Hero extends Entity {
 		
 		// Load preferences
 		MAX_TARGETS = prefs.getInteger("max targets");
-		money = prefs.getInteger("Money") + 10000;
+		money = prefs.getInteger("Money");
 		startMoney = money;
 		
 		// Calculate reload
-		int reloads = prefs.getInteger("Reload");
-		if (reloads <= 4) 
-			reloadTime = (1.2f - reloads * 0.2f);
-		else 
-			reloadTime = (1f / reloads);
+		reloads = prefs.getInteger("Reload");
 		
 		// Make sure DAMAGE_MULTI doesnt go below 0.
 		if (DAMAGE_MULTIPLIER <= 0) DAMAGE_MULTIPLIER = 1;
@@ -196,13 +192,31 @@ public abstract class Hero extends Entity {
 	public long getTimeDied() {
 		return timeDied;
 	}
-	public double getReloadTime() {
-		return reloadTime;
-	}
 	
 	
 	// All Heros must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();
+	
+	/**
+	 * Returns the time in seconds of the reload time
+	 * @param upgrades # times Reload upgraded
+	 * @return float
+	 */
+	public float getReloadTime(int upgrades) {
+		if (upgrades <= 4) 
+			return (1.2f - upgrades * 0.2f);
+		else 
+			return (1f / upgrades);
+	}
+	
+	/**
+	 * Gets current reloadTime of hero's current upgrades.
+	 * If shopping, use getReloadTime(upgrades) to specify how many current upgrades.
+	 * @return
+	 */
+	public float getReloadTime() {
+		return getReloadTime(reloads);
+	}
 
 	/**
 	 * Checks if the hero is targetting given enemy 

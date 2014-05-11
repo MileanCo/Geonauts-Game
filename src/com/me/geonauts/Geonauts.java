@@ -68,7 +68,6 @@ public class Geonauts extends Game {
 	public ActionResolver getActionResolver() {
 		return actionResolver;
 	}
-
 	public MainMenuScreen getMainMenuScreen() {
 		return mainMenu;
 	}
@@ -89,5 +88,10 @@ public class Geonauts extends Game {
 	}
 	public EndGameScreen getEndScreen() {
 		return endGame;
+	}
+	
+	// These methods are just universal, as multiple screens need 'em
+	public float getReloadTime(int upgrades) {
+		return gameScreen.getHero().getReloadTime(upgrades);
 	}
 }

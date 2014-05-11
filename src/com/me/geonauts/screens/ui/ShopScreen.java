@@ -2,7 +2,6 @@ package com.me.geonauts.screens.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -22,7 +20,7 @@ public class ShopScreen extends AbstractScreen{
 	//load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
-	//
+	// Value of upgrades
 	private static final int VALUE_RELOAD = 150;
 	private static final int VALUE_ATTACK = 50;
 	private static final int VALUE_HEALTH = 50;
@@ -32,42 +30,30 @@ public class ShopScreen extends AbstractScreen{
 	private int costR;
 	private int costA;
 	private int costH;
-	//private int costM = 100 * (prefs.getInteger("Money"));
 	private int costMT;
+	
+	//labels
+	private Label lblRinfo;
+	private Label lblAinfo;
+	private Label lblHinfo;
+	private Label lblMoney;
+	private Label lblMTinfo;
+	
 	
 	//buttons
 	private TextButton btnReload;
-	private Label lblRinfo;
-	private Label lblRcost;
-	
 	private TextButton btnAttack;
-	private Label lblAinfo;
-	private Label lblAcost;
-	
 	private TextButton btnHealth;
-	private Label lblHinfo;
-	private Label lblHcost;
-	
-	private Label lblMoney;
-	
-	/**
-	private TextButton btnMoney;
-	private Label 		lblMinfo;
-	private Label btnMcost;
-	*/
-	
 	private TextButton btnMultiTarget;
-	private Label 		lblMTinfo;
-	private Label 		lblMTcost;
-	
 	private TextButton btnQuit;
 	
+	// Skins
 	private Skin skin;
 	private Skin fancySkin;
 	
 	private TextureAtlas uiAtlas;
 	
-	//player values
+	// Num ugrades bought
 	int reload;
 	int attack;
 	int health;
@@ -97,35 +83,43 @@ public class ShopScreen extends AbstractScreen{
 		styleDam.up = new TextureRegionDrawable(upDam);
 		styleDam.down = new TextureRegionDrawable(down);
 		styleDam.font = skin.getFont("default-font");
-		styleDam.font.setColor(0.0f, 0.0f, 08f, 0f);
+		styleDam.fontColor = skin.getColor("grey");
+		
 		
 		TextButtonStyle styleHealth = new TextButtonStyle();
 		styleHealth.up = new TextureRegionDrawable(upHealth);
 		styleHealth.down = new TextureRegionDrawable(down);
-		styleHealth.font = new BitmapFont();
+		styleHealth.font = skin.getFont("default-font");
+		styleHealth.fontColor = skin.getColor("grey");
+		
 		
 		TextButtonStyle styleReload = new TextButtonStyle();
 		styleReload.up = new TextureRegionDrawable(upReload);
 		styleReload.down = new TextureRegionDrawable(down);
 		styleReload.font = skin.getFont("default-font");
+		styleReload.fontColor = skin.getColor("grey");
+		
 		
 		TextButtonStyle styleMT = new TextButtonStyle();
 		styleMT.up = new TextureRegionDrawable(upMultitarget);
 		styleMT.down = new TextureRegionDrawable(down);
 		styleMT.font = skin.getFont("default-font");
+		styleMT.font = skin.getFont("default-font");
+		styleMT.fontColor = skin.getColor("grey");
 		
 		TextButtonStyle styleDown = new TextButtonStyle();
 		styleDown.up = new TextureRegionDrawable(down);
 		styleDown.down = new TextureRegionDrawable(down);
 		styleDown.font = skin.getFont("default-font");
+		styleDown.font = skin.getFont("default-font");
+		styleDown.fontColor = skin.getColor("grey");
 		
 		// Get preferences. Updates cost, attributes (attack, damage, health, etc).
 		getPreferences();
 		
 		// GUI SHIT
-		lblRinfo = new Label("", skin);
-		lblRcost = new Label("", skin);
-		btnReload = new TextButton("+", styleReload);
+		lblRinfo = new Label("", skin, "gold");
+		btnReload = new TextButton("$"+costR, styleReload);
 		btnReload.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -140,9 +134,8 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		lblAinfo = new Label("", skin);
-		lblAcost = new Label("", skin);
-		btnAttack = new TextButton("+ 1", styleDam);
+		lblAinfo = new Label("", skin, "red");
+		btnAttack = new TextButton("$"+costA, styleDam);
 		btnAttack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -158,9 +151,8 @@ public class ShopScreen extends AbstractScreen{
 			}
 		});
 		
-		lblHinfo = new Label("", skin);
-		lblHcost = new Label("", skin);
-		btnHealth = new TextButton("+ 1", styleHealth);
+		lblHinfo = new Label("", skin, "green");
+		btnHealth = new TextButton("$"+costH, styleHealth);
 		btnHealth.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -175,26 +167,9 @@ public class ShopScreen extends AbstractScreen{
 				}
 			}
 		});
-		/**
-		btnMoney = new TextButton("Money", styleY);
-		lblMinfo = new Label("Money Increase", skin);
-		btnMcost = new TextButton(String.valueOf(costM), styleY);
-		btnMoney.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("my app", "Released");
-				if(money >= costM){
-					moneyx++;
-					money = money - costM;
-				}
-			}
-		});
-		*/
-		lblMTinfo = new Label("", skin);
-		lblMTcost = new Label("", skin);
-		btnMultiTarget = new TextButton("+ 1", styleMT);
+		
+		lblMTinfo = new Label("", skin, "purple");
+		btnMultiTarget = new TextButton("$"+costMT, styleMT);
 		btnMultiTarget.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -258,27 +233,17 @@ public class ShopScreen extends AbstractScreen{
     	table.add(lblMoney);//.height(btnHeight).center();
 		table.row();
 		
-		table.add(btnReload).width(btnWidth).height(btnHeight);;
-		table.add(lblRinfo);
-		table.add(lblRcost);
+		table.add(btnReload).width(btnWidth).height(btnHeight);
+		table.add(lblRinfo).left();
 		table.row();
-		table.add(btnAttack).width(btnWidth).height(btnHeight);;
-		table.add(lblAinfo);
-		table.add(lblAcost);
+		table.add(btnAttack).width(btnWidth).height(btnHeight);
+		table.add(lblAinfo).left();;
 		table.row();
-		table.add(btnHealth).width(btnWidth).height(btnHeight);;
-		table.add(lblHinfo);
-		table.add(lblHcost);
+		table.add(btnHealth).width(btnWidth).height(btnHeight);
+		table.add(lblHinfo).left();;
 		table.row();
-		/**
-		table.add(btnMoney);
-		table.add(lblMinfo);
-		table.add(btnMcost);
-		table.row();
-		*/
 		table.add(btnMultiTarget).width(btnWidth).height(btnHeight);;
-		table.add(lblMTinfo);
-		table.add(lblMTcost);
+		table.add(lblMTinfo).left();;
 		table.row();
 		table.add(btnQuit).width(btnWidth).height(btnHeight);;
 		
@@ -306,24 +271,20 @@ public class ShopScreen extends AbstractScreen{
 	}
 	
 	private void updateLabels() {		
-		lblHinfo.setText("Current health: " + (health * 50 + 200));
-		lblHcost.setText("Cost: " + costH);
+		lblHinfo.setText("Health: " + (health * 50 + 200));
+		btnHealth.setText("$" + costH);
 		
-		lblAinfo.setText("Current damage: " + (30 + attack * 10));
-		lblAcost.setText("Cost: " + costA);
+		lblAinfo.setText("Damage: " + (30 + attack * 10));
+		btnAttack.setText("$" + costA);
 		
 		// Calculate reloadTime
-		float reloadTime;
-		if (reload <= 4) 
-			reloadTime = (1.2f - reload * 0.2f);
-		else 
-			reloadTime = (1f / reload);
+
 		
-		lblRinfo.setText("Current reload time: " + (Math.round(reloadTime*100.0)/100.0) + "s ");
-		lblRcost.setText("Cost: " + costR);
+		lblRinfo.setText("Reload Time: " + (Math.round(game.getReloadTime(reload)*100.0)/100.0) + "s ");
+		btnReload.setText("$" + costR);
 		
 		lblMTinfo.setText("Max Targets: " + multitarget);
-		lblMTcost.setText("Cost: " + costMT);
+		btnMultiTarget.setText("$" + costMT);
 		
 		lblMoney.setText("Money $" + money);
 		//lblScore.setText("Your score was " + game.getGameScreen().getWorld().getHero().getScore());
