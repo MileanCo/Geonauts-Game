@@ -6,5 +6,6 @@ public enum Achievement {
 	DIST_400,
 	SCORE_MORE,
 	ALL_THE_TARGETS,
-	NEW_PILOT
+	NEW_PILOT, 
+	COIN_COLLECTOR
 }

@@ -176,6 +176,11 @@ public class GameScreen implements Screen, InputProcessor {
 			prefs.putInteger("highdistance", world.getHero().getDistance());
 		}
 		
+		// Save coins collected
+		int coins_collected = prefs.getInteger("coins_collected");
+		coins_collected += world.getHero().coinsCollected;
+		prefs.putInteger("coins_collected", coins_collected);
+		
 		// Increase # of games played
 		int games_played = prefs.getInteger("games_played");
 		games_played += 1;
@@ -199,8 +204,14 @@ public class GameScreen implements Screen, InputProcessor {
 			game.getActionResolver().unlockAchievement(Achievement.SCORE_MORE);
 		}
 		
+		// New pilot achievement
 		if (games_played <= 10) {
 			game.getActionResolver().incrementAchievement(Achievement.NEW_PILOT, 1);
+		}
+		
+		// Coin collector achievement
+		if (coins_collected <= 300) {
+			game.getActionResolver().incrementAchievement(Achievement.COIN_COLLECTOR, world.getHero().coinsCollected);
 		}
 		
 		

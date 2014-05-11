@@ -47,7 +47,7 @@ public class Chunk {
 	/**
 	 * STRUCTURES
 	 */
-	private String[] pyramid = {"......", 
+	private String[] pyramid = {".", 
 	                            "..Cc..",
 	                            ".CBBc.",
 	                            "CBBBBc",
@@ -56,15 +56,15 @@ public class Chunk {
 	private String[] ceilingPyramid =  {"tBBBBt", 
 							            ".tBBt.",
 							            "..tt..",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
-							            "......",
+							            ".",
+							            ".",
+							            ".",
+							            ".",
+							            ".",
+							            ".",
+							            ".",
+							            ".",
+							            ".", // EMPTY ROWS FOR PADDING CAN BE 1 TILE
 							            };
 	
 	private String[] box33 = {"CTc",
@@ -80,18 +80,18 @@ public class Chunk {
 	private String[] floor = {"CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTc"};
 	
 	private String[] ceiling =  {"tttttttttttttttttttttttttttttttttttttttt", 
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            "......",
-            };
+								".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".",
+					            ".", // EMPTY ROWS FOR PADDING CAN BE 1 TILE
+					            };
 	
 	private String[] wall_floor41 = {"E",
 								   "W",
@@ -115,7 +115,7 @@ public class Chunk {
 							            ".",
 							            ".",
 							            ".",
-							            ".",
+							            ".", // EMPTY ROWS FOR PADDING CAN BE 1 TILE
 							            };
 	
 	private String[] wall_ceiling51 = { "W", 
@@ -130,7 +130,7 @@ public class Chunk {
 							            ".",
 							            ".",
 							            ".",
-							            };
+							            };  // EMPTY ROWS FOR PADDING CAN BE 1 TILE
 	
 	private String[] stairFloor1 = {"E....",
 									"Sc...",
@@ -159,10 +159,11 @@ public class Chunk {
 							  	"......CBBs.......",
 							  	".....CBBBs.......",
 							  	"FwwwwtttBtwwwwwwF",
-							  	".................",
-							  	".................",
-							  	"................." ,
-							  	"................."};
+							  	".",
+							  	".",
+							  	"." ,
+							  	".",
+							  	"."}; // EMPTY ROWS FOR PADDING CAN BE 1 TILE
 	
 	
 	/**
@@ -191,39 +192,6 @@ public class Chunk {
 				build6();
 				break;
 		}
-	}
-	
-	private void build2() {
-		reset();
-		
-		// Make some structures
-		addStructure(pyramid, random.nextInt(10 - 0) + 0);
-		
-		addStructure(pyramid, random.nextInt(30 - 15) + 15);
-		
-		addStructure(ceilingPyramid, random.nextInt(33 - 15) + 15);
-	}
-	
-	private void build3() {
-		reset();
-		
-		addStructure(box33, random.nextInt(10 - 0) + 0);
-		
-		addStructure(pyramid, random.nextInt(30 - 15) + 15);
-		
-		addStructure(box44, random.nextInt(35 - 15) + 15);
-		
-		addStructure(wall_ceiling51, random.nextInt(WIDTH/2-2 - 0) + 0);
-	}
-	
-	private void build4() {
-		reset();
-		
-		addStructure(ceiling, 0);
-		
-		addStructure(box33, random.nextInt(20 - 0) + 0);
-		
-		addStructure(wall_floor41, random.nextInt(WIDTH - 15) + 15);
 	}
 	
 	/**
@@ -287,12 +255,45 @@ public class Chunk {
 			
 	}
 	
+	private void build2() {
+		reset();
+		
+		// Make some structures
+		addStructure(pyramid, random.nextInt(10 - 0) + 0);
+		
+		addStructure(pyramid, random.nextInt(30 - 15) + 15);
+		
+		addStructure(ceilingPyramid, random.nextInt(33 - 15) + 15);
+	}
+	
+	private void build3() {
+		reset();
+		
+		addStructure(box33, random.nextInt(10 - 0) + 0);
+		
+		addStructure(pyramid, random.nextInt(30 - 15) + 15);
+		
+		addStructure(box44, random.nextInt(35 - 15) + 15);
+		
+		addStructure(wall_ceiling51, random.nextInt(WIDTH/2-2 - 0) + 0);
+	}
+	
+	private void build4() {
+		reset();
+		
+		addStructure(ceiling, 0);
+		
+		addStructure(box33, random.nextInt(20 - 0) + 0);
+		
+		addStructure(wall_floor41, random.nextInt(WIDTH - 15) + 15);
+	}
+	
 	private void build5() {
 		reset();
 		
 		addStructure(stairFloor1, random.nextInt(15 - 5) + 5);
 		
-		addStructure(wall_ceiling41, random.nextInt(20 - 0) + 0);
+		addStructure(wall_ceiling41, random.nextInt(20 - 10) + 10);
 		
 		addStructure(box44, random.nextInt(30 - 15) + 15);
 		
@@ -306,7 +307,7 @@ public class Chunk {
 		
 		addStructure(stairFloor2, random.nextInt(10 - 0) + 0);
 		
-		addStructure(wall_ceiling51, random.nextInt(15 - 2) + 2);
+		addStructure(wall_ceiling51, random.nextInt(15 - 6) + 6);
 		
 		//addStructure(box33, random.nextInt(20 - 12) + 12);
 		

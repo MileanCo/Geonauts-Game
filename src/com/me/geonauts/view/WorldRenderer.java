@@ -39,8 +39,9 @@ import com.me.geonauts.model.entities.enemies.BlueMob;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
+import com.me.geonauts.model.entities.heroes.Bomber;
+import com.me.geonauts.model.entities.heroes.Echo;
 import com.me.geonauts.model.entities.heroes.Hero;
-import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.model.entities.missiles.GreenEnemyLaser;
 import com.me.geonauts.model.entities.missiles.YellowLaser;
 import com.me.geonauts.model.entities.particles.Particle;
@@ -65,8 +66,9 @@ public class WorldRenderer {
 	public static final int WIDTH = (int) CAMERA_WIDTH;
 	public static final int HEIGHT = (int) CAMERA_HEIGHT;
 	
-	private static final float EXPLOSION_DURATION = 0.03f; //seconds b/t frames
+	private static final float EXPLOSION_DURATION = 0.04f; //seconds b/t frames
 	private static final float COIN_SPIN_DURATION = 0.10f;
+	private static final float HERO_ANIM_DURATION = 0.03f;
 	
 	private Random randomGen = new Random();
 	private World world;
@@ -259,27 +261,35 @@ public class WorldRenderer {
 		blockTextures.get(BlockType.CORNER_LEFT).flip(true, false); //flip to get bot tile
 				
 		// Load all Hero textures
-		int frames = 1;
-		Sage.heroFrames = new TextureRegion[frames];
-		for (int i = 0; i < frames; i++) {
-			Sage.heroFrames[i] = nautsAtlas.findRegion("sage0" + i);
+		TextureRegion[] bomberFrames = new TextureRegion[2];
+		for (int i = 0; i < bomberFrames.length; i++) {
+			bomberFrames[i] = nautsAtlas.findRegion("bomber0" + i);
 		}
+		Bomber.anim = new Animation(HERO_ANIM_DURATION, bomberFrames);
+		
+		TextureRegion[] echoFrames = new TextureRegion[2];
+		for (int i = 0; i < echoFrames.length; i++) {
+			echoFrames[i] = nautsAtlas.findRegion("echo0" + i);
+		}
+		Echo.anim = new Animation(HERO_ANIM_DURATION, echoFrames);
+		
+		
 		
 		// Load all Enemy textures
-		Dwain.enemyFrames = new TextureRegion[frames];
-		for (int i = 0; i < frames; i++) {
+		Dwain.enemyFrames = new TextureRegion[1];
+		for (int i = 0; i < Dwain.enemyFrames.length; i++) {
 			Dwain.enemyFrames[i] = enemiesAtlas.findRegion("dwain0" + i);
 		}
-		FireMob.enemyFrames = new TextureRegion[frames];
-		for (int i = 0; i < frames; i++) {
+		FireMob.enemyFrames = new TextureRegion[1];
+		for (int i = 0; i < FireMob.enemyFrames.length; i++) {
 			FireMob.enemyFrames[i] = enemiesAtlas.findRegion("fire_mob0" + i);
 		}
-		BlueMob.enemyFrames = new TextureRegion[frames];
-		for (int i = 0; i < frames; i++) {
+		BlueMob.enemyFrames = new TextureRegion[1];
+		for (int i = 0; i < BlueMob.enemyFrames.length; i++) {
 			BlueMob.enemyFrames[i] = enemiesAtlas.findRegion("blue_mob0" + i);
 		}
-		Fiend.enemyFrames = new TextureRegion[frames];
-		for (int i = 0; i < frames; i++) {
+		Fiend.enemyFrames = new TextureRegion[1];
+		for (int i = 0; i < Fiend.enemyFrames.length; i++) {
 			Fiend.enemyFrames[i] = enemiesAtlas.findRegion("fiend0" + i);
 		}
 		
@@ -459,6 +469,11 @@ public class WorldRenderer {
 				drawUpdateMissile(i, delta);
 			}
 			
+			// DRAW and UPDATE POWERUPS
+			for (int i = 0; i < world.getPowerups().size(); i++) {
+				drawUpdatePowerup(i, delta);
+			}
+			
 			// DRAW and UPDATE ENEMY MISSILES
 			for (int i = 0; i < world.getEnemyMissileControllers().size(); i++ ) {
 				drawUpdateEnemyMissile(i, delta);
@@ -484,11 +499,6 @@ public class WorldRenderer {
 			// DRAW and UPDATE floating texts
 			for (int i = 0; i < floatingTexts.size(); i++) {
 				drawUpdateFloatingText(i, delta);
-			}
-	
-			// DRAW and UPDATE POWERUPS
-			for (int i = 0; i < world.getPowerups().size(); i++) {
-				drawUpdatePowerup(i, delta);
 			}
 			
 
@@ -563,8 +573,7 @@ public class WorldRenderer {
 		Hero hero = world.getHero();
 		if (! hero.grounded) {
 			// Draw hero's frame in the proper position
-			TextureRegion[] frames = hero.getFrames();
-			drawEntity(hero, frames[0]);
+			drawEntity(hero, hero.getKeyFrame());
 		}
 		
 		// Create some particles for Hero
@@ -682,7 +691,8 @@ public class WorldRenderer {
 			drawEntity(a, a.getKeyFrame());
 			
 			// Dont spawn particles for coins
-			if (a.isCoin() && false) {
+			/**
+			if (a.isCoin()) {
 				// Create some particles for the coin
 				int spawn = randomGen.nextInt(COIN_PARTICLE_SPAWN_THRESHOLD - 0) + 0;
 				if (spawn == 5) {
@@ -692,6 +702,7 @@ public class WorldRenderer {
 					world.getParticles().add(p);
 				}
 			}
+			*/
 		}
 	}
 	
@@ -712,8 +723,11 @@ public class WorldRenderer {
 	private void drawUpdatePowerup(int i, float delta) {
 		Powerup p = world.getPowerups().get(i);
 		
-		// Check if animation is finished, or not alive.
-		if (p.position.x < world.getHero().getCamOffsetPosX() - p.SIZE.x || ! p.isAlive()) {
+		// Check if powerup is off screen, not alive, or touching a block
+		if (p.position.x < world.getHero().getCamOffsetPosX() - p.SIZE.x || 
+				! p.isAlive() ||
+				world.getBlock((int)p.position.x, (int)p.position.y) != null) {
+			// Remove the powerup
 			world.getPowerups().remove(i);
 			
 			// Check if there is text to display, & if Powerup isn't alive (it was picked up by hero)
@@ -790,6 +804,7 @@ public class WorldRenderer {
 	 */
 	public void dispose() {
 		spriteBatch.dispose();
+		
 		//background.dispose();
 	}
 	

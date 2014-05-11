@@ -19,8 +19,9 @@ import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.enemies.BlueMob;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
+import com.me.geonauts.model.entities.heroes.Bomber;
+import com.me.geonauts.model.entities.heroes.Echo;
 import com.me.geonauts.model.entities.heroes.Hero;
-import com.me.geonauts.model.entities.heroes.Sage;
 import com.me.geonauts.model.entities.particles.Particle;
 import com.me.geonauts.model.entities.powerups.HealthPack;
 import com.me.geonauts.model.entities.powerups.Powerup;
@@ -62,7 +63,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int POWERUP_SPAWN_THRESHOLD = 200;
+	private int POWERUP_SPAWN_THRESHOLD = 1100;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -77,7 +78,12 @@ public class World {
 		screen = s;
 		
 		// Create default hero Sage.
-		hero = new Sage(new Vector2(WorldRenderer.CAM_OFFSET, 6));		
+		int h_type = randomGen.nextInt(2 - 0) + 0;
+		if (h_type == 0) 
+			hero = new Bomber(new Vector2(WorldRenderer.CAM_OFFSET, 6));	
+		else
+			hero = new Echo(new Vector2(WorldRenderer.CAM_OFFSET, 6));	
+		
 		
 		// Create default lists
 		enemies = new ArrayList<EnemyController>();

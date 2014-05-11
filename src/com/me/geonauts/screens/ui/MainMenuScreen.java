@@ -238,10 +238,12 @@ public class MainMenuScreen extends AbstractScreen {
 		lblScore.setText("High Score: " + highscore);
 
 		// Enable music if 1st time
+		/**
 		if (prefs.getInteger("games_played") <= 1) {
 			prefs.putBoolean("play-music", true);
 			prefs.flush();
 		}
+		*/
 		
 		boolean music = prefs.getBoolean("play-music");
 		
@@ -266,6 +268,7 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	private void resetPrefs() {
 		//prefs.clear();
+		prefs.putBoolean("play-music", true);
 		prefs.putInteger("Reload", 1);
 		prefs.putInteger("Attack", 1);
 		prefs.putInteger("Health", 1);

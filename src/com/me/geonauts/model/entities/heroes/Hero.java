@@ -26,7 +26,7 @@ public abstract class Hero extends Entity {
 		FLYING, FALLING, DYING
 	}	
 	public State		state = State.FALLING;
-	private float		stateTime = 0;
+	protected float		stateTime = 0;
 	private long		timeDied = 0;
 	
 	// Movement attributes
@@ -194,8 +194,8 @@ public abstract class Hero extends Entity {
 	}
 	
 	
-	// All Heros must implement the getFrames() method to return the proper images 
-	public abstract TextureRegion[] getFrames ();
+	// Animation to render the Hero
+	public abstract TextureRegion getKeyFrame();
 	
 	/**
 	 * Returns the time in seconds of the reload time
