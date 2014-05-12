@@ -1,13 +1,12 @@
 package com.me.geonauts.screens.ui;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -29,7 +28,6 @@ public class MainMenuScreen extends AbstractScreen {
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 	private static final String TITLE = "G E O N A U T S";
 
-	
 	// Buttons
 	private TextButton btnNewGame;
 	private TextButton btnHowToPlay;
@@ -241,6 +239,8 @@ public class MainMenuScreen extends AbstractScreen {
 		boolean music = prefs.getBoolean("play-music");
 		if (prefs.getInteger("games_played") == 0) {
 			music = true;
+		} else {
+			// Don't show ads the first time game is played
 		}
 		
 		if (music) {
@@ -249,7 +249,7 @@ public class MainMenuScreen extends AbstractScreen {
 		} else {
 			game.menuMusicOgg.stop();
 		}
-
+		
 	}
 
 	private void newGame() {

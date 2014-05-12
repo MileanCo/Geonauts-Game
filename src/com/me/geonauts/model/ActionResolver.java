@@ -26,4 +26,7 @@ public interface ActionResolver {
 	
 	/** Displays achievements */
 	public void showAchievements();
+	
+	/** Displays an ad */
+	public void showAd();
 }

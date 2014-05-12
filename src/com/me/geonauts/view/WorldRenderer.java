@@ -35,6 +35,7 @@ import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
+import com.me.geonauts.model.entities.anims.Shield;
 import com.me.geonauts.model.entities.enemies.BlueMob;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.Fiend;
@@ -49,6 +50,7 @@ import com.me.geonauts.model.entities.particles.ParticleLite;
 import com.me.geonauts.model.entities.particles.ParticleYellow;
 import com.me.geonauts.model.entities.powerups.HealthPack;
 import com.me.geonauts.model.entities.powerups.Powerup;
+import com.me.geonauts.model.entities.powerups.ShieldPack;
 import com.me.geonauts.model.enums.BlockType;
 
 
@@ -69,6 +71,7 @@ public class WorldRenderer {
 	private static final float EXPLOSION_DURATION = 0.04f; //seconds b/t frames
 	private static final float COIN_SPIN_DURATION = 0.10f;
 	private static final float HERO_ANIM_DURATION = 0.03f;
+	private static final float BARRIER_ANIM_DURATION = 0.10f;
 	
 	private Random randomGen = new Random();
 	private World world;
@@ -194,6 +197,7 @@ public class WorldRenderer {
 		TextureAtlas coinsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/coins.pack"));
 		TextureAtlas powerupsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/powerups.pack"));
 		TextureAtlas miscAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/misc.pack"));
+		TextureAtlas barrierAtlas = new TextureAtlas(Gdx.files.internal("images/textures/misc/barrier.pack"));
 		TextureAtlas missilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/missiles/missiles.pack"));
 		TextureAtlas nautsAtlas = new TextureAtlas(Gdx.files.internal("images/textures/nauts/nauts.pack"));
 		TextureAtlas tilesAtlas = new TextureAtlas(Gdx.files.internal("images/textures/tiles/tiles.pack"));
@@ -295,6 +299,8 @@ public class WorldRenderer {
 		
 		// Load powerups
 		HealthPack.frame = powerupsAtlas.findRegion("health-red");
+		ShieldPack.frame = powerupsAtlas.findRegion("shield");
+		
 		
 		// Load missile frames
 		YellowLaser.frames = new TextureRegion[1];
@@ -310,6 +316,13 @@ public class WorldRenderer {
 		ParticleYellow.frame = miscAtlas.findRegion("particle_yellow");
 		
 		// Load animations
+		// barrier
+		TextureRegion[] barrierFrames = new TextureRegion[9];
+		for (int i = 0; i < barrierFrames.length; i++) {
+			barrierFrames[i] = barrierAtlas.findRegion("barrier0" + (i+1));
+		}
+		Shield.anim =  new Animation(BARRIER_ANIM_DURATION, barrierFrames);
+		
 		//hit
 		TextureRegion[] explosionHitFrames = new TextureRegion[8];
 		for (int i = 0; i < explosionHitFrames.length; i++) {
@@ -511,7 +524,7 @@ public class WorldRenderer {
 			font_fipps_small.draw(spriteBatch, "Score: " + world.getHero().score, 
 					cam.position.x - width/2, height);
 			font_fipps_small.setColor(1.0f, 0f, 0f, 1.0f);
-			font_fipps_small.draw(spriteBatch, "Health: " + world.getHero().health, 
+			font_fipps_small.draw(spriteBatch, "Health: " + world.getHero().getHealth(), 
 					cam.position.x - width/2, height - font_fipps_small.getLineHeight());
 			
 			
@@ -731,11 +744,11 @@ public class WorldRenderer {
 			world.getPowerups().remove(i);
 			
 			// Check if there is text to display, & if Powerup isn't alive (it was picked up by hero)
-			if (p.TEXT_FLOAT_VALUE > 0 && !p.isAlive()) {
+			if (p.TEXT_FLOAT_VALUE != null && !p.isAlive()) {
 				// create new floating text
 				Vector2 pos = p.position.cpy();
 				pos.y +=  world.getHero().SIZE.y;
-				FloatingText ft = new FloatingText("+" + p.TEXT_FLOAT_VALUE, pos, new Vector2(0, 1));
+				FloatingText ft = new FloatingText(p.TEXT_FLOAT_VALUE, pos, new Vector2(0, 1));
 				ft.color = p.TEXT_FLOAT_COLOR;
 				floatingTexts.add(ft);
 				

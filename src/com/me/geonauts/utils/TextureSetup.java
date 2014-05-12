@@ -24,6 +24,7 @@ public class TextureSetup {
 	public static void main(String[] args) {
 		
 		// Animations
+		/**
 		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_06", ROOT_DIR + "textures/explosions", "explosion_06.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_10", ROOT_DIR + "textures/explosions", "explosion_10.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/explosion_11", ROOT_DIR + "textures/explosions", "explosion_11.pack");
@@ -47,12 +48,13 @@ public class TextureSetup {
 		
 		// misc
 		TexturePacker2.process(ASSET_FOLDER + "misc", ROOT_DIR + "textures/misc", "misc.pack");
-		
+		*/
 		// Powerups
 		TexturePacker2.process(ASSET_FOLDER + "powerups", ROOT_DIR + "textures/misc", "powerups.pack");
+		TexturePacker2.process(ASSET_FOLDER + "animations/barrier", ROOT_DIR + "textures/misc", "barrier.pack");
 		
 		// UI stuff
-		TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
+		//TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
 
 	}
 }

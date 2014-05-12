@@ -44,13 +44,15 @@ public abstract class Hero extends Entity {
 	// Other attributes
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	public boolean grounded;
-	public int health;
+	protected int health;
 	protected int reloads;
 	protected int damage;
 	
 	protected int DAMAGE_MULTIPLIER = 10 - prefs.getInteger("Reload"); // Decrease damage by # of reload upgrades
 	protected int HEALTH_MULTIPLIER = 50;
-
+	
+	// Shield stuff
+	public int shield = 0; // If this is EVER set to above 0, a shield animation is started
 	
 	// Targetting stuff
 	protected LinkedList<Target> targets;
@@ -245,9 +247,47 @@ public abstract class Hero extends Entity {
 	public int getDistance() {
 		return distance;
 	}
-	
+	public int getHealth() {
+		return health;
+	}
+	public void addHealth(int amount) {
+		this.health += amount;
+	}
+
 	public int getMoneyEarned() {
 		return money - startMoney;
 	}
+		
+	/**
+	 * Deals damage to the hero
+	 * @param amount
+	 */
+	public void dealDamage(int amount) {
+		// Hurt shield if it's still up
+		if (shield > 0) {
+			shield -= amount;
+
+			// If shield is out, turn it off
+			if (shield <= 0) {
+				// Remaining damage hurts health, which is negative.
+				health += shield;
+				shield = 0;
+				
+			}
+		// No shield, hurt health
+		} else {
+			health -= amount;
+		}
+		System.out.println(shield);
+		System.out.println(health);
+	}
+
+	public void deactivateShield() {
+		this.shield = 0;
+	}
+
+
+	
+
 }
 	

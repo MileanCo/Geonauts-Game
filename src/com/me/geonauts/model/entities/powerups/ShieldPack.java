@@ -5,23 +5,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.controller.HeroController;
 
-public class HealthPack extends Powerup {
+public class ShieldPack extends Powerup {
 	public static Vector2 SIZE = new Vector2((50f/64f), (48f/60f));
 	
 	public static TextureRegion frame;
 	
-	private int HEALTH = 150;
+	private int SHIELD = 150;
 
 	
-	public HealthPack(Vector2 pos, Vector2 velocity, HeroController hc) {
+	public ShieldPack(Vector2 pos, Vector2 velocity, HeroController hc) {
 		super(pos, velocity, SIZE, hc);
-		TEXT_FLOAT_VALUE = "+" + HEALTH;
-		TEXT_FLOAT_COLOR = new Color(1, 0, 0, 1);
+		TEXT_FLOAT_VALUE = "+" + SHIELD + " Shield";
+		TEXT_FLOAT_COLOR = new Color(0.2f, 0.2f, 1, 1);
 	}
 
 	@Override
 	public void doAction() {
-		heroC.addHealth(HEALTH);
+		heroC.activateShield(SHIELD);
 		alive = false;
 	}
 

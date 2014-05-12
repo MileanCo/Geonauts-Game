@@ -91,7 +91,7 @@ public class EnemyMissileController {
 		
 		// Check if missile collides with Target
 		if (collisionWithTarget()) {
-			missile.getTarget().health -= missile.getDamage();
+			missile.getTarget().dealDamage(missile.getDamage());
 			die();
 			return;
 		}

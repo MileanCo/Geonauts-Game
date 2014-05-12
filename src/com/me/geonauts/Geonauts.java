@@ -1,5 +1,7 @@
 package com.me.geonauts;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -13,7 +15,7 @@ import com.me.geonauts.screens.ui.ShopScreen;
 import com.me.geonauts.screens.ui.TutorialScreen;
 
 public class Geonauts extends Game {
-
+	public Random randomGen = new Random();
 	private GameScreen gameScreen;
 	private MainMenuScreen mainMenu;
 	private ShopScreen shop;

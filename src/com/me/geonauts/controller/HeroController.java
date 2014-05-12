@@ -16,7 +16,9 @@ import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;
 import com.me.geonauts.model.entities.Target;
+import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Explosion06;
+import com.me.geonauts.model.entities.anims.Shield;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.heroes.Hero.State;
@@ -260,10 +262,13 @@ public class HeroController {
 		for (Block block : collidable) {
 			if (block == null)  continue;
 			if (heroRect.overlaps(block.getBounds())) {
-				//System.out.println("Collision @ " + block.position.toString());
-				dead();
-				world.getCollisionRects().add(block.getBounds()); // for debug
-				break;
+				// If hero has shield, slow movement down A LOT
+				if (hero.shield > 0) 
+					hero.velocity.scl(0.975f);
+				else {
+					dead();
+					world.getCollisionRects().add(block.getBounds());
+				}
 			}
 		}
 
@@ -288,19 +293,23 @@ public class HeroController {
 		for (Block block : collidable) {
 			if (block == null) 	continue;
 			if (heroRect.overlaps(block.getBounds())) {
-				//System.out.println("Collision @ " + block.position.toString());
-				dead();
-				world.getCollisionRects().add(block.getBounds());
+				// If hero has shield, slow movement down A LOT
+				if (hero.shield > 0) 
+					hero.velocity.scl(0.975f);
+				else {
+					dead();
+					world.getCollisionRects().add(block.getBounds());
+				}
 				break;
 			}
 		}
 		// reset the collision box's position on Y
 		heroRect.y = hero.position.y;
 
-		// update Hero's position
+		// update and center bounding box Hero's position
 		hero.position.add(hero.velocity);
-		hero.getBounds().x = hero.position.x + BOUND_BOX_OFFSET.x / 2.5f;
-		hero.getBounds().y = hero.position.y + BOUND_BOX_OFFSET.y / 2.5f;
+		hero.getBounds().x = hero.position.x + BOUND_BOX_OFFSET.x / 2f;
+		hero.getBounds().y = hero.position.y + BOUND_BOX_OFFSET.y / 2f;
 
 		// un-scale velocity (not in frame time)
 		hero.velocity.scl(1 / delta);
@@ -346,5 +355,26 @@ public class HeroController {
 		}
 
 		return false;
+	}
+	
+	public Hero getHero() {
+		return hero;
+	}
+	public Rectangle getBounds() {
+		return hero.getBounds();
+	}
+	
+	public void addHealth(int amount) {
+		hero.addHealth(amount);
+	}
+	
+	public void activateShield(int amount) {
+		AbstractAnimation s = new Shield(hero.position.cpy(), 1, this.getHero());
+		world.getAnimations().add(s);
+		hero.shield += (amount);
+	}
+	
+	public void deactivateShield() {
+		hero.deactivateShield();
 	}
 }

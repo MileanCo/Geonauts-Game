@@ -210,7 +210,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 		
 		// Coin collector achievement
-		if (coins_collected <= 300) {
+		if (coins_collected > 0 && coins_collected <= 300) {
 			game.getActionResolver().incrementAchievement(Achievement.COIN_COLLECTOR, world.getHero().coinsCollected);
 		}
 		

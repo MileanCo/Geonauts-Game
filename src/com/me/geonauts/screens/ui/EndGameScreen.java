@@ -1,5 +1,7 @@
 package com.me.geonauts.screens.ui;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
@@ -140,6 +142,10 @@ public class EndGameScreen  extends AbstractScreen {
 		boolean music = prefs.getBoolean("play-music");
 		if (music) 
 			game.shopMusicOgg.play();
+		
+		// Show an 50% of the time
+		if (game.randomGen.nextBoolean()) 
+			game.getActionResolver().showAd();
 	}
 
 	private void goToShop() {

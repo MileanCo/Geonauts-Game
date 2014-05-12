@@ -52,4 +52,10 @@ public class DesktopInterface implements ActionResolver {
 		
 	}
 
+	@Override
+	public void showAd() {
+		// TODO Auto-generated method stub
+		System.out.println("Showing ad, bitches");
+	}
+
 }

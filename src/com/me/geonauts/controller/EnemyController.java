@@ -12,6 +12,7 @@ import com.me.geonauts.model.entities.anims.Explosion06;
 import com.me.geonauts.model.entities.anims.Explosion10;
 import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.enemies.AbstractEnemy;
+import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.missiles.EnemyMissile;
 
 public class EnemyController {
@@ -35,7 +36,8 @@ public class EnemyController {
 	public EnemyController(World world, AbstractEnemy e) {
 		this.world = world;
 		this.enemy = e;
-		BOUND_BOX_OFFSET = new Vector2(e.SIZE.x/3f, e.SIZE.y / 3f);
+		BOUND_BOX_OFFSET = new Vector2(e.SIZE.x / 3f, e.SIZE.y / 3f);
+		enemy.setBounds(enemy.SIZE.x - BOUND_BOX_OFFSET.x, enemy.SIZE.y - BOUND_BOX_OFFSET.y);
 	}
 	
 	// This is the rectangle pool used in collision detection
@@ -114,14 +116,18 @@ public class EnemyController {
 				enemy.getBounds().width, enemy.getBounds().height);
 
 		
+		// Get hero object so we can get rects
+		Hero hero = world.getHero();
+		
 		// Check if enemy collides with Hero
 		Rectangle heroRect = rectPool.obtain();
 		// set the rectangle to hero's bounding box
-		heroRect.set(world.getHero().getBounds().x, world.getHero().getBounds().y, 
-				world.getHero().getBounds().width, world.getHero().getBounds().height);
+		heroRect.set(hero.getBounds().x, hero.getBounds().y, 
+				hero.getBounds().width, hero.getBounds().height);
+		
 		// Does it collide? 
 		if (enemyRect.overlaps(heroRect)) {
-			world.getHero().health -= enemy.getDamage() * 2;
+			hero.dealDamage(enemy.getDamage() * 2);
 			die(false);
 			return;
 		} 
@@ -193,8 +199,8 @@ public class EnemyController {
 
 		// update enemy's position
 		enemy.position.add(enemy.velocity);
-		enemy.getBounds().x = enemy.position.x + BOUND_BOX_OFFSET.x / 1.5f;
-		enemy.getBounds().y = enemy.position.y + BOUND_BOX_OFFSET.y / 1.5f;
+		enemy.getBounds().x = enemy.position.x + BOUND_BOX_OFFSET.x / 2f;
+		enemy.getBounds().y = enemy.position.y + BOUND_BOX_OFFSET.y / 2f;
 
 		// un-scale velocity (not in frame time)
 		enemy.velocity.scl(1 / delta);

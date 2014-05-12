@@ -25,6 +25,7 @@ import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.particles.Particle;
 import com.me.geonauts.model.entities.powerups.HealthPack;
 import com.me.geonauts.model.entities.powerups.Powerup;
+import com.me.geonauts.model.entities.powerups.ShieldPack;
 import com.me.geonauts.screens.GameScreen;
 import com.me.geonauts.view.WorldRenderer;
 
@@ -34,9 +35,9 @@ import com.me.geonauts.view.WorldRenderer;
  */
 public class World {
 	/** Time spent the Hero is dead. */
-	private static final long DEAD_TIME = 2500;
+	private static final long DEAD_TIME = 2500; //milliseconds
 	/** Amount the game speed increases over time */
-	public static final float SPEED_INCREMENT = 0.01f;
+	public static final float SPEED_INCREMENT = 0.02f;
 	
 	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
@@ -63,7 +64,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int POWERUP_SPAWN_THRESHOLD = 1600;
+	private int POWERUP_SPAWN_THRESHOLD = 2500;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -171,12 +172,21 @@ public class World {
 		
 		// Spawn some powerups!
 		spawn = randomGen.nextInt(POWERUP_SPAWN_THRESHOLD - 0) + 0;
+		// HEALTH PACK
 		if (spawn == 50) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			Vector2 vel = new Vector2(randomGen.nextFloat() - 0.5f, randomGen.nextFloat() - 0.5f);
 			// Dont spawn powerups on blocks.
 			if (getBlock((int)pos.x, (int)pos.y) == null )
-				powerups.add(new HealthPack(pos, vel, hero));
+				powerups.add(new HealthPack(pos, vel, screen.getHeroController()));
+
+		// SHIELD
+		} else if (spawn == 51) {
+			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+			Vector2 vel = new Vector2(randomGen.nextFloat() - 0.5f, randomGen.nextFloat() - 0.5f);
+			// Dont spawn powerups on blocks.
+			if (getBlock((int)pos.x, (int)pos.y) == null )
+				powerups.add(new ShieldPack(pos, vel, screen.getHeroController()));
 		}
 		
 		

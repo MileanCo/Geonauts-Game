@@ -158,7 +158,7 @@ public class Chunk {
 	private String[] divider1 = {".......CTc.......",
 							  	"......CBBs.......",
 							  	".....CBBBs.......",
-							  	"FwwwwtttBtwwwwwwF",
+							  	"FwwwwtttttwwwwwwF",
 							  	".",
 							  	".",
 							  	"." ,

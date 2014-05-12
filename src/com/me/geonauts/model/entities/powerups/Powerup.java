@@ -3,22 +3,22 @@ package com.me.geonauts.model.entities.powerups;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.entities.Entity;
-import com.me.geonauts.model.entities.heroes.Hero;
 
 public abstract class Powerup extends Entity {
 	
 	public Vector2 velocity;
 	protected float ROTATION_SPEED = 0.5f;
 	
-	public int TEXT_FLOAT_VALUE = 0;
+	public String TEXT_FLOAT_VALUE = null;
 	public Color TEXT_FLOAT_COLOR = null;
-	protected Hero hero;
+	protected HeroController heroC;
 	protected boolean alive = true;
 	
-	public Powerup(Vector2 pos, Vector2 velocity, Vector2 SIZE, Hero h) {
+	public Powerup(Vector2 pos, Vector2 velocity, Vector2 SIZE, HeroController h) {
 		super(pos, SIZE);
-		hero = h;
+		heroC = h;
 		this.velocity = velocity;
 		
 	}
@@ -35,7 +35,7 @@ public abstract class Powerup extends Entity {
 		this.getBounds().y = this.position.y ;
 		
 		// Check if hit hero
-		if (hero.getBounds().overlaps(this.getBounds())) {
+		if (heroC.getBounds().overlaps(this.getBounds())) {
 			doAction();
 		}
 		

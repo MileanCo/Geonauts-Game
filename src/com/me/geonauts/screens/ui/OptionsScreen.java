@@ -146,6 +146,10 @@ public class OptionsScreen extends AbstractScreen{
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 		
+		// Show an 50% of the time
+		if (game.randomGen.nextBoolean()) 
+			game.getActionResolver().showAd();
+		
 	}
 
 	private void goToMenu() {

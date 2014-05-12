@@ -1,5 +1,7 @@
 package com.me.geonauts.screens.ui;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +18,7 @@ import com.me.geonauts.Geonauts;
 import com.me.geonauts.model.enums.Achievement;
 
 
-public class ShopScreen extends AbstractScreen{	
+public class ShopScreen extends AbstractScreen {	
 	//load preferences
 	Preferences prefs = Gdx.app.getPreferences("game-prefs");
 	
@@ -299,6 +301,10 @@ public class ShopScreen extends AbstractScreen{
 		
 		getPreferences();
 		updateLabels();
+		
+		// Show an 50% of the time
+		if (game.randomGen.nextBoolean()) 
+			game.getActionResolver().showAd();
 	}
 	
 	public void quitAndSave() {
