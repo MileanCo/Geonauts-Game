@@ -27,13 +27,13 @@ public class YellowLaser extends Missile {
 	@Override
 	public void update(float delta) {
 		// Target - Position
-		Vector2 V = target.position.cpy().sub(position);
+		Vector2 V = target.getCenterPosition().sub(position);
 		// Unit vector = V / magnitude of V
 		Vector2 unitVec = V.div(V.len());
 		
 		// Get difference in x and y from target to position
-		float x_diff = target.position.cpy().x - position.x;
-		float y_diff = target.position.cpy().y - position.y;
+		float x_diff = target.position.cpy().x - position.x;// + target.SIZE.x/2f;
+		float y_diff = target.position.cpy().y - position.y;// - target.SIZE.y/2f;
 		
 		// If target is dead, Missile is considered 'floating'
 		if (! target.isAlive() ) {

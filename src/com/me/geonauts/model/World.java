@@ -10,13 +10,15 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.me.geonauts.controller.EnemyController;
-import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
+import com.me.geonauts.controller.enemies.BossWidowController;
+import com.me.geonauts.controller.enemies.EnemyController;
+import com.me.geonauts.controller.enemies.EnemyMissileController;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.anims.AbstractAnimation;
 import com.me.geonauts.model.entities.anims.Coin;
 import com.me.geonauts.model.entities.enemies.BlueMob;
+import com.me.geonauts.model.entities.enemies.BossWidow;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Bomber;
@@ -64,7 +66,7 @@ public class World {
 	
 	
 	/** Spawning variables */
-	private int POWERUP_SPAWN_THRESHOLD = 2500;
+	private int POWERUP_SPAWN_THRESHOLD = 2550;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
 	private final int MIN_SPAWN = 100;
@@ -73,7 +75,12 @@ public class World {
 	
 	private boolean changed_spawn = false;
 	
+	public boolean bossMode;
+	private boolean bossSpawned = false;
+	private final int BOSS_LEVEL = 3;
+	
 	private int total_upgrades;
+	private int games_played;
 	
 	public World(GameScreen s) { //, float CAMERA_WIDTH, float CAMERA_HEIGHT) {	
 		screen = s;
@@ -93,28 +100,33 @@ public class World {
 		enemyMissiles = new ArrayList<EnemyMissileController> ();
 		particles = new ArrayList<Particle> ();
 		powerups = new ArrayList<Powerup> ();
-		
-		resetChunks();
-
-		
+				
 		// Get preferences
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		total_upgrades = prefs.getInteger("total upgrades");
+		games_played = prefs.getInteger("games_played");	
+		
+		bossMode = prefs.getBoolean("bossMode");
 		
 		// Make game harder based on total upgrades
+		BossWidow.health = 1400 + total_upgrades * 50;
 		Dwain.health = 55 + total_upgrades * 7;
 		FireMob.health = 45 + total_upgrades * 7;
 		BlueMob.health = 35 + total_upgrades * 5;
 		
-		Dwain.damage = 15 + total_upgrades * 2;
+		BossWidow.damage = 125 + total_upgrades * 3;
+		Dwain.damage = 15 + total_upgrades;
 		FireMob.damage = 10 + total_upgrades * 2;
 		BlueMob.damage = 15 + total_upgrades * 2;
 		
+		ShieldPack.SHIELD = 150 + total_upgrades*5	;
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {
 			SPAWN_THRESHOLD = 250;
-		}		
+		}	
+		
+		resetChunks();
 	}
 	
 	/**
@@ -139,23 +151,29 @@ public class World {
 		}
 				
 		// Spawn some enemies!
-		int spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
+		int spawn;
+		if (bossMode) // if boss, spawn less enemies
+			spawn = randomGen.nextInt(SPAWN_THRESHOLD*2 - 0) + 0;
+		else
+			spawn = randomGen.nextInt(SPAWN_THRESHOLD - 0) + 0;
+		
 		int y = randomGen.nextInt(WorldRenderer.HEIGHT - 1) + 1;
 
+		
 		// Dwain
-		if (spawn == 50 && total_upgrades >= 7) {
+		if (spawn == 1 && total_upgrades >= 7) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
 		
 		// Fire Mob
-		} else if (spawn == 51 || (spawn == 50 && total_upgrades < 7)) {
+		} else if (spawn == 2 || (spawn == 1 && total_upgrades < 7)) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new FireMob(pos, hero));
 			enemies.add(ec);
 
 		// Blue Mob
-		} else if (spawn == 53) {
+		} else if (spawn == 3) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new BlueMob(pos, hero));
 			enemies.add(ec);
@@ -163,7 +181,7 @@ public class World {
 			
 		spawn = randomGen.nextInt(COIN_SPAWN_THRESHOLD - 0) + 0;
 		// Spawn some Coins!
-		if (spawn == 54) {
+		if (spawn == 4) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			// Dont spawn coins on blocks.
 			if (getBlock((int)pos.x, (int)pos.y) == null )
@@ -198,7 +216,19 @@ public class World {
 		} else if (hero.getDistance() % INCREASE_SPAWN_EVERY != 0)
 			changed_spawn = false;
 		
-
+		// Spawn a boss if distance is right, no boss mode currently, and it's a boss level
+		if (hero.getDistance() > Chunk.WIDTH-12  && (games_played % BOSS_LEVEL == 0 || bossMode) && !bossSpawned) {
+			// Only spawn the boss if more than 3 games have been played
+			if (games_played > 3) {
+				y = randomGen.nextInt((int) (WorldRenderer.HEIGHT-BossWidow.SIZE.y - BossWidow.SIZE.y)) + (int)BossWidow.SIZE.y;
+				Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
+				EnemyController ec = new BossWidowController(this,  new BossWidow(pos));
+				
+				enemies.add(ec);
+				bossMode = true;
+				bossSpawned = true;
+			}
+		}
 		// WORLD RENDERER HANDLES DRAWING AND UPDATING OF ALL ENTITIES
 		
 		
@@ -211,9 +241,15 @@ public class World {
 	public void resetChunks() {
 		chunks = new LinkedList<Chunk>();
 		
+		
 		for (int i = 0; i < NUM_CHUNKS; i++) {
 			Vector2 cpos = new Vector2( i * Chunk.WIDTH, 0);
-			chunks.add(i, new Chunk(cpos, this));
+			
+			// Make 2nd chunk blank if 2nd chunk and it's a boss level
+			if (i >= 1 && games_played % BOSS_LEVEL == 0) 
+				chunks.add(i, new Chunk(cpos, this, true));
+			else
+				chunks.add(i, new Chunk(cpos, this, false));
 		}
 		
 	}
@@ -277,4 +313,10 @@ public class World {
 			return chunks.getFirst().getBlock(col, row);
 		
 	}
+
+	public GameScreen getScreen() {
+		return screen;
+	}
+	
+	
 }

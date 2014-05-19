@@ -31,15 +31,9 @@ public class TextureSetup {
 		TexturePacker2.process(ASSET_FOLDER + "animations/hit", ROOT_DIR + "textures/explosions", "hit.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/coins", ROOT_DIR + "textures/misc", "coins.pack");
 		
-		// enemies
-		TexturePacker2.process(ASSET_FOLDER + "enemies", ROOT_DIR + "textures/enemies", "enemies.pack");
-		
 		// nauts
 		TexturePacker2.process(ASSET_FOLDER + "nauts", ROOT_DIR + "textures/nauts", "nauts.pack");
 		
-		// missiles
-		TexturePacker2.process(ASSET_FOLDER + "missiles", ROOT_DIR + "textures/missiles", "missiles.pack");
-
 		// tiles
 		TexturePacker2.process(ASSET_FOLDER + "tiles", ROOT_DIR + "textures/tiles", "tiles.pack");
 		
@@ -49,10 +43,18 @@ public class TextureSetup {
 		// misc
 		TexturePacker2.process(ASSET_FOLDER + "misc", ROOT_DIR + "textures/misc", "misc.pack");
 		*/
+		// missiles
+		TexturePacker2.process(ASSET_FOLDER + "missiles", ROOT_DIR + "textures/missiles", "missiles.pack");
+
+		
+		// enemies
+		TexturePacker2.process(ASSET_FOLDER + "enemies", ROOT_DIR + "textures/enemies", "enemies.pack");
+		
 		// Powerups
 		TexturePacker2.process(ASSET_FOLDER + "powerups", ROOT_DIR + "textures/misc", "powerups.pack");
 		TexturePacker2.process(ASSET_FOLDER + "animations/barrier", ROOT_DIR + "textures/misc", "barrier.pack");
 		
+
 		// UI stuff
 		//TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
 

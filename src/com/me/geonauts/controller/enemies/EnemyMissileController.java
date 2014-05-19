@@ -1,4 +1,4 @@
-package com.me.geonauts.controller;
+package com.me.geonauts.controller.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;

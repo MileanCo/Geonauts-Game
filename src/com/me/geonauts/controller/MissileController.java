@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.me.geonauts.controller.enemies.EnemyController;
 import com.me.geonauts.model.World;
 import com.me.geonauts.model.entities.Block;
 import com.me.geonauts.model.entities.Entity;

@@ -7,5 +7,6 @@ public enum Achievement {
 	SCORE_MORE,
 	ALL_THE_TARGETS,
 	NEW_PILOT, 
-	COIN_COLLECTOR
+	COIN_COLLECTOR, 
+	BLACK_WIDOW
 }

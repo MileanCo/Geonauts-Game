@@ -10,7 +10,7 @@ public class ShieldPack extends Powerup {
 	
 	public static TextureRegion frame;
 	
-	private int SHIELD = 150;
+	public static int SHIELD = 150;
 
 	
 	public ShieldPack(Vector2 pos, Vector2 velocity, HeroController hc) {

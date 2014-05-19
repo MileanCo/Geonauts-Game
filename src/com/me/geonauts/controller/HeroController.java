@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.me.geonauts.controller.enemies.EnemyController;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.EntityAccessor;
 import com.me.geonauts.model.World;
@@ -163,6 +164,11 @@ public class HeroController {
 		// Processing the input - setting the states of Hero
 		if (hero.state != Hero.State.DYING) 
 			processInput();
+		
+		// If hero no alive, it's dead.
+		if (! hero.alive) 
+			dead();
+		
 		
 		// Check for targets to shoot at IF it's time to shoot
 		if (hero.getStateTime() - lastShootTime > hero.getReloadTime() && ! hero.grounded) {

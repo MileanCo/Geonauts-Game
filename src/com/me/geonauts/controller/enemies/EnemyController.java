@@ -1,4 +1,4 @@
-package com.me.geonauts.controller;
+package com.me.geonauts.controller.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,16 +18,16 @@ import com.me.geonauts.model.entities.missiles.EnemyMissile;
 public class EnemyController {
 
 	// Collidable blocks.
-	private Array<Block> collidable = new Array<Block>();
+	protected Array<Block> collidable = new Array<Block>();
 	
-	private Vector2 BOUND_BOX_OFFSET;
+	protected Vector2 BOUND_BOX_OFFSET;
 	
 	// Model objects
-	private World world;
-	private AbstractEnemy enemy;
+	protected World world;
+	protected AbstractEnemy enemy;
 	
 	// Shooting fields
-	private float lastShootTime;
+	protected float lastShootTime;
 	
 	/**
 	 * Constructor to make the Controller for enemy
@@ -42,7 +42,7 @@ public class EnemyController {
 	
 	// This is the rectangle pool used in collision detection
 	// Good to avoid instantiation each frame
-	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
+	protected Pool<Rectangle> rectPool = new Pool<Rectangle>() {
 		@Override
 		protected Rectangle newObject() {
 			return new Rectangle();
@@ -68,7 +68,7 @@ public class EnemyController {
 				&& enemy.position.x > world.getHero().position.x ) {
 			
 			// CREATE NEW MISSILE w/ TARGET
-			EnemyMissile m = enemy.newMissile(enemy.position.cpy().add(enemy.SIZE.x/1.5f, 0), world.getHero());
+			EnemyMissile m = enemy.newMissile(enemy.getCenterPosition().add(enemy.SIZE.x/1.5f, 0), world.getHero());
 			//, t.getEnemy(), 25);
 			EnemyMissileController emc = new EnemyMissileController(world, m);
 
@@ -83,9 +83,19 @@ public class EnemyController {
 		// apply acceleration to change velocity
 		enemy.velocity.add(enemy.acceleration.x, enemy.acceleration.y);
 		
+		
+		enemy.velocity.scl(delta); // scale velocity to frame units
+		
 		// checking collisions with the surrounding blocks depending on enemy's velocity
 		checkCollisionWithBlocks(delta);
 
+		// update enemy's position
+		enemy.position.add(enemy.velocity);
+		enemy.getBounds().x = enemy.position.x + BOUND_BOX_OFFSET.x / 2f;
+		enemy.getBounds().y = enemy.position.y + BOUND_BOX_OFFSET.y / 2f;
+
+		enemy.velocity.scl(1 / delta); // un-scale velocity (not in frame time)
+		
 		// apply damping to halt enemy nicely
 		enemy.velocity.y *= enemy.getDAMP();
 		
@@ -105,10 +115,7 @@ public class EnemyController {
 	}
 
 	/** Collision checking **/
-	private void checkCollisionWithBlocks(float delta) {
-		// scale velocity to frame units
-		enemy.velocity.scl(delta);
-
+	protected void checkCollisionWithBlocks(float delta) {
 		// Obtain the rectangle from the pool instead of instantiating it
 		Rectangle enemyRect = rectPool.obtain();
 		// set the rectangle to enemy's bounding box
@@ -196,19 +203,10 @@ public class EnemyController {
 		}
 		// reset the collision box's position on Y
 		enemyRect.y = enemy.position.y;
-
-		// update enemy's position
-		enemy.position.add(enemy.velocity);
-		enemy.getBounds().x = enemy.position.x + BOUND_BOX_OFFSET.x / 2f;
-		enemy.getBounds().y = enemy.position.y + BOUND_BOX_OFFSET.y / 2f;
-
-		// un-scale velocity (not in frame time)
-		enemy.velocity.scl(1 / delta);
-
 	}
 	
 	/** populate the collidable array with the blocks found in the enclosing coordinates **/
-	private void populateCollidableBlocks(int startX, int startY, int endX,	int endY) {
+	protected void populateCollidableBlocks(int startX, int startY, int endX,	int endY) {
 		collidable.clear();
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {
@@ -219,7 +217,7 @@ public class EnemyController {
 		}
 	}
 	
-	private void die(boolean shotDown) {
+	protected void die(boolean shotDown) {
 		enemy.alive = false;
 		enemy.state = AbstractEnemy.State.DYING;
 		world.getEnemyControllers().remove(this);

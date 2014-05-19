@@ -13,7 +13,6 @@ public class Fiend extends AbstractEnemy {
 	
 
 	public static final float SPEED = 3f;	// unit per second
-	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((100/64f), (45/60f));
 	private static int health = 50;
 	private static int damage = 15;
@@ -31,10 +30,10 @@ public class Fiend extends AbstractEnemy {
 	 * @param SIZE
 	 */
 	public Fiend(Vector2 pos) {
-		super(pos, SIZE, SPEED, health, damage);
+		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
 		PITCH = rand.nextInt(20-12) + 12;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
-	
+
 		//System.out.println(ROTATION_SPEED);
 
 	}
@@ -71,8 +70,8 @@ public class Fiend extends AbstractEnemy {
 		}
 		
 		// Set acceleration
-		acceleration.x = SPEED * DIRECTION;
-		acceleration.y = (float) (SPEED * angle) * DIRECTION;
+		acceleration.x = SPEED * direction.x;
+		acceleration.y = (float) (SPEED * angle) * direction.y;
 		
 	}
 

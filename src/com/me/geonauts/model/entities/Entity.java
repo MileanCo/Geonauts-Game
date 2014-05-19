@@ -67,4 +67,14 @@ public abstract class Entity {
 	public float getY() {
 		return position.y;
 	}
+	/** 
+	 * @return Center position of enemy, not bottom-left corner.
+	 */
+	public Vector2 getCenterPosition() {
+		Vector2 V = position.cpy();
+		//V.x += (SIZE.x / 2f);
+		V.y += (SIZE.y / 2f);
+		return V;
+	}
+	
 }

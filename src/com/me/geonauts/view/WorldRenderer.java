@@ -20,9 +20,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.me.geonauts.controller.EnemyController;
-import com.me.geonauts.controller.EnemyMissileController;
 import com.me.geonauts.controller.MissileController;
+import com.me.geonauts.controller.enemies.EnemyController;
+import com.me.geonauts.controller.enemies.EnemyMissileController;
 import com.me.geonauts.model.Chunk;
 import com.me.geonauts.model.ParallaxLayer;
 import com.me.geonauts.model.World;
@@ -37,6 +37,7 @@ import com.me.geonauts.model.entities.anims.Explosion11;
 import com.me.geonauts.model.entities.anims.ExplosionHit;
 import com.me.geonauts.model.entities.anims.Shield;
 import com.me.geonauts.model.entities.enemies.BlueMob;
+import com.me.geonauts.model.entities.enemies.BossWidow;
 import com.me.geonauts.model.entities.enemies.Dwain;
 import com.me.geonauts.model.entities.enemies.Fiend;
 import com.me.geonauts.model.entities.enemies.FireMob;
@@ -44,6 +45,7 @@ import com.me.geonauts.model.entities.heroes.Bomber;
 import com.me.geonauts.model.entities.heroes.Echo;
 import com.me.geonauts.model.entities.heroes.Hero;
 import com.me.geonauts.model.entities.missiles.GreenEnemyLaser;
+import com.me.geonauts.model.entities.missiles.PurpleEnemyLaser;
 import com.me.geonauts.model.entities.missiles.YellowLaser;
 import com.me.geonauts.model.entities.particles.Particle;
 import com.me.geonauts.model.entities.particles.ParticleLite;
@@ -134,7 +136,6 @@ public class WorldRenderer {
 	
 	public WorldRenderer(World world) {
 		this.world = world;		
-		this.debug = debug;
 		spriteBatch = new SpriteBatch();
 		debugRenderer = new ShapeRenderer();
 		loadTextures();
@@ -280,6 +281,10 @@ public class WorldRenderer {
 		
 		
 		// Load all Enemy textures
+		BossWidow.enemyFrames = new TextureRegion[1];
+		for (int i = 0; i < BossWidow.enemyFrames.length; i++) {
+			BossWidow.enemyFrames[i] = enemiesAtlas.findRegion("bosses/widow0" + i);
+		}
 		Dwain.enemyFrames = new TextureRegion[1];
 		for (int i = 0; i < Dwain.enemyFrames.length; i++) {
 			Dwain.enemyFrames[i] = enemiesAtlas.findRegion("dwain0" + i);
@@ -307,7 +312,9 @@ public class WorldRenderer {
 		YellowLaser.frames[0] =  missilesAtlas.findRegion("laser_yellow0" + 0);
 		GreenEnemyLaser.frames = new TextureRegion[1];
 		GreenEnemyLaser.frames[0] =  missilesAtlas.findRegion("laser_green0" + 0);
-		//Missile.frames[1] =  missilesAtlas.findRegion("laser_green0" + 0);
+		PurpleEnemyLaser.frames = new TextureRegion[1];
+		PurpleEnemyLaser.frames[0] =  missilesAtlas.findRegion("laser_purple0" + 0);
+
 		
 		// Load target frames
 		Target.frames = new TextureRegion[1];
@@ -471,12 +478,7 @@ public class WorldRenderer {
 			
 			drawHero(delta);
 			
-			// Draw & Update in SAME loop for performance improvement
-			// DRAW and UPDATE enemies
-			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
-				drawUpdateEnemy(i, delta);
-			}
-			
+			// Draw & Update in SAME loop for performance improvement			
 			// DRAW and UPDATE MISSILES
 			for (int i = 0; i < world.getMissileControllers().size(); i++ ) {
 				drawUpdateMissile(i, delta);
@@ -490,6 +492,11 @@ public class WorldRenderer {
 			// DRAW and UPDATE ENEMY MISSILES
 			for (int i = 0; i < world.getEnemyMissileControllers().size(); i++ ) {
 				drawUpdateEnemyMissile(i, delta);
+			}
+			
+			// DRAW and UPDATE enemies
+			for (int i = 0; i < world.getEnemyControllers().size(); i++) {
+				drawUpdateEnemy(i, delta);
 			}
 			
 			// DRAW and UPDATE TARGETS
@@ -828,15 +835,15 @@ public class WorldRenderer {
 	 * @param frame TextureRegion
 	 */
 	private void drawEntity(Entity e, TextureRegion frame) {
-		spriteBatch.draw(frame, e.position.x * ppuX, e.position.y * ppuY, 
-				e.SIZE.x * ppuX / 2, e.SIZE.y * ppuY / 2,  
-				e.SIZE.x * ppuX, e.SIZE.y * ppuY,  
-				1, 1,  
-				e.getAngle());
+		spriteBatch.draw(frame, e.position.x * ppuX - e.SIZE.x/2f, e.position.y * ppuY - e.SIZE.y/2f,  //region, x, y
+				e.SIZE.x * ppuX / 2f, e.SIZE.y * ppuY / 2f,  //originX, originY
+				e.SIZE.x * ppuX, e.SIZE.y * ppuY,  //width, height
+				1, 1,   //scaleX, scaleY
+				e.getAngle()); 
 	}
 	
 
-	
+
 	public float getPPUX() { 
 		return ppuX; 
 	}

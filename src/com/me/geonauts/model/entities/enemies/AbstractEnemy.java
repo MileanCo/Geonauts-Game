@@ -17,7 +17,7 @@ import com.me.geonauts.model.entities.missiles.EnemyMissile;
  *
  */
 public abstract class AbstractEnemy extends Entity {
-	protected Random rand = new Random();
+	protected static Random rand = new Random();
 	// State stuff
 	public enum State {
 		DYING, FLYING, FALLING
@@ -27,11 +27,12 @@ public abstract class AbstractEnemy extends Entity {
 	protected float		stateTime = 0;
 	
 	// Movement attributes
-	protected float 	SPEED;
+	public float 	SPEED;
 	protected float 	DAMP;
 	public Vector2 		acceleration;
 	public Vector2 		velocity;
 	public Vector2		MAX_VEL;
+	public Vector2 		direction = new Vector2(-1, -1);
 	
 	// Other attributes
 	public int health;
@@ -45,9 +46,10 @@ public abstract class AbstractEnemy extends Entity {
 	public AbstractEnemy(Vector2 pos, Vector2 SIZE, float SPEED, int health, int damage) {
 		super(pos, SIZE);
 		
+		
 		// Make new movement vectors
 		DAMP = 0.85f;
-		this.SPEED = (float) (rand.nextDouble() * SPEED);
+		this.SPEED = SPEED;
 		MAX_VEL = new Vector2(SPEED, SPEED * 2f);
 		acceleration = new Vector2(SPEED, 0);
 		velocity = new Vector2();
@@ -74,7 +76,6 @@ public abstract class AbstractEnemy extends Entity {
 	public float getReloadTime() {
 		return reloadTime;
 	}
-
 	// All Enemies must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();
 	

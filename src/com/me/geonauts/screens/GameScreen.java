@@ -190,6 +190,8 @@ public class GameScreen implements Screen, InputProcessor {
 		world.getHero().money += (world.getHero().getDistance()/2); // add distance traveled to money
 		prefs.putInteger("Money", world.getHero().money);
 		
+		prefs.putBoolean("bossMode", world.bossMode);
+		
 		prefs.flush();
 		
 		// Google Play Services stuff & achievements
@@ -210,7 +212,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 		
 		// Coin collector achievement
-		if (coins_collected > 0 && coins_collected <= 300) {
+		if (world.getHero().coinsCollected > 0 && world.getHero().coinsCollected <= 300) {
 			game.getActionResolver().incrementAchievement(Achievement.COIN_COLLECTOR, world.getHero().coinsCollected);
 		}
 		
@@ -304,4 +306,9 @@ public class GameScreen implements Screen, InputProcessor {
 	public Hero getHero() {
 		return world.getHero();
 	}
+
+	public Geonauts getGame() {
+		return game;
+	}
+	
 }

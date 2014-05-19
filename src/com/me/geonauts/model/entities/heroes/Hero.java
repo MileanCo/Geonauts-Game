@@ -71,6 +71,7 @@ public abstract class Hero extends Entity {
 	
 	public int enemiesKilled = 0;
 	public int coinsCollected = 0;
+	public boolean alive = true;
 
 	
 	/**
@@ -116,6 +117,9 @@ public abstract class Hero extends Entity {
 		
 	}
 
+	public void die() {
+		state = State.DYING;
+	}
 	/**
 	 * Update method to change hero's state.
 	 * @param delta
@@ -278,8 +282,6 @@ public abstract class Hero extends Entity {
 		} else {
 			health -= amount;
 		}
-		System.out.println(shield);
-		System.out.println(health);
 	}
 
 	public void deactivateShield() {

@@ -85,7 +85,7 @@ public class MainMenuScreen extends AbstractScreen {
 		lblInfo = new Label("Google Play - ", skin);
 		
 		
-		btnNewGame = new TextButton("New Game", style);
+		btnNewGame = new TextButton("Play", style);
 		btnNewGame.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;

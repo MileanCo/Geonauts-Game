@@ -36,11 +36,18 @@ public class Chunk {
 	public Chunk(Vector2 pos, World world) {
 		this.position = pos;
 		this.world = world;
+		newBuild(false);
+		
+	}
 	
+	public Chunk(Vector2 pos, World world, boolean bossMode) {
+		this.position = pos;
+		this.world = world;
+		
 		// System.out.println("cpos: " + pos);
 		//loadChunkFile("chunk1");
 		//();
-		newBuild();
+		newBuild(bossMode);
 	}
 	
 	
@@ -170,7 +177,21 @@ public class Chunk {
 	 * Determines which build to make
 	 */
 	public void newBuild() {
+		this.newBuild(false);
+	}
+	
+	/**
+	 * Determines which build to make
+	 * @param bossMode True if blank build
+	 */
+	public void newBuild(boolean bossMode) {
 		int build = random.nextInt(7 - 1) + 1;
+		
+		// If there's a boss, don't build anything
+		if (world.bossMode || bossMode) {
+			reset();
+			return;
+		}
 		
 		switch (build) {
 			case 1: 
@@ -190,6 +211,10 @@ public class Chunk {
 				break;
 			case 6:
 				build6();
+				break;
+			// blank build
+			case 7:
+				reset();
 				break;
 		}
 	}

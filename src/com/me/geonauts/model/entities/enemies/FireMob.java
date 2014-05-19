@@ -14,7 +14,6 @@ public class FireMob extends AbstractEnemy {
 	
 
 	public static final float SPEED = 0.6f;	// unit per second
-	public final int DIRECTION = -1;
 	private static Vector2 SIZE = new Vector2((50/64f), (50/60f));
 	public static int health;
 	public static int damage;
@@ -35,10 +34,10 @@ public class FireMob extends AbstractEnemy {
 	 * @param SIZE
 	 */
 	public FireMob(Vector2 pos, Hero hero) {
-		super(pos, SIZE, SPEED, health, damage);
+		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
 		PITCH = rand.nextInt(32-15) + 15;
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
-	
+
 		this.hero = hero;
 		//System.out.println(ROTATION_SPEED);
 
@@ -68,8 +67,8 @@ public class FireMob extends AbstractEnemy {
 		else if (angle < -PITCH) angle = -PITCH;
 		
 		// Set acceleration
-		acceleration.x = SPEED * DIRECTION;
-		acceleration.y = (float) (SPEED * angle) * DIRECTION;
+		acceleration.x = SPEED * direction.x;
+		acceleration.y = (float) (SPEED * angle) * direction.y;
 		
 	}
 

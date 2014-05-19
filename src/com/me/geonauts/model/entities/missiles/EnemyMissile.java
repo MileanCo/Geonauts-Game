@@ -47,7 +47,7 @@ public abstract class EnemyMissile extends Entity {
 		
 		
 		// Set initial velocity
-		Vector2 V = target.position.cpy().sub(position);
+		Vector2 V = target.getCenterPosition().sub(position);
 		// Unit vector = V / magnitude of V
 		Vector2 unitVec = V.div(V.len());	
 		velocity = unitVec.scl(SPEED);
