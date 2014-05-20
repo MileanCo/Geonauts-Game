@@ -77,7 +77,7 @@ public class World {
 	
 	public boolean bossMode;
 	private boolean bossSpawned = false;
-	private final int BOSS_LEVEL = 3;
+	private final int BOSS_LEVEL = 4;
 	
 	private int total_upgrades;
 	private int games_played;
@@ -218,8 +218,12 @@ public class World {
 		
 		// Spawn a boss if distance is right, no boss mode currently, and it's a boss level
 		if (hero.getDistance() > Chunk.WIDTH-12  && (games_played % BOSS_LEVEL == 0 || bossMode) && !bossSpawned) {
+			// If it isn't a boss level, and no boss mode is set, dont make a boss
+			if (games_played % BOSS_LEVEL != 0 && !bossMode) {
+				//omfg
+			
 			// Only spawn the boss if more than 3 games have been played
-			if (games_played > 3) {
+			} else if (games_played > 6) {
 				y = randomGen.nextInt((int) (WorldRenderer.HEIGHT-BossWidow.SIZE.y - BossWidow.SIZE.y)) + (int)BossWidow.SIZE.y;
 				Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 				EnemyController ec = new BossWidowController(this,  new BossWidow(pos));

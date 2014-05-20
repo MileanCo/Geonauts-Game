@@ -17,7 +17,6 @@ public class FireMob extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((50/64f), (50/60f));
 	public static int health;
 	public static int damage;
-	private static int value = 10;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 1;
@@ -39,6 +38,7 @@ public class FireMob extends AbstractEnemy {
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 
 		this.hero = hero;
+		value = 10;
 		//System.out.println(ROTATION_SPEED);
 
 	}

@@ -17,7 +17,6 @@ public class Dwain extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((74/64f), (71/60f));
 	public static int health;
 	public static int damage;
-	private static int value = 20;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 2;
@@ -34,6 +33,7 @@ public class Dwain extends AbstractEnemy {
 		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
 		PITCH = rand.nextInt(25-16) + 16;
 		reloadTime = (rand.nextInt(10 - 7) + 7) / 10f;
+		value = 20;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 

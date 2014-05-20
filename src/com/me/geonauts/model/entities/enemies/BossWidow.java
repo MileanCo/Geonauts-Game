@@ -14,7 +14,6 @@ public class BossWidow extends AbstractEnemy {
 	public static Vector2 SIZE = new Vector2((300/64f), (300/60f));
 	public static int health;
 	public static int damage;
-	private static int value = 1000;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 2;
@@ -25,6 +24,7 @@ public class BossWidow extends AbstractEnemy {
 	public BossWidow(Vector2 pos) {
 		super(pos, SIZE, 1.5f, health, damage);
 		reloadTime = (rand.nextInt(20 - 10) + 10) / 10f; // seconds
+		value = 1000;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 		//System.out.println(ROTATION_SPEED);

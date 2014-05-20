@@ -16,7 +16,6 @@ public class Fiend extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((100/64f), (45/60f));
 	private static int health = 50;
 	private static int damage = 15;
-	private static int value = 10;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 2;
@@ -32,6 +31,7 @@ public class Fiend extends AbstractEnemy {
 	public Fiend(Vector2 pos) {
 		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
 		PITCH = rand.nextInt(20-12) + 12;
+		value = 10;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 
 		//System.out.println(ROTATION_SPEED);

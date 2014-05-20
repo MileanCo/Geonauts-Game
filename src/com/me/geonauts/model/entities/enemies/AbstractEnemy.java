@@ -35,6 +35,7 @@ public abstract class AbstractEnemy extends Entity {
 	public Vector2 		direction = new Vector2(-1, -1);
 	
 	// Other attributes
+	protected int value;
 	public int health;
 	protected int damage;
 	protected float reloadTime = -1; // -1 means they can't shoot. Overwrite to make it shoot.
@@ -79,7 +80,12 @@ public abstract class AbstractEnemy extends Entity {
 	// All Enemies must implement the getFrames() method to return the proper images 
 	public abstract TextureRegion[] getFrames ();
 	
-	public abstract int getValue();
+	public int getValue() {
+		return value;
+	}
+	public int getScoreValue() {
+		return value * 10;
+	}
 
 	public boolean isAlive() {
 		return alive;

@@ -229,7 +229,7 @@ public class EnemyController {
 		if (! shotDown) r = 10;
 		else {
 			// Increase the score
-			world.getHero().score += enemy.getValue() * 10;
+			world.getHero().score += enemy.getScoreValue();
 			world.getHero().money += enemy.getValue();
 			world.getHero().enemiesKilled++;
 		}

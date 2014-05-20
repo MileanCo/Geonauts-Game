@@ -17,7 +17,6 @@ public class BlueMob extends AbstractEnemy {
 	private static Vector2 SIZE = new Vector2((39/64f), (39/60f));
 	public static int health;
 	public static int damage;
-	private static int value = 20;
 	
 	private float lastStateTime = 0;
 	private static final float STATE_CHANGE_TIME = 1;
@@ -35,6 +34,7 @@ public class BlueMob extends AbstractEnemy {
 	 */
 	public BlueMob(Vector2 pos, Hero hero) {
 		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
+		value = 20;
 		PITCH = rand.nextInt(32-15) + 15;
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 		

@@ -287,7 +287,7 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 	
-	public WorldRenderer getRenderer() {
+	public WorldRenderer getWorldRenderer() {
 		return renderer;
 	}
 

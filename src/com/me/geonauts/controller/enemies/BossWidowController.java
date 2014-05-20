@@ -1,5 +1,6 @@
 package com.me.geonauts.controller.enemies;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 import com.me.geonauts.model.entities.enemies.BossWidow;
 import com.me.geonauts.model.entities.missiles.EnemyMissile;
 import com.me.geonauts.model.enums.Achievement;
+import com.me.geonauts.view.FloatingText;
 import com.me.geonauts.view.WorldRenderer;
 
 public class BossWidowController extends EnemyController {	
@@ -125,6 +127,13 @@ public class BossWidowController extends EnemyController {
 		super.die(shotDown);
 		world.bossMode = false;
 		world.getScreen().getGame().getActionResolver().unlockAchievement(Achievement.BLACK_WIDOW);
+		
+		// create new floating text
+		Vector2 pos = enemy.position.cpy();
+		pos.y +=  world.getHero().SIZE.y;
+		FloatingText ft = new FloatingText("+ " + enemy.getScoreValue(), pos, new Vector2(0, 1));
+		ft.color = new Color(1, 1, 1, 1);
+		world.getScreen().getWorldRenderer().getFloatingTexts().add(ft);
 	}
 	
 	private void checkCollideHero() {

@@ -856,5 +856,8 @@ public class WorldRenderer {
 	public void setWorld(World w) {
 		this.world = w;
 	}
+	public List<FloatingText> getFloatingTexts() {
+		return floatingTexts;
+	}
 
 }
