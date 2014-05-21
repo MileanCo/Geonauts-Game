@@ -112,30 +112,6 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(null);
 		renderer.dispose();
 	}
-
-	// * InputProcessor methods ***************************//
-
-	// 				KEYBOARD 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.Z)
-			heroController.flyPressed();
-			
-		return true;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		if (keycode == Keys.Z)
-			heroController.flyReleased();
-		
-		// Check if escape is pressed to show the main menu
-		if (keycode == Keys.ESCAPE) {
-			toMainMenu();
-		}
-		
-		return true;
-	}
 	
 	/**
 	 * Sets the game screen to main menu
@@ -218,6 +194,33 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		
 	}
+	// * InputProcessor methods ***************************//
+
+	// 				KEYBOARD 
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.W)
+			heroController.flyUpPressed();
+		if (keycode == Keys.S)
+			heroController.flyDownPressed();
+		
+		return true;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		if (keycode == Keys.W)
+			heroController.flyUpReleased();
+		if (keycode == Keys.S)
+			heroController.flyDownReleased();
+		
+		// Check if escape is pressed to show the main menu
+		if (keycode == Keys.ESCAPE) {
+			toMainMenu();
+		}
+		
+		return true;
+	}
 
 	@Override
 	public boolean keyTyped(char character) {
@@ -243,9 +246,13 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 		}
 		
-		// Touch on Left hand-side of screen
-		if (x < width / 3) {
-			heroController.flyPressed();
+		// Touch on Top-Left hand-side of screen
+		if (x < width / 3 && y < height/2) {
+			heroController.flyUpPressed();
+		}
+		// Touch on Bottom-Left hand-side of screen
+		if (x < width / 3 && y >= height/2) {
+			heroController.flyDownPressed();
 		}
 		// Touch on Right hand-side of screen
 		if (x > width / 3) {
@@ -258,10 +265,14 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		if (!Gdx.app.getType().equals(ApplicationType.Android))
 			return false;
-		// Touch on Left hand-side of screen
-		if (x < width / 3) {
-			heroController.flyReleased();
+		// Touch on Top-Left hand-side of screen
+		if (x < width / 3 && y < height/2) {
+			heroController.flyUpReleased();
 		}
+		// Touch on Bottom-Left hand-side of screen
+		if (x < width / 3 && y >= height/2) {
+			heroController.flyDownReleased();
+		}				
 		// Touch on Right hand-side of screen
 		if (x > width / 3) {
 			heroController.targetReleased();

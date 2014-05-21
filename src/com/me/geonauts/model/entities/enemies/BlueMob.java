@@ -34,7 +34,7 @@ public class BlueMob extends AbstractEnemy {
 	 */
 	public BlueMob(Vector2 pos, Hero hero) {
 		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
-		value = 20;
+		value = 14;
 		PITCH = rand.nextInt(32-15) + 15;
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 		

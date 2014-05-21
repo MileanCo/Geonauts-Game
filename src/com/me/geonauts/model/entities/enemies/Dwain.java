@@ -33,7 +33,7 @@ public class Dwain extends AbstractEnemy {
 		super(pos, SIZE, (float) (rand.nextDouble() * SPEED), health, damage);
 		PITCH = rand.nextInt(25-16) + 16;
 		reloadTime = (rand.nextInt(10 - 7) + 7) / 10f;
-		value = 20;
+		value = 16;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 

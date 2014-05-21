@@ -23,9 +23,10 @@ import com.me.geonauts.view.WorldRenderer;
 public abstract class Hero extends Entity {
 	// State stuff
 	public enum State {
-		FLYING, FALLING, DYING
+		FLYING_UP, FLYING_DOWN, FLYING_STRAIGHT, 
+		DYING
 	}	
-	public State		state = State.FALLING;
+	public State		state = State.FLYING_DOWN;
 	protected float		stateTime = 0;
 	private long		timeDied = 0;
 	
@@ -144,10 +145,18 @@ public abstract class Hero extends Entity {
 			// Update angle based State
 			// Make hero go straight first couple meters
 			if (position.x > WorldRenderer.WIDTH/2) { 
-				if (state == State.FLYING) 
+				if (state == State.FLYING_UP) 
 					angle += ROTATION_SPEED;
-				else if ( state == State.FALLING || state == State.DYING)
-					angle -= ROTATION_SPEED / 2.0f;
+				else if ( state == State.FLYING_DOWN || state == State.DYING)
+					angle -= ROTATION_SPEED;
+				else if ( state == State.FLYING_STRAIGHT) {
+					if (angle > 0)
+						angle -= ROTATION_SPEED / 2.0f;
+					else if (angle < 0) 
+						angle += ROTATION_SPEED / 2.0f;
+					
+				}
+					
 			}
 				
 			// Make sure angle isn't too big.

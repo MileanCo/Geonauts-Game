@@ -10,7 +10,7 @@ public class Echo extends Hero {
 	
 	// Rotation stuff
 	public static final float ROTATION_SPEED = 0.75f; // angles per second??
-	private static final float PITCH = 18f; 
+	private static final float PITCH = 22f; 
 	
 	// Other Attributes
 	private static int health = 225;

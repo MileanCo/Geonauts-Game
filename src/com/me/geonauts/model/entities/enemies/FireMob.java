@@ -38,7 +38,7 @@ public class FireMob extends AbstractEnemy {
 		ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 
 		this.hero = hero;
-		value = 10;
+		value = 8;
 		//System.out.println(ROTATION_SPEED);
 
 	}

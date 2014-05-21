@@ -28,7 +28,8 @@ import com.me.geonauts.model.entities.missiles.YellowLaser;
 
 public class HeroController {
 	enum Keys {
-		FLY, FIRE
+		FLY_UP, FLY_DOWN,
+		FIRE
 	}
 
 	// Collidable blocks.
@@ -49,7 +50,8 @@ public class HeroController {
 	// Keys
 	static Map<Keys, Boolean> keys = new HashMap<HeroController.Keys, Boolean>();
 	static {
-		keys.put(Keys.FLY, false);
+		keys.put(Keys.FLY_UP, false);
+		keys.put(Keys.FLY_DOWN, false);
 		keys.put(Keys.FIRE, false);
 	};
 	
@@ -148,12 +150,19 @@ public class HeroController {
 	public void targetReleased() {
 		keys.get(keys.put(Keys.FIRE, false));
 	}
-	
-	public void flyPressed() {
-		keys.get(keys.put(Keys.FLY, true));
+	// FLY UP
+	public void flyUpPressed() {
+		keys.get(keys.put(Keys.FLY_UP, true));
 	}
-	public void flyReleased() {
-		keys.get(keys.put(Keys.FLY, false));
+	public void flyUpReleased() {
+		keys.get(keys.put(Keys.FLY_UP, false));
+	}
+	// FLY DOWN
+	public void flyDownPressed() {
+		keys.get(keys.put(Keys.FLY_DOWN, true));
+	}
+	public void flyDownReleased() {
+		keys.get(keys.put(Keys.FLY_DOWN, false));
 	}
 
 	/**
@@ -161,6 +170,7 @@ public class HeroController {
 	 * @param delta
 	 */
 	public void update(float delta) {
+		
 		// Processing the input - setting the states of Hero
 		if (hero.state != Hero.State.DYING) 
 			processInput();
@@ -211,7 +221,7 @@ public class HeroController {
 				hero.position.y = -hero.SIZE.y/2f ;
 			// yes, bounce hero
 			} else {
-				hero.state = State.FALLING;
+				hero.state = State.FLYING_DOWN;
 				hero.angle -= hero.ROTATION_SPEED;
 			}
 			
@@ -222,7 +232,7 @@ public class HeroController {
 				hero.position.y = Chunk.HEIGHT;
 			// yes, bounce hero
 			} else {
-				hero.state = State.FLYING;
+				hero.state = State.FLYING_UP;
 				hero.angle += hero.ROTATION_SPEED;
 			}
 		}
@@ -348,18 +358,16 @@ public class HeroController {
 
 	/** Change Hero's state and parameters based on input controls **/
 	private boolean processInput() {
-		if (keys.get(Keys.FLY)) {	
-			hero.state = Hero.State.FLYING;
-			flyPressedTime = System.currentTimeMillis();
-			
-		// If he's not flying, he's falling.
+		// Fly up 
+		if (keys.get(Keys.FLY_UP)) {	
+			hero.state = Hero.State.FLYING_UP;
+		// Fly down
+		} else if (keys.get(Keys.FLY_DOWN)) {
+			hero.state = Hero.State.FLYING_DOWN;
+		// Idle
 		} else {
-			hero.state = Hero.State.FALLING;
+			hero.state = Hero.State.FLYING_STRAIGHT;
 		}
-		if (keys.get(Keys.FIRE)) {
-
-		}
-
 		return false;
 	}
 	

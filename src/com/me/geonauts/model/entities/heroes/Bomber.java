@@ -9,8 +9,8 @@ public class Bomber extends Hero {
 	public static final float SPEED = 3.0f;	// unit per second
 	
 	// Rotation stuff
-	public static final float ROTATION_SPEED = 0.75f; // angles per second??
-	private static final float PITCH = 22f; 
+	public static final float ROTATION_SPEED = 0.70f; // angles per second??
+	private static final float PITCH = 24f; 
 	
 	// Other Attributes
 	private static int health = 200;
