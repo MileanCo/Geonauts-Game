@@ -24,7 +24,7 @@ public class BossWidow extends AbstractEnemy {
 	public BossWidow(Vector2 pos) {
 		super(pos, SIZE, 1.5f, health, damage);
 		reloadTime = (rand.nextInt(20 - 10) + 10) / 10f; // seconds
-		value = 1000;
+		value = 700;
 		//ROTATION_SPEED = ROTATION_SPEED * (float)rand.nextDouble();
 	
 		//System.out.println(ROTATION_SPEED);

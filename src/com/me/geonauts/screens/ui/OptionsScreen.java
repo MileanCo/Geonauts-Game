@@ -63,6 +63,7 @@ public class OptionsScreen extends AbstractScreen{
 				prefs.putInteger("max targets", 1);
 				prefs.putInteger("Money", 200);
 				prefs.putInteger("total upgrades", 5);
+				prefs.putBoolean("bossMode", false);
 				prefs.flush();
 				
 			}
@@ -150,6 +151,8 @@ public class OptionsScreen extends AbstractScreen{
 		if (game.randomGen.nextBoolean()) 
 			game.getActionResolver().showAd();
 		
+		
+    	table.setBackground(background);
 	}
 
 	private void goToMenu() {

@@ -179,6 +179,7 @@ public class EnemyMissileController {
 	
 	
 	private boolean collisionWithTarget() {
+		if (!missile.getTarget().alive) return false;
 		// Get the Missile Rectangle 
 		Rectangle missileRect = rectPool.obtain();
 		missileRect.set(missile.getBounds().x, missile.getBounds().y,

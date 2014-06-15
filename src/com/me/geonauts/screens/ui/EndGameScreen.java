@@ -144,8 +144,10 @@ public class EndGameScreen  extends AbstractScreen {
 			game.shopMusicOgg.play();
 		
 		// Show an 50% of the time
-		if (game.randomGen.nextBoolean()) 
+		if ((game.randomGen.nextInt(3 - 0 ) + 0) == 0) 
 			game.getActionResolver().showAd();
+		
+    	table.setBackground(background);
 	}
 
 	private void goToShop() {

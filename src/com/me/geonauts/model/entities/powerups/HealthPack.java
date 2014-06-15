@@ -10,7 +10,7 @@ public class HealthPack extends Powerup {
 	
 	public static TextureRegion frame;
 	
-	private int HEALTH = 150;
+	public static int HEALTH = 150;
 
 	
 	public HealthPack(Vector2 pos, Vector2 velocity, HeroController hc) {

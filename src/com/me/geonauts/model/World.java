@@ -77,7 +77,7 @@ public class World {
 	
 	public boolean bossMode;
 	private boolean bossSpawned = false;
-	private final int BOSS_LEVEL = 3;
+	private int BOSS_LEVEL = 5;
 	
 	private int reload_upgrades;
 	private int total_upgrades;
@@ -106,12 +106,18 @@ public class World {
 		Preferences prefs = Gdx.app.getPreferences("game-prefs");
 		total_upgrades = prefs.getInteger("total upgrades");
 		reload_upgrades = prefs.getInteger("Reload");
-		games_played = prefs.getInteger("games_played");	
+		games_played = prefs.getInteger("games_played");
+		
+		// Make boss appear at game # 8 instead of #10 
+		if (games_played < 10) {
+			BOSS_LEVEL = 4;
+		} else 
+			BOSS_LEVEL = 5;
 		
 		bossMode = prefs.getBoolean("bossMode");
 		
 		// Make game harder based on total upgrades
-		BossWidow.health = 1200 + total_upgrades * 50 + reload_upgrades * 50;
+		BossWidow.health = 1000 + total_upgrades * 50 + reload_upgrades * 70;
 		Dwain.health = 55 + total_upgrades * 7;
 		FireMob.health = 45 + total_upgrades * 7;
 		BlueMob.health = 35 + total_upgrades * 5;
@@ -122,6 +128,7 @@ public class World {
 		BlueMob.damage = 15 + total_upgrades * 3;
 		
 		ShieldPack.SHIELD = 150 + total_upgrades*5	;
+		HealthPack.HEALTH = 150 + total_upgrades*5	;
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {
@@ -225,7 +232,7 @@ public class World {
 				//omfg
 			
 			// Only spawn the boss if more than 3 games have been played
-			} else if (games_played > 5) {
+			} else if (games_played > 7) {
 				y = randomGen.nextInt((int) (WorldRenderer.HEIGHT-BossWidow.SIZE.y - BossWidow.SIZE.y)) + (int)BossWidow.SIZE.y;
 				Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 				EnemyController ec = new BossWidowController(this,  new BossWidow(pos));

@@ -12,6 +12,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.math.Vector2;
 import com.me.geonauts.Geonauts;
 import com.me.geonauts.controller.HeroController;
 import com.me.geonauts.model.World;
@@ -35,7 +36,16 @@ public class GameScreen implements Screen, InputProcessor {
 		
 	private int width, height;
 	
+	private final float WIDTHTOUCHRATIO = 3.0f;
+	
 	private Preferences prefs = Gdx.app.getPreferences("game-prefs");
+	
+	//private final float TOUCH_DISPLACEMENT = 4f; // pixels
+	/** Number of current movement touches on the screen */
+	private int numMovTouches;
+	private Vector2 lastTouchStart = new Vector2();
+	private Vector2 lastTouchEnd = new Vector2();
+	private boolean lastTouchDragged = false;
 
 	/**
 	 * Create a new game to play!
@@ -65,6 +75,8 @@ public class GameScreen implements Screen, InputProcessor {
 		boolean music = prefs.getBoolean("play-music");
 		if (music) 
 			game.gameMusicOgg.play();
+		
+		numMovTouches = 0;
 	}
 
 	/**
@@ -82,6 +94,11 @@ public class GameScreen implements Screen, InputProcessor {
 			world.update(delta);
 		}
 		renderer.render(delta);
+		
+		// check if hero has arrived at last touch
+		//if (lastTouch.y > getHeroYPix() - TOUCH_DISPLACEMENT &&  lastTouch.y < getHeroYPix() + TOUCH_DISPLACEMENT) {
+		//	this.touchUp((int)lastTouch.x, (int)lastTouch.y, 0, 0);
+		//}
 	}
 	
 	@Override
@@ -163,7 +180,7 @@ public class GameScreen implements Screen, InputProcessor {
 		prefs.putInteger("games_played", games_played);
 		
 		// Save money
-		world.getHero().money += (world.getHero().getDistance()/2); // add distance traveled to money
+		//world.getHero().money += (world.getHero().getDistance()/4); // add distance traveled to money
 		prefs.putInteger("Money", world.getHero().money);
 		
 		prefs.putBoolean("bossMode", world.bossMode);
@@ -235,6 +252,7 @@ public class GameScreen implements Screen, InputProcessor {
 		float x_world = x / renderer.getPPUX();
 		// Touch thinks Y 0 is at top, GAME thinks y 0 is at bottom. Convert to fix.
 		float y_world = WorldRenderer.CAMERA_HEIGHT - y / renderer.getPPUY();
+		float heroY = getHeroYPix();
 		
 		if (!Gdx.app.getType().equals(ApplicationType.Android)) {
 			if (button == Input.Buttons.LEFT) {
@@ -246,18 +264,48 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 		}
 		
-		// Touch on Top-Left hand-side of screen
-		if (x < width / 3 && y < height/2) {
-			heroController.flyUpPressed();
-		}
-		// Touch on Bottom-Left hand-side of screen
-		if (x < width / 3 && y >= height/2) {
-			heroController.flyDownPressed();
-		}
+		
 		// Touch on Right hand-side of screen
-		if (x > width / 3) {
+		if (x > width / WIDTHTOUCHRATIO) {
 			heroController.targetPressed(x_world, y_world);
+		} else {
+			
+			// Only move up/down by hero if is in middle of screen
+			if (heroY < height * 0.85f && heroY > (height - (height * 0.85f) )) { 
+				System.out.println("touch middle: " + heroY);
+				// Touch on Top-Left hand-side of screen
+				if (y < heroY) {
+					heroController.flyUpPressed();
+					heroController.flyDownReleased();
+					numMovTouches++;
+				}
+				// Touch on Bottom-Left hand-side of screen
+				else if (y >= heroY) {
+					heroController.flyDownPressed();
+					heroController.flyUpReleased();
+					numMovTouches++;
+				}
+			// Hero on edges of screen
+			} else {
+				System.out.println("touch edge: " + heroY);
+				// Touch on Top-Left hand-side of screen
+				if (y < height / 2) {
+					heroController.flyUpPressed();
+					heroController.flyDownReleased();
+					numMovTouches++;
+				}
+				// Touch on Bottom-Left hand-side of screen
+				else if (y >= height / 2) {
+					heroController.flyDownPressed();
+					heroController.flyUpReleased();
+					numMovTouches++;
+				}
+			}
 		}
+	
+		
+		
+		
 		return true;
 	}
 
@@ -265,25 +313,70 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		if (!Gdx.app.getType().equals(ApplicationType.Android))
 			return false;
-		// Touch on Top-Left hand-side of screen
-		if (x < width / 3 && y < height/2) {
-			heroController.flyUpReleased();
-		}
-		// Touch on Bottom-Left hand-side of screen
-		if (x < width / 3 && y >= height/2) {
-			heroController.flyDownReleased();
-		}				
+		
+		float heroY = getHeroYPix();
+
 		// Touch on Right hand-side of screen
-		if (x > width / 3) {
+		if (x > width / WIDTHTOUCHRATIO) {
 			heroController.targetReleased();
+		// Touch on Left-hand side
+		} else {
+			// THIS WORKS FOR MULTI-FINGER TOUCH
+			if (numMovTouches >= 2) {
+				// Touch up above hero
+				if (y < heroY) 
+					heroController.flyUpReleased();
+				// Touch up below hero
+				else if (y >= heroY) {
+					heroController.flyDownReleased();
+				}
+			// THIS WORKS FOR 1 FINGER TOUCH AND DRAG
+			} else if ( numMovTouches >= 0 && numMovTouches < 2){
+				if (heroController.isFlyUpPressed()) { 
+					heroController.flyUpReleased();
+				} else if (heroController.isFlyDownPressed()) {
+					heroController.flyDownReleased();
+				}
+			}
+			
+			numMovTouches--;
+			if (numMovTouches < 0) {
+				System.out.println("ERROR: NUM TOUCHES IS LESS THAN ZERO!");
+				numMovTouches = 0;
+			}
+			
 		}
 		return true;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
+		float x_world = x / renderer.getPPUX();
+		// Touch thinks Y 0 is at top, GAME thinks y 0 is at bottom. Convert to fix.
+		float y_world = WorldRenderer.CAMERA_HEIGHT - y / renderer.getPPUY();
+		float heroY = getHeroYPix();
+		
+		// New drag, record start position, 
+		if (! lastTouchDragged) {
+			lastTouchDragged = true;
+			lastTouchStart.x = x;
+			lastTouchStart.y = y;
+		}
+		
+		// Touch on Top-Left hand-side of screen
+		if (x < width / WIDTHTOUCHRATIO && y < heroY) {
+			heroController.flyUpPressed();
+			heroController.flyDownReleased();
+		}
+		// Touch on Bottom-Left hand-side of screen
+		else if (x < width / WIDTHTOUCHRATIO && y >= heroY) {
+			heroController.flyDownPressed();
+			heroController.flyUpReleased();
+		}
+		lastTouchEnd.x = x;
+		lastTouchEnd.y = y;
+		
+		return true;
 	}
 
 	@Override
@@ -296,6 +389,10 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	private float getHeroYPix() {
+		return (WorldRenderer.CAMERA_HEIGHT - world.getHero().getCenterPosition().y) * renderer.getPPUY();
 	}
 	
 	public WorldRenderer getWorldRenderer() {

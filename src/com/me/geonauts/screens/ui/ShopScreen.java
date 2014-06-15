@@ -303,7 +303,7 @@ public class ShopScreen extends AbstractScreen {
 		updateLabels();
 		
 		// Show an 50% of the time
-		if ((game.randomGen.nextInt(3 - 0 ) + 0) == 0) 
+		if (game.randomGen.nextBoolean()) 
 			game.getActionResolver().showAd();
 	}
 	

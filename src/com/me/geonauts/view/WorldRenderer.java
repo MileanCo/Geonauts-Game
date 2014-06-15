@@ -70,7 +70,7 @@ public class WorldRenderer {
 	public static final int WIDTH = (int) CAMERA_WIDTH;
 	public static final int HEIGHT = (int) CAMERA_HEIGHT;
 	
-	private static final float EXPLOSION_DURATION = 0.04f; //seconds b/t frames
+	private static final float EXPLOSION_DURATION = 0.055f; //seconds b/t frames
 	private static final float COIN_SPIN_DURATION = 0.10f;
 	private static final float HERO_ANIM_DURATION = 0.03f;
 	private static final float BARRIER_ANIM_DURATION = 0.10f;
@@ -700,7 +700,7 @@ public class WorldRenderer {
 			if (a.isCoin() && ! a.isAlive()) {
 				Vector2 pos = a.position.cpy();
 				pos.y +=  world.getHero().SIZE.y;
-				FloatingText ft = new FloatingText("+ $" + Coin.value, pos, new Vector2(0, 1));
+				FloatingText ft = new FloatingText("+ $" + Coin.value, pos, new Vector2(1, 1));
 				ft.color = new Color(1, 0.843f, 0, 1);
 				floatingTexts.add(ft);
 			}

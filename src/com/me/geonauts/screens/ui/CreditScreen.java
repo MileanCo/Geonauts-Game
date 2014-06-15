@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -16,7 +19,15 @@ import com.me.geonauts.Geonauts;
 public class CreditScreen extends AbstractScreen{
 	private TextButton btnCredit;
 	private Table table;
+	private Label lblInfo;
+	private TextButton btnGoBack;
+	private TextureAtlas uiAtlas;
+	private TextButtonStyle style;
 	
+	private final String CREDITS = "Lead programmer: Joel Stenkvist \n"
+			+ "Game Design & Dev: William Jamar and Joel\n"
+			+ "Art by OpenGameArt.org, Joel, and Tristan Gaskins\nMusic by 40Ringz\n"
+			+ "\nPowered by libGDX";
 	
 	public CreditScreen(Geonauts game) {
 		super(game);
@@ -28,36 +39,41 @@ public class CreditScreen extends AbstractScreen{
 		table.setFillParent(true);
 		stage.addActor(table);
 		
-		//Texture
-		// Load textures
-		TextureAtlas uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		Skin skin = new Skin(Gdx.files.internal("images/ui/default-skin.json"));
+		Skin fancySkin = new Skin(Gdx.files.internal("images/ui/fancy-skin.json"));
 		
-		TextureRegion upCredits = uiAtlas.findRegion("hjm-small_gas_planet"); //new TextureRegion(new Texture(Gdx.files.internal("images/ui/hjm-small_gas_planet_0.png")));
-		TextureRegion downCredits = uiAtlas.findRegion("planet_down");
+		uiAtlas = new TextureAtlas(Gdx.files.internal("images/ui/ui.pack"));
+		// TextureRegions
+		TextureRegion upRegion = uiAtlas.findRegion("buttonNormal");
+		TextureRegion downRegion = uiAtlas.findRegion("buttonPressed");
 
-		//Style
-		TextButtonStyle styleC = new TextButtonStyle();
-		styleC.up = new TextureRegionDrawable(upCredits);
-		styleC.down = new TextureRegionDrawable(downCredits);
-		styleC.font = new BitmapFont(
+		// Styles
+		style = new TextButtonStyle();
+		style.up = new TextureRegionDrawable(upRegion);
+		style.down = new TextureRegionDrawable(downRegion);
+		style.font = new BitmapFont(
 				Gdx.files.internal("fonts/regular.fnt"),
-				Gdx.files.internal("fonts/regular.png"), false);
+				Gdx.files.internal("fonts/regular.png"), false);	
 		
-		//Button
-		btnCredit = new TextButton("Game development: Joel Stenkvist \n"
-				+ "Menu development: William Jamar\n"
-				+ "Art from OpenGameArt.org\nMusic by 40Ringz\n"
-				+ "\nPowered by libGDX", styleC);
-		btnCredit.addListener(new InputListener() {
+		
+		btnGoBack = new TextButton("Return", style);
+		btnGoBack.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				goToMenu();
+				goToMenu();			
 			}
 		});
 		
-		table.add(btnCredit);
+		lblInfo = new Label(CREDITS, skin, "red");
+		
+		table.add(lblInfo);
+		table.row();
+		table.add(btnGoBack);
+		
+		
+
 		
 
 	}
@@ -72,6 +88,8 @@ public class CreditScreen extends AbstractScreen{
 
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+		
+		//table.setBackground(background);
 		
 	}
 

@@ -35,6 +35,7 @@ public abstract class AbstractEnemy extends Entity {
 	public Vector2 		direction = new Vector2(-1, -1);
 	
 	// Other attributes
+	private static final int SCORE_MULTIPLIER = 14;
 	protected int value;
 	public int health;
 	protected int damage;
@@ -84,7 +85,7 @@ public abstract class AbstractEnemy extends Entity {
 		return value;
 	}
 	public int getScoreValue() {
-		return value * 10;
+		return value * SCORE_MULTIPLIER;
 	}
 
 	public boolean isAlive() {

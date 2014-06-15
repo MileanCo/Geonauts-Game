@@ -129,7 +129,10 @@ public abstract class Hero extends Entity {
 		// Add delta to the stateTime, used by animations.
 		stateTime += delta;
 		
-		if (health <= 0) state = State.DYING;
+		if (health <= 0) {
+			state = State.DYING;
+			alive = false;
+		}
 		
 		// If dying, stop movement and record time.
 		if (state == State.DYING) {
@@ -143,20 +146,16 @@ public abstract class Hero extends Entity {
 		// If the Hero isn't on the ground, UPDATE ANGLE AND ACCELERATION
 		if (! grounded) {
 			// Update angle based State
-			// Make hero go straight first couple meters
-			if (position.x > WorldRenderer.WIDTH/2) { 
-				if (state == State.FLYING_UP) 
-					angle += ROTATION_SPEED;
-				else if ( state == State.FLYING_DOWN || state == State.DYING)
+			if (state == State.FLYING_UP) 
+				angle += ROTATION_SPEED;
+			else if ( state == State.FLYING_DOWN) // || state == State.DYING)
+				angle -= ROTATION_SPEED;
+			else if ( state == State.FLYING_STRAIGHT) {
+				if (angle > 0)
 					angle -= ROTATION_SPEED;
-				else if ( state == State.FLYING_STRAIGHT) {
-					if (angle > 0)
-						angle -= ROTATION_SPEED / 2.0f;
-					else if (angle < 0) 
-						angle += ROTATION_SPEED / 2.0f;
-					
-				}
-					
+				else if (angle < 0) 
+					angle += ROTATION_SPEED;
+				
 			}
 				
 			// Make sure angle isn't too big.

@@ -27,7 +27,7 @@ import com.me.geonauts.model.entities.missiles.Missile;
 import com.me.geonauts.model.entities.missiles.YellowLaser;
 
 public class HeroController {
-	enum Keys {
+	public enum Keys {
 		FLY_UP, FLY_DOWN,
 		FIRE
 	}
@@ -48,7 +48,7 @@ public class HeroController {
 
 
 	// Keys
-	static Map<Keys, Boolean> keys = new HashMap<HeroController.Keys, Boolean>();
+	public static Map<Keys, Boolean> keys = new HashMap<HeroController.Keys, Boolean>();
 	static {
 		keys.put(Keys.FLY_UP, false);
 		keys.put(Keys.FLY_DOWN, false);
@@ -165,6 +165,13 @@ public class HeroController {
 		keys.get(keys.put(Keys.FLY_DOWN, false));
 	}
 
+	public boolean isFlyUpPressed() {
+		return keys.get(Keys.FLY_UP);
+	}
+	public boolean isFlyDownPressed() {
+		return keys.get(Keys.FLY_DOWN);
+	}
+	
 	/**
 	 * Update the Hero's position and check collisions
 	 * @param delta

@@ -79,7 +79,7 @@ public class MainMenuScreen extends AbstractScreen {
 				Gdx.files.internal("fonts/regular.png"), false);
 
 		// Labels
-		lblTitle = new Label(TITLE, fancySkin, "gold");
+		lblTitle = new Label(TITLE, fancySkin, "red");
 		lblScore = new Label("High Score: " + highscore, skin);
 		lblDistance = new Label("Furthest Distance: " + highdistance + " m", skin);
 		lblInfo = new Label("Google Play - ", skin);
@@ -250,6 +250,8 @@ public class MainMenuScreen extends AbstractScreen {
 			game.menuMusicOgg.stop();
 		}
 		
+    	table.setBackground(background);
+		
 	}
 
 	private void newGame() {
@@ -271,6 +273,7 @@ public class MainMenuScreen extends AbstractScreen {
 		prefs.putInteger("Moneyx", 1);
 		prefs.putInteger("max targets", 1);
 		prefs.putInteger("Money", 200);
+		prefs.putBoolean("bossMode", false);
 		prefs.putInteger("total upgrades", 5);
 		prefs.flush();
 	}

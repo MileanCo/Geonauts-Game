@@ -15,7 +15,13 @@ public class FloatingText {
 	
 	public FloatingText(String text, Vector2 pos, Vector2 velocity) {
 		this.position = pos;
-		this.velocity = velocity;
+		
+		// LOL JUST OVER WRITE!!!
+		//this.velocity = velocity;
+		this.velocity = new Vector2(1, 1);
+		
+		
+		
 		this.text = text;
 	}
 	

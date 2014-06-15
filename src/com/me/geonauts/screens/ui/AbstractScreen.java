@@ -1,13 +1,15 @@
 package com.me.geonauts.screens.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.me.geonauts.Geonauts;
 
 /**
@@ -23,6 +25,7 @@ public abstract class AbstractScreen implements Screen {
     protected final Stage stage;
     
     protected Table table;
+    protected TextureRegionDrawable background;
     
     
 
@@ -39,6 +42,8 @@ public abstract class AbstractScreen implements Screen {
 		
 		//table.debug(); // turn on all debug lines (table, cell, and widget)
 	    //table.debugTable(); // turn on only table lines
+		Texture texBackground = new Texture(Gdx.files.internal("images/backgrounds/mainmenu_720.png"));
+		background = new TextureRegionDrawable(new TextureRegion(texBackground));
 	    
     }
 
@@ -53,8 +58,7 @@ public abstract class AbstractScreen implements Screen {
 		stage.setViewport( width, height, false );
 		
     	table.setSize(width, height);
-    	table.clear();
-   
+    	table.clear();   
 	}
 
     @Override

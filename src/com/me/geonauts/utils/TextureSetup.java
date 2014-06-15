@@ -56,7 +56,7 @@ public class TextureSetup {
 		
 
 		// UI stuff
-		//TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
+		TexturePacker2.process(ASSET_FOLDER + "ui", ROOT_DIR + "ui/", "ui.pack");
 
 	}
 }
