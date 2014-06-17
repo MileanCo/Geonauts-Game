@@ -107,7 +107,7 @@ public abstract class Hero extends Entity {
 		if (DAMAGE_MULTIPLIER <= 0) DAMAGE_MULTIPLIER = 1;
 		
 		this.health = health + prefs.getInteger("Health") * HEALTH_MULTIPLIER;
-		damage = 35 + prefs.getInteger("Attack") * DAMAGE_MULTIPLIER;
+		damage = 50 + prefs.getInteger("Attack") * DAMAGE_MULTIPLIER;
 		
 		/**
 		System.out.println(MAX_TARGETS);

@@ -69,7 +69,7 @@ public class World {
 	private int POWERUP_SPAWN_THRESHOLD = 2550;
 	private int COIN_SPAWN_THRESHOLD = 225;
 	private int SPAWN_THRESHOLD = 450;
-	private final int MIN_SPAWN = 100;
+	private final int MIN_SPAWN = 175;
 	private int INCREASE_SPAWN_EVERY = 30; //units
 	private int SPAWN_INCREASE_RATE = 25;
 	
@@ -128,7 +128,7 @@ public class World {
 		BlueMob.damage = 15 + total_upgrades * 3;
 		
 		ShieldPack.SHIELD = 150 + total_upgrades*5	;
-		HealthPack.HEALTH = 150 + total_upgrades*5	;
+		HealthPack.HEALTH = 200 + total_upgrades*6	;
 		
 		SPAWN_THRESHOLD -= total_upgrades * 8;
 		if (SPAWN_THRESHOLD <= 250) {

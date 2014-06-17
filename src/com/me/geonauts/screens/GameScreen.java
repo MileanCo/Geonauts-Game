@@ -269,24 +269,29 @@ public class GameScreen implements Screen, InputProcessor {
 		if (x > width / WIDTHTOUCHRATIO) {
 			heroController.targetPressed(x_world, y_world);
 		} else {
+			// first check if heroY is too close to y for comfort
+			if (Math.abs(heroY - y) < 30) return false;
+			
 			
 			// Only move up/down by hero if is in middle of screen
-			if (heroY < height * 0.85f && heroY > (height - (height * 0.85f) )) { 
-				System.out.println("touch middle: " + heroY);
-				// Touch on Top-Left hand-side of screen
-				if (y < heroY) {
-					heroController.flyUpPressed();
-					heroController.flyDownReleased();
-					numMovTouches++;
-				}
-				// Touch on Bottom-Left hand-side of screen
-				else if (y >= heroY) {
-					heroController.flyDownPressed();
-					heroController.flyUpReleased();
-					numMovTouches++;
-				}
+			//if (heroY < height * 0.90f && heroY > (height - (height * 0.90f) )) { 
+			System.out.println("touch: " + heroY);
+			// Touch on Top-Left hand-side of screen
+			if (y < heroY) {
+				heroController.flyUpPressed();
+				heroController.flyDownReleased();
+				numMovTouches++;
+			}
+			// Touch on Bottom-Left hand-side of screen
+			else if (y >= heroY) {
+				heroController.flyDownPressed();
+				heroController.flyUpReleased();
+				numMovTouches++;
+			}
 			// Hero on edges of screen
-			} else {
+			/**} else {
+				 
+				
 				System.out.println("touch edge: " + heroY);
 				// Touch on Top-Left hand-side of screen
 				if (y < height / 2) {
@@ -300,7 +305,7 @@ public class GameScreen implements Screen, InputProcessor {
 					heroController.flyUpReleased();
 					numMovTouches++;
 				}
-			}
+			}*/
 		}
 	
 		

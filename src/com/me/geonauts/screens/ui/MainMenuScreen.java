@@ -267,14 +267,14 @@ public class MainMenuScreen extends AbstractScreen {
 	private void resetPrefs() {
 		//prefs.clear();
 		prefs.putBoolean("play-music", true);
-		prefs.putInteger("Reload", 1);
+		prefs.putInteger("Reload", 2);
 		prefs.putInteger("Attack", 1);
 		prefs.putInteger("Health", 1);
 		prefs.putInteger("Moneyx", 1);
-		prefs.putInteger("max targets", 1);
+		prefs.putInteger("max targets", 2);
 		prefs.putInteger("Money", 200);
 		prefs.putBoolean("bossMode", false);
-		prefs.putInteger("total upgrades", 5);
+		prefs.putInteger("total upgrades", 7);
 		prefs.flush();
 	}
 	

@@ -56,13 +56,13 @@ public class OptionsScreen extends AbstractScreen{
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				prefs.putInteger("Reload", 1);
+				prefs.putInteger("Reload", 2);
 				prefs.putInteger("Attack", 1);
 				prefs.putInteger("Health", 1);
 				prefs.putInteger("Moneyx", 1);
-				prefs.putInteger("max targets", 1);
+				prefs.putInteger("max targets", 2);
 				prefs.putInteger("Money", 200);
-				prefs.putInteger("total upgrades", 5);
+				prefs.putInteger("total upgrades", 7);
 				prefs.putBoolean("bossMode", false);
 				prefs.flush();
 				
