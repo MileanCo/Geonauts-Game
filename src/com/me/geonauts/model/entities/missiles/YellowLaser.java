@@ -7,7 +7,7 @@ import com.me.geonauts.model.entities.enemies.AbstractEnemy;
 public class YellowLaser extends Missile {	
 	
 	public static Vector2 SIZE = new Vector2((22f/64f), (26/60f));
-	private static float SPEED = 12f;
+	public static float SPEED;
 	
 	public static TextureRegion[] frames;
 	

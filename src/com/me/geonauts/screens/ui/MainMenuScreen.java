@@ -234,6 +234,8 @@ public class MainMenuScreen extends AbstractScreen {
 		// update menu labels
 		lblDistance.setText("Best Distance: " + highdistance + " m");
 		lblScore.setText("High Score: " + highscore);
+		
+		game.getActionResolver().submitScore(highscore);
 
 		// Enable music if 1st time
 		boolean music = prefs.getBoolean("play-music");

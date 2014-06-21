@@ -28,6 +28,7 @@ public class MissileController {
 	public MissileController(World world, Missile m) {
 		this.world = world;
 		this.missile = m;
+		this.missile.MAX_VEL = world.getHero().MAX_VEL;
 	}
 	
 	// This is the rectangle pool used in collision detection
@@ -62,6 +63,8 @@ public class MissileController {
 		
 		// checking collisions with the surrounding blocks depending on missile's velocity
 		checkCollisions(delta);
+		
+		//System.out.println(missile.MAX_VEL);
 
 		// apply damping to halt Missile nicely
 		//Missile.velocity.scl(DAMP);

@@ -24,6 +24,7 @@ import com.me.geonauts.model.entities.enemies.FireMob;
 import com.me.geonauts.model.entities.heroes.Bomber;
 import com.me.geonauts.model.entities.heroes.Echo;
 import com.me.geonauts.model.entities.heroes.Hero;
+import com.me.geonauts.model.entities.missiles.YellowLaser;
 import com.me.geonauts.model.entities.particles.Particle;
 import com.me.geonauts.model.entities.powerups.HealthPack;
 import com.me.geonauts.model.entities.powerups.Powerup;
@@ -118,14 +119,14 @@ public class World {
 		
 		// Make game harder based on total upgrades
 		BossWidow.health = 1000 + total_upgrades * 50 + reload_upgrades * 70;
-		Dwain.health = 55 + total_upgrades * 7;
-		FireMob.health = 45 + total_upgrades * 7;
-		BlueMob.health = 35 + total_upgrades * 5;
+		Dwain.health = 55 + total_upgrades * 6;
+		FireMob.health = 45 + total_upgrades * 6;
+		BlueMob.health = 35 + total_upgrades * 4;
 		
 		BossWidow.damage = 125 + total_upgrades * 3;
-		Dwain.damage = (int) (15 + total_upgrades * 1.5f);
-		FireMob.damage = 10 + total_upgrades * 3;
-		BlueMob.damage = 15 + total_upgrades * 3;
+		Dwain.damage = (int) (20 + total_upgrades * 1.5f);
+		FireMob.damage = 12 + total_upgrades * 3;
+		BlueMob.damage = 16 + total_upgrades * 3;
 		
 		ShieldPack.SHIELD = 150 + total_upgrades*5	;
 		HealthPack.HEALTH = 200 + total_upgrades*6	;
@@ -134,6 +135,9 @@ public class World {
 		if (SPAWN_THRESHOLD <= 250) {
 			SPAWN_THRESHOLD = 250;
 		}	
+		
+		// Reset speed's on missiles
+		YellowLaser.SPEED = 12f;
 		
 		resetChunks();
 	}
@@ -170,7 +174,7 @@ public class World {
 
 		
 		// Dwain
-		if (spawn == 1 && total_upgrades >= 7) {
+		if (spawn == 1 && total_upgrades >= 9) {
 			Vector2 pos = new Vector2(hero.getCamOffsetPosX() + WorldRenderer.WIDTH, y);
 			EnemyController ec = new EnemyController(this, new Dwain(pos));
 			enemies.add(ec);
@@ -242,6 +246,9 @@ public class World {
 				bossSpawned = true;
 			}
 		}
+		
+		YellowLaser.SPEED += delta * SPEED_INCREMENT;
+		
 		// WORLD RENDERER HANDLES DRAWING AND UPDATING OF ALL ENTITIES
 		
 		

@@ -45,7 +45,7 @@ public abstract class Missile extends Entity {
 		// Make new movement vectors
 		//this.SPEED = (float) (rand.nextDouble() * SPEED);
 		MAX_VEL = new Vector2(SPEED*2f, SPEED*2f);
-		acceleration = new Vector2(SPEED, 0);
+		acceleration = new Vector2(SPEED*4f, 0);
 		
 		
 		// Set initial velocity
