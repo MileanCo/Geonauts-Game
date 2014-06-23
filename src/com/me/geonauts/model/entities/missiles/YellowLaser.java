@@ -11,6 +11,8 @@ public class YellowLaser extends Missile {
 	
 	public static TextureRegion[] frames;
 	
+	private Vector2 unitVelocity = new Vector2();
+	
 	/**
 	 * 
 	 * @param pos
@@ -25,12 +27,7 @@ public class YellowLaser extends Missile {
 	 * @param delta
 	 */
 	@Override
-	public void update(float delta) {
-		// Target - Position
-		Vector2 V = target.getCenterPosition().sub(position);
-		// Unit vector = V / magnitude of V
-		Vector2 unitVec = V.div(V.len());
-		
+	public void update(float delta) {		
 		// Get difference in x and y from target to position
 		float x_diff = target.position.cpy().x - position.x;// + target.SIZE.x/2f;
 		float y_diff = target.position.cpy().y - position.y;// - target.SIZE.y/2f;
@@ -42,8 +39,12 @@ public class YellowLaser extends Missile {
 		
 		// If the target is infront of the missile, update acceleration with unit vec
 		if (x_diff > 0) {
+			// Target - Position
+			Vector2 V = target.getCenterPosition().sub(position);
+			// Unit vector = V / magnitude of V
+			unitVelocity = V.div(V.len());
+			
 			//if (x_diff < 1) 
-				velocity = unitVec.scl(SPEED);
 			// else 
 				// Set acceleration to the unit vector * speed
 			//	acceleration = unitVec.scl(SPEED);
@@ -55,6 +56,8 @@ public class YellowLaser extends Missile {
 			// Angle = sin^-1 (opposite / Hypotenuse)
 			angle = (float) Math.toDegrees( Math.atan(y_diff / x_diff) );
 		}
+		// Do this everytime, since after x_diff < 0, it stays constant.
+		velocity = unitVelocity.cpy().scl(SPEED);
 
 		
 	}

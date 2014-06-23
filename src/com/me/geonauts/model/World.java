@@ -40,7 +40,7 @@ public class World {
 	/** Time spent the Hero is dead. */
 	private static final long DEAD_TIME = 2500; //milliseconds
 	/** Amount the game speed increases over time */
-	public static final float SPEED_INCREMENT = 0.02f;
+	public static final float SPEED_INCREMENT = 0.022f;
 	
 	/** The collision boxes for debug drawing, that's it. **/
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();

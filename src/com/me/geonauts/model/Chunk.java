@@ -171,8 +171,7 @@ public class Chunk {
 							  	"." ,
 							  	".",
 							  	"."}; // EMPTY ROWS FOR PADDING CAN BE 1 TILE
-	
-	
+
 	/**
 	 * Determines which build to make
 	 */

@@ -270,7 +270,7 @@ public class GameScreen implements Screen, InputProcessor {
 			heroController.targetPressed(x_world, y_world);
 		} else {
 			// first check if heroY is too close to y for comfort
-			if (Math.abs(heroY - y) < 30) return false;
+			if (Math.abs(heroY - y) < 23) return false;
 			
 			
 			// Only move up/down by hero if is in middle of screen
