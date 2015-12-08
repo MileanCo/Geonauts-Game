@@ -1,5 +1,5 @@
-Geonauts
-==============
+Geonauts - Mobile App Game
+==========================
 
 Google Play Store - https://play.google.com/store/apps/details?id=com.me.geonauts&hl=en
 
@@ -9,7 +9,18 @@ The game was created by NC State students in the department of Computer Science!
 Final project app for Entrepreneurship Innovation - Geonauts! On Android, iOS, and desktop.
 List of features that need to be added to Geonauts:
 
-# TO-DO
+## Technology
+Powered by [LibGDX](https://libgdx.badlogicgames.com)
+Java
+
+
+# TO-DO 
+* NEED Desktop and Android launchers
+   * Lost over time
+   * Installation [WIKI](https://github.com/libgdx/libgdx/wiki/Setting-up-your-Development-Environment-%28Eclipse%2C-Intellij-IDEA%2C-NetBeans%29)
+
+
+# TO-DO (Features)
 * **Pixel-perfect collision detection.**
      * At least not with rectangles.
 * Smart enemy movement (avoid walls)
@@ -17,14 +28,12 @@ List of features that need to be added to Geonauts:
    * Turrets
    * At least 4 different kinds of enemies
    * Bosses
-   
 * **Missile projectiles**
 * **Animations**
   * Enemy ship animations
   * Hero and Enemy ship trails
   * Explosions
   * 
-
 * **Background images / parallax scrolling**
 * **Music**
    * Main menu music
@@ -34,7 +43,6 @@ List of features that need to be added to Geonauts:
    * Explosion sound
    * Level up sound
    * Ship flying sound?
-
 
 * **Menus**
  *  **Main Menu**
