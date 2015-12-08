@@ -1,7 +1,7 @@
 Geonauts - Mobile App Game
 ==========================
 
-Google Play Store - https://play.google.com/store/apps/details?id=com.me.geonauts&hl=en
+Download at the [Google Play Store](https://play.google.com/store/apps/details?id=com.me.geonauts&hl=en)
 
 A classic side-scroller with an upgrade shop to improve combat capabilities. Compete on the global Leaderboards with other players for the highest score!
 The game was created by NC State students in the department of Computer Science!
@@ -10,9 +10,10 @@ Final project app for Entrepreneurship Innovation - Geonauts! On Android, iOS, a
 List of features that need to be added to Geonauts:
 
 ## Technology
-Powered by [LibGDX](https://libgdx.badlogicgames.com)
-Java
-
+* Powered by [LibGDX](https://libgdx.badlogicgames.com)
+* Java
+* Supported on: Android & Desktop
+* [Getting Started Guide](https://libgdx.badlogicgames.com/documentation.html)
 
 # TO-DO 
 * NEED Desktop and Android launchers
